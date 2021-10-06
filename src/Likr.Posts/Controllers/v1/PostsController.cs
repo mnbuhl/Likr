@@ -45,7 +45,6 @@ namespace Likr.Posts.Controllers.v1
         {
             var post = new Post
             {
-                Id = Guid.NewGuid().ToString(),
                 Body = postDto.Body,
                 UserId = postDto.UserId
             };
@@ -53,7 +52,7 @@ namespace Likr.Posts.Controllers.v1
             _context.Posts.Add(post);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("Get", new { id = post.Id }, new PostDto(post.Id, post.Body, post.UserId, null));
+            return CreatedAtAction("Get", new { id = post.Id }, new PostDto(post.Id, post.Body, post.UserId, post.Comments));
         }
     }
 }
