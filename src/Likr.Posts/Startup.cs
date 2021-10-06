@@ -30,6 +30,14 @@ namespace Likr.Posts
         {
             services.AddDbContext<AppDbContext>(opt => 
                 opt.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddApiVersioning(opt =>
+            {
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.UseApiBehavior = true;
+                opt.ReportApiVersions = true;
+            });
             
             services.AddControllers();
             services.AddSwaggerGen(c =>

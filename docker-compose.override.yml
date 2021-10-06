@@ -1,14 +1,15 @@
 version: '3.4'
 
 services:
-  sqlserver:
-    container_name: sqlserver
+  sqldata:
+    container_name: sqldata
     environment:
-      SA_PASSWORD: "secretpw123"
-      ACCEPT_EULA: "Y"
+      - SA_PASSWORD=secretpw123
+      - ACCEPT_EULA=Y
+      - MSSQL_PID-Express
     restart: always
     ports:
-      - "5433:1433"
+      - "1433:1433"
     volumes:
       - mssqldata:/var/opt/mssql
         
@@ -35,9 +36,9 @@ services:
   likr.posts:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:DefaultConnection=Server=sqlserver;Database=PostsDb;User Id=sa;Password=secretpw123"
+      - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=PostsDb;User Id=sa;Password=secretpw123;"
     depends_on:
-      - sqlserver
+      - sqldata
     ports:
       - "8001:80"
   
@@ -52,8 +53,3 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8003:80"
-
-volumes:
-  mssqldata:
-  rabbitmqdata:
-  ravendbdata:

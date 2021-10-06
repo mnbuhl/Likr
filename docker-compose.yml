@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  sqlserver:
+  sqldata:
     image: mcr.microsoft.com/mssql/server:2019-latest
     
   ravendb:
@@ -28,3 +28,7 @@ services:
       context: .
       dockerfile: src/Likr.Likes/Dockerfile
 
+volumes:
+  mssqldata:
+  rabbitmqdata:
+  ravendbdata:
