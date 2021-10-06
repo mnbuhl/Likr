@@ -35,7 +35,7 @@ namespace Likr.Posts.Data
 
         public async Task<Post> GetPost(Guid id)
         {
-            return await _context.Posts.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Posts.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> CreatePost(Post post)
