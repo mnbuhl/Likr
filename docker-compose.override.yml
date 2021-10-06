@@ -8,7 +8,7 @@ services:
       ACCEPT_EULA: "Y"
     restart: always
     ports:
-      - "1433:1433"
+      - "5433:1433"
     volumes:
       - mssqldata:/var/opt/mssql
         
@@ -35,31 +35,23 @@ services:
   likr.posts:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:DefaultConnection=Server=sqlserver;Database=PostsDb;User Id=sa;Password=secretpw123"
     depends_on:
-      - ravendb
+      - sqlserver
     ports:
       - "8001:80"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
   
   likr.comments:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8002:80"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   likr.likes:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8003:80"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
 volumes:
   mssqldata:
