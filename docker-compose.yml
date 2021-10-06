@@ -12,3 +12,16 @@ services:
     build:
       context: .
       dockerfile: src/Likr.Posts/Dockerfile
+
+  likr.comments:
+    image: ${DOCKER_REGISTRY-}likrcomments
+    build:
+      context: .
+      dockerfile: src/Likr.Comments/Dockerfile
+
+  likr.likes:
+    image: ${DOCKER_REGISTRY-}likrlikes
+    build:
+      context: .
+      dockerfile: src/Likr.Likes/Dockerfile
+
