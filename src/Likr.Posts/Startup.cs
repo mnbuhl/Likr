@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Likr.Posts.Data;
+using Likr.Posts.Interfaces;
+using Likr.Posts.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace Likr.Posts
@@ -38,6 +40,10 @@ namespace Likr.Posts
                 opt.UseApiBehavior = true;
                 opt.ReportApiVersions = true;
             });
+
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+            services.AddScoped<IPostRepository, PostRepository>();
             
             services.AddControllers();
             services.AddSwaggerGen(c =>

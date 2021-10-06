@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Likr.Posts.Data;
 using Likr.Posts.Dtos.v1;
 using Likr.Posts.Entities;
+using Likr.Posts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,44 +17,42 @@ namespace Likr.Posts.Controllers.v1
     [Route("api/v{version:apiVersion}/[controller]")]
     public class PostsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IPostRepository _repository;
+        private readonly IMapper _mapper;
 
-        public PostsController(AppDbContext context)
+        public PostsController(IPostRepository repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostDto>>> GetAll()
+        public async Task<ActionResult<IList<PostDto>>> GetAll()
         {
-            List<Post> posts = await _context.Posts.ToListAsync();
+            IList<Post> posts = await _repository.GetAllPosts();
 
-            var postDtos = posts.Select(x => new PostDto(x.Id, x.Body, x.UserId, null));
-
-            return Ok(postDtos);
+            return Ok(_mapper.Map<IList<PostDto>>(posts));
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PostDto>> Get(string id)
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<PostDto>> Get(Guid id)
         {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _repository.GetPost(id);
 
-            return Ok(new PostDto(post.Id, post.Body, post.UserId, null));
+            return Ok(_mapper.Map<PostDto>(post));
         }
 
         [HttpPost]
         public async Task<ActionResult<PostDto>> Create([FromBody] CreatePostDto postDto)
         {
-            var post = new Post
-            {
-                Body = postDto.Body,
-                UserId = postDto.UserId
-            };
+            var post = _mapper.Map<Post>(postDto);
 
-            _context.Posts.Add(post);
-            await _context.SaveChangesAsync();
+            bool created = await _repository.CreatePost(post);
 
-            return CreatedAtAction("Get", new { id = post.Id }, new PostDto(post.Id, post.Body, post.UserId, post.Comments));
+            if (!created)
+                return BadRequest(ModelState);
+
+            return CreatedAtAction("Get", new { id = post.Id }, _mapper.Map<PostDto>(post));
         }
     }
 }
