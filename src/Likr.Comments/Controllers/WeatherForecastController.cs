@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Likr.Comments.Interfaces;
 
 namespace Likr.Comments.Controllers
 {
@@ -17,10 +18,12 @@ namespace Likr.Comments.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ICommentRepository _repository;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, ICommentRepository repository)
         {
             _logger = logger;
+            _repository = repository;
         }
 
         [HttpGet]
