@@ -9,17 +9,34 @@ services:
     restart: always
     ports:
       - "1433:1433"
+    volumes:
+      - mssqldata:/var/opt/mssql
+        
+  ravendb:
+    container_name: ravendb
+    ports:
+      - "8080:8080"
+      - "38888:38888"
+    environment:
+      - RAVEN_Security_UnsecuredAccessAllowed=PublicNetwork
+      - RAVEN_Setup_Mode=None
+      - RAVEN_License_Eula_Accepted=true
+    volumes:
+      - ravendbdata:/var/ravendb/data
 
   rabbitmq:
+    container_name: rabbitmq
     ports:
       - "15672:15672"
       - "5672:5672"
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
   
   likr.posts:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
-      - sqlserver
+      - ravendb
     ports:
       - "8001:80"
     volumes:
@@ -43,3 +60,8 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+volumes:
+  mssqldata:
+  rabbitmqdata:
+  ravendbdata:
