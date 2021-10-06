@@ -1,6 +1,12 @@
 version: '3.4'
 
 services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+  
   likr.posts:
     image: ${DOCKER_REGISTRY-}likrposts
     build:

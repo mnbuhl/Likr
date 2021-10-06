@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Likr.Posts
+namespace Likr.Likes
 {
     public class Startup
     {
@@ -30,7 +30,7 @@ namespace Likr.Posts
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Likr.Posts", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Likr.Likes", Version = "v1" });
             });
         }
 
@@ -41,10 +41,10 @@ namespace Likr.Posts
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Likr.Posts v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Likr.Likes v1"));
             }
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
