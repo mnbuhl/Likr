@@ -1,5 +1,6 @@
 using Likr.Comments.Data;
 using Likr.Comments.Interfaces;
+using Likr.Comments.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -31,8 +32,10 @@ namespace Likr.Comments
                 opt.ReportApiVersions = true;
             });
 
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
             services.AddSingleton<IRavenDbStore, RavenDbStore>();
-            services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddSingleton(typeof(ICommentRepository), typeof(CommentRepository));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
