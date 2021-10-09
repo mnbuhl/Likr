@@ -8,18 +8,18 @@ namespace Likr.Posts.Consumers
 {
     public class CommentCreatedConsumer : IConsumer<CommentCreated>
     {
-        private readonly IGenericRepository<Comment> _repository;
+        private readonly IGenericRepository<Comment> _commentRepository;
 
-        public CommentCreatedConsumer(IGenericRepository<Comment> repository)
+        public CommentCreatedConsumer(IGenericRepository<Comment> commentRepository)
         {
-            _repository = repository;
+            _commentRepository = commentRepository;
         }
 
         public async Task Consume(ConsumeContext<CommentCreated> context)
         {
             var message = context.Message;
 
-            var comment = await _repository.GetAsync(x => x.Id == message.Id);
+            var comment = await _commentRepository.GetAsync(x => x.Id == message.Id);
 
             if (comment != null)
                 return;
@@ -32,8 +32,8 @@ namespace Likr.Posts.Consumers
                 UserId = message.UserId,
                 LikesCount = 0
             };
-
-            await _repository.CreateAsync(comment);
+            
+            await _commentRepository.CreateAsync(comment);
         }
     }
 }
