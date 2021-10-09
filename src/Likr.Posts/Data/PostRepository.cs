@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Likr.Posts.Dtos.v1;
 using Likr.Posts.Entities;
 using Likr.Posts.Interfaces;
 using Microsoft.EntityFrameworkCore;

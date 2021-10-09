@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Likr.Posts.Data;
 using Likr.Posts.Dtos.v1;
 using Likr.Posts.Entities;
 using Likr.Posts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Likr.Posts.Controllers.v1
 {
@@ -33,7 +30,7 @@ namespace Likr.Posts.Controllers.v1
 
             return Ok(_mapper.Map<IList<PostDto>>(posts));
         }
-        
+
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IList<PostDto>>> GetAllByUserId(string userId)
         {

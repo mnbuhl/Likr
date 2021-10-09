@@ -15,13 +15,13 @@ services:
         
   ravendb:
     container_name: ravendb
-    ports:
-      - "8080:8080"
-      - "38888:38888"
     environment:
       - RAVEN_Security_UnsecuredAccessAllowed=PublicNetwork
       - RAVEN_Setup_Mode=None
       - RAVEN_License_Eula_Accepted=true
+    ports:
+      - "8080:8080"
+      - "38888:38888"
     volumes:
       - ravendbdata:/var/ravendb/data
 
@@ -45,6 +45,8 @@ services:
   likr.comments:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "Database:Name=Comments"
+      - "Database:Urls:0=http://ravendb:8080"
     ports:
       - "8002:80"
 

@@ -8,10 +8,16 @@ namespace Likr.Posts.Data
 {
     public class DatabaseSeeder
     {
+        private readonly AppDbContext _context;
         public DatabaseSeeder(AppDbContext context)
         {
-            context.Database.EnsureCreated();
-            context.Database.Migrate();
+            _context = context;
+        }
+
+        public void Seed()
+        {
+            _context.Database.EnsureCreated();
+            _context.Database.Migrate();
 
             List<Post> posts;
             List<Comment> comments;
@@ -22,7 +28,7 @@ namespace Likr.Posts.Data
                 Guid.NewGuid(),
             };
 
-            if (!context.Posts.Any())
+            if (!_context.Posts.Any())
             {
                 var random = new Random();
                 posts = new List<Post>();
@@ -36,16 +42,15 @@ namespace Likr.Posts.Data
                         UserId = users[random.Next(3)].ToString()
                     });
                 }
-                
-                context.Posts.AddRange(posts);
+
+                _context.Posts.AddRange(posts);
             }
 
-            if (!context.Comments.Any())
+            if (!_context.Comments.Any())
             {
-                
             }
 
-            context.SaveChanges();
+            _context.SaveChanges();
         }
     }
 }

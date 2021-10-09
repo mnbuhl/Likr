@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Linq;
 using Likr.Comments.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -14,7 +13,7 @@ namespace Likr.Comments.Data
     public class RavenDbStore : IRavenDbStore
     {
         public DocumentStore Store { get; init; }
-        
+
         private readonly IConfiguration _configuration;
         private readonly ILogger<RavenDbStore> _logger;
 
@@ -22,6 +21,7 @@ namespace Likr.Comments.Data
         {
             _configuration = configuration;
             _logger = logger;
+
             Store = new DocumentStore
             {
                 Database = configuration.GetValue<string>("Database:Name"),
@@ -29,14 +29,14 @@ namespace Likr.Comments.Data
             };
 
             Store.Initialize();
-            
+
             EnsureCreated();
         }
 
         private void EnsureCreated()
         {
             string databaseName = _configuration.GetValue<string>("Database:Name");
-            
+
             try
             {
                 Store.Maintenance.ForDatabase(databaseName)
@@ -50,7 +50,10 @@ namespace Likr.Comments.Data
 
                 Store.Maintenance.Server.Send(
                     new CreateDatabaseOperation(new DatabaseRecord(databaseName)));
-                
+
+                var seeder = new DatabaseSeeder(Store);
+                seeder.Seed();
+
                 _logger.LogInformation("Comments database successfully created.");
             }
         }
