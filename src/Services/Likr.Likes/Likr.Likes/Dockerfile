@@ -6,10 +6,11 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["src/Likr.Likes/Likr.Likes.csproj", "src/Likr.Likes/"]
-RUN dotnet restore "src/Likr.Likes/Likr.Likes.csproj"
+COPY ["src/Services/Likr.Likes/Likr.Likes/Likr.Likes.csproj", "src/Services/Likr.Likes/Likr.Likes/"]
+COPY ["src/Services/Likr.Likes/Likr.Commands/Likr.Commands.csproj", "src/Services/Likr.Likes/Likr.Commands/"]
+RUN dotnet restore "src/Services/Likr.Likes/Likr.Likes/Likr.Likes.csproj"
 COPY . .
-WORKDIR "/src/src/Likr.Likes"
+WORKDIR "/src/src/Services/Likr.Likes/Likr.Likes"
 RUN dotnet build "Likr.Likes.csproj" -c Release -o /app/build
 
 FROM build AS publish

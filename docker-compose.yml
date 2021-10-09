@@ -14,19 +14,19 @@ services:
     image: ${DOCKER_REGISTRY-}likrposts
     build:
       context: .
-      dockerfile: src/Likr.Posts/Dockerfile
+      dockerfile: src/Services/Likr.Posts/Dockerfile
 
   likr.comments:
     image: ${DOCKER_REGISTRY-}likrcomments
     build:
       context: .
-      dockerfile: src/Likr.Comments/Dockerfile
+      dockerfile: src/Services/Likr.Comments/Dockerfile
 
   likr.likes:
     image: ${DOCKER_REGISTRY-}likrlikes
     build:
       context: .
-      dockerfile: src/Likr.Likes/Dockerfile
+      dockerfile: src/Services/Likr.Likes/Dockerfile
 
 volumes:
   mssqldata:
