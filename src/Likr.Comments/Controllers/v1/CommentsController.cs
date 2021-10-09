@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Likr.Comments.Commands;
 using Likr.Comments.Dtos.v1;
-using Likr.Comments.Dtos.v1.Commands;
 using Likr.Comments.Entities;
 using Likr.Comments.Interfaces;
 using MassTransit;

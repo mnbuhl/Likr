@@ -3,7 +3,7 @@ using Likr.Posts.Entities;
 using Likr.Posts.Interfaces;
 using MassTransit;
 
-namespace Likr.Posts.Consumers
+namespace Likr.Comments.Commands
 {
     public record CommentDeleted(string Id);
     

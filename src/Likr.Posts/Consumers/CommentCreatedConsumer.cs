@@ -4,7 +4,7 @@ using Likr.Posts.Entities;
 using Likr.Posts.Interfaces;
 using MassTransit;
 
-namespace Likr.Posts.Consumers
+namespace Likr.Comments.Commands
 {
     public record CommentCreated(string Id, string Body, string UserId, Guid PostId);
 

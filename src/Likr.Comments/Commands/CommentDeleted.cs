@@ -1,4 +1,4 @@
-﻿namespace Likr.Comments.Dtos.v1.Commands
+﻿namespace Likr.Comments.Commands
 {
     public record CommentDeleted(string Id);
 }

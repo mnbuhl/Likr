@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using GreenPipes;
-using Likr.Posts.Consumers;
+using Likr.Comments.Commands;
 using MassTransit;
 using MassTransit.Definition;
 using Microsoft.Extensions.Configuration;
@@ -17,9 +17,7 @@ namespace Likr.Posts.Extensions
             {
                 configure.AddConsumer<CommentCreatedConsumer>();
                 configure.AddConsumer<CommentDeletedConsumer>();
-                
-                configure.SetKebabCaseEndpointNameFormatter();
-                
+
                 configure.UsingRabbitMq((context, cfg) =>
                 {
                     var configuration = context.GetRequiredService<IConfiguration>();

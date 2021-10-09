@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Likr.Comments.Dtos.v1.Commands
+namespace Likr.Comments.Commands
 {
     public record CommentCreated(string Id, string Body, string UserId, Guid PostId);
 }
