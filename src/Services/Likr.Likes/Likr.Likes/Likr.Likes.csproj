@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Likr.Commands\Likr.Commands.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Dockerfile.original" />
+  </ItemGroup>
+
 </Project>
