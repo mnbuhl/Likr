@@ -45,7 +45,6 @@ services:
   likr.comments:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "Database:Name=Comments"
       - "Database:Urls:0=http://ravendb:8080"
     ports:
       - "8002:80"

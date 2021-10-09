@@ -1,6 +1,7 @@
 using Likr.Comments.Data;
 using Likr.Comments.Interfaces;
 using Likr.Comments.Mapping;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
