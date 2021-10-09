@@ -5,6 +5,7 @@ using AutoMapper;
 using Likr.Comments.Dtos.v1;
 using Likr.Comments.Entities;
 using Likr.Comments.Interfaces;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Likr.Comments.Controllers.v1
@@ -16,11 +17,13 @@ namespace Likr.Comments.Controllers.v1
     {
         private readonly ICommentRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public CommentsController(ICommentRepository repository, IMapper mapper)
+        public CommentsController(ICommentRepository repository, IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             _repository = repository;
             _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet]
@@ -63,6 +66,9 @@ namespace Likr.Comments.Controllers.v1
             if (!created)
                 return BadRequest();
 
+            await _publishEndpoint.Publish(new CommentCreated(comment.Id, comment.Body, comment.UserId,
+                comment.PostId));
+
             return CreatedAtAction("Get", new { id = comment.Id }, _mapper.Map<CommentDto>(comment));
         }
 
@@ -73,6 +79,8 @@ namespace Likr.Comments.Controllers.v1
 
             if (!deleted)
                 return NotFound();
+
+            await _publishEndpoint.Publish(new CommentDeleted(id.ToString()));
 
             return NoContent();
         }
