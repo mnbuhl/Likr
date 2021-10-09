@@ -27,6 +27,8 @@ services:
 
   rabbitmq:
     container_name: rabbitmq
+    hostname: rabbitmq
+    restart: always
     ports:
       - "15672:15672"
       - "5672:5672"
@@ -37,8 +39,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=PostsDb;User Id=sa;Password=secretpw123;"
+      - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
     depends_on:
       - sqldata
+      - rabbitmq
     ports:
       - "8001:80"
   
@@ -46,6 +50,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "Database:Urls:0=http://ravendb:8080"
+      - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
+    restart: unless-stopped
+    depends_on:
+      - ravendb
+      - rabbitmq
     ports:
       - "8002:80"
 

@@ -19,10 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Likr.Comments", "src\Likr.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Likr.Likes", "src\Likr.Likes\Likr.Likes.csproj", "{A66C5E84-9752-4E19-96AC-B8F43959D71D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{071F00CC-FD38-46AD-82CB-207F2C0C34E8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Likr.Shared", "src\Likr.Shared\Likr.Shared.csproj", "{CE7319AF-11BB-44CE-92F7-62E9179C8170}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,10 +41,6 @@ Global
 		{A66C5E84-9752-4E19-96AC-B8F43959D71D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A66C5E84-9752-4E19-96AC-B8F43959D71D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A66C5E84-9752-4E19-96AC-B8F43959D71D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE7319AF-11BB-44CE-92F7-62E9179C8170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE7319AF-11BB-44CE-92F7-62E9179C8170}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE7319AF-11BB-44CE-92F7-62E9179C8170}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE7319AF-11BB-44CE-92F7-62E9179C8170}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,7 +49,6 @@ Global
 		{225A5019-544A-490A-956B-208C6115A513} = {4502DA90-AF70-4EEB-A470-654AD0D8997D}
 		{28A19B84-35E0-4160-99E7-2EE9B402B6B2} = {4502DA90-AF70-4EEB-A470-654AD0D8997D}
 		{A66C5E84-9752-4E19-96AC-B8F43959D71D} = {4502DA90-AF70-4EEB-A470-654AD0D8997D}
-		{CE7319AF-11BB-44CE-92F7-62E9179C8170} = {071F00CC-FD38-46AD-82CB-207F2C0C34E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31E53794-E39B-4A1C-A622-6C5C2D7718FB}

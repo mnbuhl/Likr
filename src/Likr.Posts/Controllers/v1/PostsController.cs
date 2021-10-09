@@ -6,6 +6,7 @@ using Likr.Posts.Dtos.v1;
 using Likr.Posts.Entities;
 using Likr.Posts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Likr.Posts.Controllers.v1
 {
@@ -46,7 +47,7 @@ namespace Likr.Posts.Controllers.v1
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PostDto>> Get(Guid id)
         {
-            var post = await _repository.GetAsync(x => x.Id == id);
+            var post = await _repository.GetAsync(x => x.Id == id, x => x.Include(p => p.Comments));
 
             if (post == null)
                 return NotFound();
@@ -70,7 +71,7 @@ namespace Likr.Posts.Controllers.v1
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            bool deleted = await _repository.DeleteAsync(id);
+            bool deleted = await _repository.DeleteAsync(id.ToString());
 
             if (!deleted)
                 return NotFound();

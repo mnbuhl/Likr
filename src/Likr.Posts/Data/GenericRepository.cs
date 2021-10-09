@@ -56,11 +56,11 @@ namespace Likr.Posts.Data
             return await query.AsNoTracking().ToListAsync();
         }
 
-        // Take a generic entity and adds it to the database
+        // Takes a generic entity and adds it to the database
         // Returns true if successfully saved to database
         public async Task<bool> CreateAsync(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
+            _context.Set<T>().Add(entity);
 
             return await _context.SaveChangesAsync() > 0;
         }
@@ -76,7 +76,7 @@ namespace Likr.Posts.Data
 
         // Takes an id and will try to find an entity from that Id
         // Returns true if successfully deleted
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(string id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
 
