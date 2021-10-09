@@ -1,6 +1,7 @@
 using Likr.Comments.Data;
 using Likr.Comments.Interfaces;
 using Likr.Comments.Mapping;
+using Likr.Shared;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,8 @@ namespace Likr.Comments
             });
 
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+            services.AddMassTransitWithRabbitMq();
 
             services.AddSingleton<IRavenDbStore, RavenDbStore>();
             services.AddSingleton(typeof(ICommentRepository), typeof(CommentRepository));

@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectItems", "ProjectItems", "{21DF0010-47ED-4711-826B-AC39A6A962C0}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Likr.Posts", "src\Likr.Posts\Likr.Posts.csproj", "{225A5019-544A-490A-956B-208C6115A513}"
