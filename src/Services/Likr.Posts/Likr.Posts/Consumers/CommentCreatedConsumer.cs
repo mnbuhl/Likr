@@ -1,14 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Likr.Commands;
 using Likr.Posts.Entities;
 using Likr.Posts.Interfaces;
 using MassTransit;
 
-// ReSharper disable once CheckNamespace
-namespace Likr.Commands
+namespace Likr.Posts.Consumers
 {
-    public record CommentCreated(string Id, string Body, string UserId, Guid PostId);
-
     public class CommentCreatedConsumer : IConsumer<CommentCreated>
     {
         private readonly IGenericRepository<Comment> _repository;

@@ -1,13 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Likr.Commands;
 using Likr.Posts.Entities;
 using Likr.Posts.Interfaces;
 using MassTransit;
 
-// ReSharper disable once CheckNamespace
-namespace Likr.Commands
+namespace Likr.Posts.Consumers
 {
-    public record CommentDeleted(string Id);
-    
     public class CommentDeletedConsumer: IConsumer<CommentDeleted>
     {
         private readonly IGenericRepository<Comment> _repository;
