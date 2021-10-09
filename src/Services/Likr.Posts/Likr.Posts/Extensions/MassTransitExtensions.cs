@@ -1,9 +1,5 @@
-﻿using System;
-using System.Reflection;
-using GreenPipes;
-using Likr.Comments.Commands;
+﻿using Likr.Commands;
 using MassTransit;
-using MassTransit.Definition;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,13 +19,13 @@ namespace Likr.Posts.Extensions
                     var configuration = context.GetRequiredService<IConfiguration>();
                     string rabbitMqHost = configuration.GetValue<string>("RabbitMq");
                     cfg.Host(rabbitMqHost);
-                    
+
                     cfg.ConfigureEndpoints(context);
                 });
             });
 
             services.AddMassTransitHostedService();
-            
+
             return services;
         }
     }

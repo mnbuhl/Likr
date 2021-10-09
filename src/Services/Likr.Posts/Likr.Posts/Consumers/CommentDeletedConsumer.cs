@@ -3,7 +3,8 @@ using Likr.Posts.Entities;
 using Likr.Posts.Interfaces;
 using MassTransit;
 
-namespace Likr.Comments.Commands
+// ReSharper disable once CheckNamespace
+namespace Likr.Commands
 {
     public record CommentDeleted(string Id);
     

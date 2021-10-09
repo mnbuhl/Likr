@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Likr.Comments.Commands;
+using Likr.Commands;
 using Likr.Comments.Dtos.v1;
 using Likr.Comments.Entities;
 using Likr.Comments.Interfaces;
