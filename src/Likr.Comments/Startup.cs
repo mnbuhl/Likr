@@ -1,5 +1,11 @@
+using Likr.Comments.Data;
+using Likr.Comments.Interfaces;
+using Likr.Comments.Mapping;
+using Likr.Shared;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,16 +15,31 @@ namespace Likr.Comments
 {
     public class Startup
     {
+        private IConfiguration _configuration;
+        
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddApiVersioning(opt =>
+            {
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.UseApiBehavior = true;
+                opt.ReportApiVersions = true;
+            });
+
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+            services.AddMassTransitWithRabbitMq();
+
+            services.AddSingleton<IRavenDbStore, RavenDbStore>();
+            services.AddSingleton(typeof(ICommentRepository), typeof(CommentRepository));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
