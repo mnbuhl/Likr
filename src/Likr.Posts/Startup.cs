@@ -1,6 +1,7 @@
 using Likr.Posts.Data;
 using Likr.Posts.Interfaces;
 using Likr.Posts.Mapping;
+using Likr.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -35,8 +36,11 @@ namespace Likr.Posts
                 opt.ReportApiVersions = true;
             });
 
+            services.AddMassTransitWithRabbitMq();
+
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IPostRepository, PostRepository>();
 
             services.AddControllers();

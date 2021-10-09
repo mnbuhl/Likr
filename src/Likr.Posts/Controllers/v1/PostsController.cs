@@ -14,10 +14,11 @@ namespace Likr.Posts.Controllers.v1
     [Route("api/v{version:apiVersion}/[controller]")]
     public class PostsController : ControllerBase
     {
-        private readonly IPostRepository _repository;
+        //private readonly IPostRepository _repository;
+        private readonly IGenericRepository<Post> _repository;
         private readonly IMapper _mapper;
 
-        public PostsController(IPostRepository repository, IMapper mapper)
+        public PostsController(IGenericRepository<Post> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -26,7 +27,7 @@ namespace Likr.Posts.Controllers.v1
         [HttpGet]
         public async Task<ActionResult<IList<PostDto>>> GetAll()
         {
-            IList<Post> posts = await _repository.GetAllPosts();
+            IList<Post> posts = await _repository.GetAllAsync();
 
             return Ok(_mapper.Map<IList<PostDto>>(posts));
         }
@@ -34,7 +35,7 @@ namespace Likr.Posts.Controllers.v1
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IList<PostDto>>> GetAllByUserId(string userId)
         {
-            IList<Post> posts = await _repository.GetPostsByUserId(userId);
+            IList<Post> posts = await _repository.GetAllAsync(x => x.UserId == userId);
 
             if (posts == null)
                 return NotFound();
@@ -45,7 +46,7 @@ namespace Likr.Posts.Controllers.v1
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PostDto>> Get(Guid id)
         {
-            var post = await _repository.GetPost(id);
+            var post = await _repository.GetAsync(x => x.Id == id);
 
             if (post == null)
                 return NotFound();
@@ -58,7 +59,7 @@ namespace Likr.Posts.Controllers.v1
         {
             var post = _mapper.Map<Post>(postDto);
 
-            bool created = await _repository.CreatePost(post);
+            bool created = await _repository.CreateAsync(post);
 
             if (!created)
                 return BadRequest(ModelState);
@@ -69,7 +70,7 @@ namespace Likr.Posts.Controllers.v1
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            bool deleted = await _repository.DeletePost(id);
+            bool deleted = await _repository.DeleteAsync(id);
 
             if (!deleted)
                 return NotFound();
