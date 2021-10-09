@@ -27,6 +27,9 @@ namespace Likr.Posts.Data.Migrations
                     b.Property<string>("Body")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("LikesCount")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
@@ -48,6 +51,9 @@ namespace Likr.Posts.Data.Migrations
 
                     b.Property<string>("Body")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LikesCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
