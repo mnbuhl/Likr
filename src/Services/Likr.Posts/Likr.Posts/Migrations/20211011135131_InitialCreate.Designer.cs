@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Likr.Posts.Data.Migrations
+namespace Likr.Posts.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211009105410_AddedLikesCount")]
-    partial class AddedLikesCount
+    [Migration("20211011135131_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,6 +24,7 @@ namespace Likr.Posts.Data.Migrations
             modelBuilder.Entity("Likr.Posts.Entities.Comment", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Body")
@@ -35,21 +36,24 @@ namespace Likr.Posts.Data.Migrations
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("PostId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("PostId1");
 
                     b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Likr.Posts.Entities.Post", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Body")
                         .HasColumnType("nvarchar(max)");
@@ -69,9 +73,7 @@ namespace Likr.Posts.Data.Migrations
                 {
                     b.HasOne("Likr.Posts.Entities.Post", null)
                         .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PostId1");
                 });
 
             modelBuilder.Entity("Likr.Posts.Entities.Post", b =>

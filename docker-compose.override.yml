@@ -19,6 +19,7 @@ services:
       - RAVEN_Security_UnsecuredAccessAllowed=PublicNetwork
       - RAVEN_Setup_Mode=None
       - RAVEN_License_Eula_Accepted=true
+    restart: always
     ports:
       - "8080:8080"
       - "38888:38888"
@@ -40,6 +41,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=PostsDb;User Id=sa;Password=secretpw123;"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
+    restart: unless-stopped
     depends_on:
       - sqldata
       - rabbitmq
@@ -61,5 +63,6 @@ services:
   likr.likes:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+    restart: unless-stopped
     ports:
       - "8003:80"

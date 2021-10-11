@@ -35,6 +35,7 @@ namespace Likr.Posts.Controllers.v1
 
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IList<PostDto>>> GetAllByUserId(string userId)
+        
         {
             IList<Post> posts = await _repository.GetAllAsync(x => x.UserId == userId);
 
@@ -47,7 +48,7 @@ namespace Likr.Posts.Controllers.v1
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PostDto>> Get(Guid id)
         {
-            var post = await _repository.GetAsync(x => x.Id == id, x => x.Include(p => p.Comments));
+            var post = await _repository.GetAsync(x => x.Id == id.ToString(), x => x.Include(p => p.Comments));
 
             if (post == null)
                 return NotFound();
