@@ -6,20 +6,20 @@ using MassTransit;
 
 namespace Likr.Likes.Consumers
 {
-    public class CommentCreatedConsumer : IConsumer<CommentCreated>
+    public class PostCreatedConsumer : IConsumer<PostCreated>
     {
-        private readonly IGenericRepository<Post> _commentRepository;
+        private readonly IGenericRepository<Post> _postRepository;
 
-        public CommentCreatedConsumer(IGenericRepository<Post> commentRepository)
+        public PostCreatedConsumer(IGenericRepository<Post> postRepository)
         {
-            _commentRepository = commentRepository;
+            _postRepository = postRepository;
         }
 
-        public async Task Consume(ConsumeContext<CommentCreated> context)
+        public async Task Consume(ConsumeContext<PostCreated> context)
         {
             var message = context.Message;
 
-            var comment = await _commentRepository.GetAsync(x => x.Id == message.Id);
+            var comment = await _postRepository.GetAsync(x => x.Id == message.Id);
 
             if (comment != null)
                 return;
@@ -31,7 +31,7 @@ namespace Likr.Likes.Consumers
                 UserId = message.UserId,
             };
             
-            await _commentRepository.CreateAsync(comment);
+            await _postRepository.CreateAsync(comment);
         }
     }
 }

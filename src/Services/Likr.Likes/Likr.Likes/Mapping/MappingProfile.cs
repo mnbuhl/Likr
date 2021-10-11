@@ -9,6 +9,7 @@ namespace Likr.Likes.Mapping
         public MappingProfile()
         {
             CreateMap<CreateLikeDto, Like>();
+            CreateMap<DeleteLikeDto, Like>();
             CreateMap<Like, LikeDto>();
         }
     }

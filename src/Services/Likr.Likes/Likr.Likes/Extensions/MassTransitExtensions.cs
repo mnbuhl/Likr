@@ -13,6 +13,8 @@ namespace Likr.Likes.Extensions
             {
                 configure.AddConsumer<CommentCreatedConsumer>();
                 configure.AddConsumer<CommentDeletedConsumer>();
+                configure.AddConsumer<PostCreatedConsumer>();
+                configure.AddConsumer<PostDeletedConsumer>();
                 
                 configure.UsingRabbitMq((context, cfg) =>
                 {

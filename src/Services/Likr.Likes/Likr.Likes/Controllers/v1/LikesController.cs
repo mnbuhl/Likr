@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Likr.Commands;
+using Likr.Likes.Data;
 using Likr.Likes.Dtos.v1;
 using Likr.Likes.Entities;
 using Likr.Likes.Interfaces;
@@ -57,7 +58,7 @@ namespace Likr.Likes.Controllers.v1
             if (!created)
                 return BadRequest();
 
-            await _publishEndpoint.Publish(new LikeCreated(like.ObserverId, like.TargetId));
+            await _publishEndpoint.Publish(new LikeCreated(like.TargetId));
 
             return NoContent();
         }
@@ -65,12 +66,18 @@ namespace Likr.Likes.Controllers.v1
         [HttpDelete]
         public async Task<IActionResult> Unlike([FromQuery] DeleteLikeDto likeDto)
         {
-            bool deleted = await _likeRepository.DeleteAsync(likeDto.TargetId.ToString());
+            var like = await _likeRepository.GetAsync(x =>
+                x.ObserverId == likeDto.ObserverId.ToString() && x.TargetId == likeDto.TargetId.ToString());
+
+            if (like == null)
+                return NotFound();
+            
+            bool deleted = await _likeRepository.DeleteAsync(like);
 
             if (!deleted)
-                return NotFound();
+                return BadRequest();
 
-            await _publishEndpoint.Publish(new LikeDeleted(likeDto.ObserverId.ToString(), likeDto.TargetId.ToString()));
+            await _publishEndpoint.Publish(new LikeDeleted(likeDto.TargetId.ToString()));
 
             return NoContent();
         }

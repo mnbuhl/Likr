@@ -19,6 +19,7 @@ namespace Likr.Likes.Interfaces
         Task<bool> CreateAsync(T entity);
         Task<bool> UpdateAsync(T entity);
         Task<bool> DeleteAsync(string id);
+        Task<bool> DeleteAsync(T entity);
         Task<int> CountAsync(Expression<Func<T, bool>> criteria = null);
     }
 }

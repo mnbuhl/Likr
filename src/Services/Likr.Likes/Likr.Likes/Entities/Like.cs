@@ -1,6 +1,8 @@
-﻿namespace Likr.Likes.Entities
+﻿using Likr.Likes.Interfaces;
+
+namespace Likr.Likes.Entities
 {
-    public class Like : BaseEntity
+    public class Like
     {
         public string ObserverId { get; set; }
         public User Observer { get; set; }

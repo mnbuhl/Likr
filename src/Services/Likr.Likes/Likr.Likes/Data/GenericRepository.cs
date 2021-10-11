@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace Likr.Likes.Data
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly AppDbContext _context;
 
@@ -79,12 +79,22 @@ namespace Likr.Likes.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        // Takes an id and will try to find an entity from that Id
-        // Returns true if successfully deleted
         public async Task<bool> DeleteAsync(string id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
+            
+            if (entity == null)
+                return false;
 
+            _context.Set<T>().Remove(entity);
+
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        // Takes an id and will try to find an entity from that Id
+        // Returns true if successfully deleted
+        public async Task<bool> DeleteAsync(T entity)
+        {
             if (entity == null)
                 return false;
 

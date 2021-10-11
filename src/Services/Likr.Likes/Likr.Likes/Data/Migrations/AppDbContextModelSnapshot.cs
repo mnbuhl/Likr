@@ -20,19 +20,13 @@ namespace Likr.Likes.Data.Migrations
 
             modelBuilder.Entity("Likr.Likes.Entities.Like", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ObserverId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TargetId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ObserverId");
+                    b.HasKey("ObserverId", "TargetId");
 
                     b.HasIndex("TargetId");
 
@@ -80,11 +74,15 @@ namespace Likr.Likes.Data.Migrations
                 {
                     b.HasOne("Likr.Likes.Entities.User", "Observer")
                         .WithMany()
-                        .HasForeignKey("ObserverId");
+                        .HasForeignKey("ObserverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Likr.Likes.Entities.Post", "Target")
                         .WithMany("Likes")
-                        .HasForeignKey("TargetId");
+                        .HasForeignKey("TargetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Observer");
 
