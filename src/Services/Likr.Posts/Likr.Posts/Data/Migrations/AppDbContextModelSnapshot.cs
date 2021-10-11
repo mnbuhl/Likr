@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Likr.Posts.Migrations
+namespace Likr.Posts.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -51,6 +51,9 @@ namespace Likr.Posts.Migrations
 
                     b.Property<string>("Body")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CommentsCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("LikesCount")
                         .HasColumnType("int");

@@ -16,19 +16,19 @@ namespace Likr.Posts.Controllers.v1
     public class PostsController : ControllerBase
     {
         //private readonly IPostRepository _repository;
-        private readonly IGenericRepository<Post> _repository;
+        private readonly IGenericRepository<Post> _postRepository;
         private readonly IMapper _mapper;
 
-        public PostsController(IGenericRepository<Post> repository, IMapper mapper)
+        public PostsController(IGenericRepository<Post> postRepository, IMapper mapper)
         {
-            _repository = repository;
+            _postRepository = postRepository;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult<IList<PostDto>>> GetAll()
         {
-            IList<Post> posts = await _repository.GetAllAsync();
+            IList<Post> posts = await _postRepository.GetAllAsync();
 
             return Ok(_mapper.Map<IList<PostDto>>(posts));
         }
@@ -37,7 +37,7 @@ namespace Likr.Posts.Controllers.v1
         public async Task<ActionResult<IList<PostDto>>> GetAllByUserId(string userId)
         
         {
-            IList<Post> posts = await _repository.GetAllAsync(x => x.UserId == userId);
+            IList<Post> posts = await _postRepository.GetAllAsync(x => x.UserId == userId);
 
             if (posts == null)
                 return NotFound();
@@ -48,7 +48,7 @@ namespace Likr.Posts.Controllers.v1
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PostDto>> Get(Guid id)
         {
-            var post = await _repository.GetAsync(x => x.Id == id.ToString(), x => x.Include(p => p.Comments));
+            var post = await _postRepository.GetAsync(x => x.Id == id.ToString(), x => x.Include(p => p.Comments));
 
             if (post == null)
                 return NotFound();
@@ -61,7 +61,7 @@ namespace Likr.Posts.Controllers.v1
         {
             var post = _mapper.Map<Post>(postDto);
 
-            bool created = await _repository.CreateAsync(post);
+            bool created = await _postRepository.CreateAsync(post);
 
             if (!created)
                 return BadRequest(ModelState);
@@ -72,7 +72,7 @@ namespace Likr.Posts.Controllers.v1
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            bool deleted = await _repository.DeleteAsync(id.ToString());
+            bool deleted = await _postRepository.DeleteAsync(id.ToString());
 
             if (!deleted)
                 return NotFound();

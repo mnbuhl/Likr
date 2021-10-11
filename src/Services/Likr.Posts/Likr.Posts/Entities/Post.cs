@@ -9,7 +9,7 @@ namespace Likr.Posts.Entities
         public string Body { get; set; }
         public string UserId { get; set; }
         public int LikesCount { get; set; }
-        public int CommentsCount => Comments?.Count ?? 0;
+        public int CommentsCount { get; set; }
         public ICollection<Comment> Comments { get; set; }
     }
 }
