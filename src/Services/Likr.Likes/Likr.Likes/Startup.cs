@@ -1,6 +1,9 @@
 using Likr.Likes.Data;
+using Likr.Likes.Interfaces;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +26,17 @@ namespace Likr.Likes
         {
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+            
+            services.AddApiVersioning(opt =>
+            {
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.UseApiBehavior = true;
+                opt.ReportApiVersions = true;
+            });
+
+            services.AddMassTransit();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             
             services.AddControllers();
             services.AddSwaggerGen(c =>
