@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Likr.Posts.Dtos.v1;
 using Likr.Posts.Entities;
+using Likr.Posts.Helpers;
 using Likr.Posts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,18 +27,18 @@ namespace Likr.Posts.Controllers.v1
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<PostDto>>> GetAll()
+        public async Task<ActionResult<IList<PostDto>>> GetAll([FromQuery] PaginationQuery paginationQuery)
         {
-            IList<Post> posts = await _postRepository.GetAllAsync();
+            IList<Post> posts = await _postRepository.GetAllAsync(paginationQuery: paginationQuery);
 
             return Ok(_mapper.Map<IList<PostDto>>(posts));
         }
 
         [HttpGet("user/{userId}")]
-        public async Task<ActionResult<IList<PostDto>>> GetAllByUserId(string userId)
+        public async Task<ActionResult<IList<PostDto>>> GetAllByUserId([FromQuery] string userId, PaginationQuery paginationQuery)
         
         {
-            IList<Post> posts = await _postRepository.GetAllAsync(x => x.UserId == userId);
+            IList<Post> posts = await _postRepository.GetAllAsync(x => x.UserId == userId, paginationQuery: paginationQuery);
 
             if (posts == null)
                 return NotFound();

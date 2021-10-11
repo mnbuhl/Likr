@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Likr.Posts.Entities;
+using Likr.Posts.Helpers;
 using Likr.Posts.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -21,7 +22,8 @@ namespace Likr.Posts.Data
 
         // Takes an expression as the criteria such is Id and an expression to include navigation properties 
         // Builds a query and gets the First item that matches the criteria
-        public async Task<T> GetAsync(Expression<Func<T, bool>> criteria, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> criteria,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             IQueryable<T> query = _context.Set<T>();
 
@@ -35,7 +37,9 @@ namespace Likr.Posts.Data
 
         // Takes an expression as the criteria such is a Where clause, an expression to include navigation properties and an expression for OrderBy
         // Builds a query and returns the list that matches the criteria
-        public async Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> criteria = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
+        public async Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> criteria = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, PaginationQuery paginationQuery = null)
         {
             IQueryable<T> query = _context.Set<T>();
 
@@ -54,7 +58,13 @@ namespace Likr.Posts.Data
                 query = orderBy(query);
             }
 
-            return await query.AsNoTracking().ToListAsync();
+            paginationQuery ??= new PaginationQuery();
+
+            return await query
+                .Skip((paginationQuery.Page - 1) * paginationQuery.PageSize)
+                .Take(paginationQuery.PageSize)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         // Takes a generic entity and adds it to the database
@@ -87,6 +97,18 @@ namespace Likr.Posts.Data
             _context.Set<T>().Remove(entity);
 
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<int> CountAsync(Expression<Func<T, bool>> criteria = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            if (criteria != null)
+            {
+                query = query.Where(criteria);
+            }
+
+            return await query.CountAsync();
         }
     }
 }

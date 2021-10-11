@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Likr.Posts.Helpers;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Likr.Posts.Interfaces
@@ -14,10 +15,11 @@ namespace Likr.Posts.Interfaces
 
         Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> criteria = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null);
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, PaginationQuery paginationQuery = null);
 
         Task<bool> CreateAsync(T entity);
         Task<bool> UpdateAsync(T entity);
         Task<bool> DeleteAsync(string id);
+        Task<int> CountAsync(Expression<Func<T, bool>> criteria = null);
     }
 }
