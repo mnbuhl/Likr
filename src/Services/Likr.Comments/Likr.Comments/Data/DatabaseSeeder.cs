@@ -116,12 +116,12 @@ namespace Likr.Comments.Data
             {
                 session.Store(new Comment
                 {
-                    Id = id,
+                    Id = id.ToLower(),
                     Body = $"This is a test comment - {counter++}",
                     LikesCount = _random.Next(0, 100),
-                    PostId = postIds[_randomForComments.Next(postIds.Count)],
+                    PostId = postIds[_randomForComments.Next(postIds.Count)].ToLower(),
                     UserId = Guid.NewGuid().ToString()
-                }, id);
+                }, id.ToLower());
             }
 
             session.SaveChanges();

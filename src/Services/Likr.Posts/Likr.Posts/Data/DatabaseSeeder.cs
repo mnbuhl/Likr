@@ -75,7 +75,7 @@ namespace Likr.Posts.Data
                 {
                     posts.Add(new Post
                     {
-                        Id = id,
+                        Id = id.ToLower(),
                         Body = $"{body[new Range(0, _randomForWordGeneration.Next(body.Length))]}",
                         LikesCount = _random.Next(0, 1000),
                         UserId = users[_random.Next(4)].ToString()
@@ -150,11 +150,11 @@ namespace Likr.Posts.Data
                 {
                     comments.Add(new Comment
                     {
-                        Id = id,
+                        Id = id.ToLower(),
                         Body = $"This is a test comment - {counter++}",
                         LikesCount = _random.Next(0, 1000),
                         UserId = users[_random.Next(4)].ToString(),
-                        PostId = postIds[_randomForComments.Next(postIds.Count)]
+                        PostId = postIds[_randomForComments.Next(postIds.Count)].ToLower()
                     });
                 }
                 

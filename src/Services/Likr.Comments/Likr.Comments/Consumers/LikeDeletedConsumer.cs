@@ -20,7 +20,7 @@ namespace Likr.Comments.Consumers
 
             if (comment != null)
             {
-                comment.LikesCount++;
+                comment.LikesCount--;
                 await _commentRepository.InsertOrUpdate(comment);
             }
         }

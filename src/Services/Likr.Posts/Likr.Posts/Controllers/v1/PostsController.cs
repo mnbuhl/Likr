@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Likr.Commands;
 using Likr.Posts.Dtos.v1;
 using Likr.Posts.Entities;
 using Likr.Posts.Helpers;
 using Likr.Posts.Interfaces;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,13 +21,15 @@ namespace Likr.Posts.Controllers.v1
         private readonly IGenericRepository<Post> _postRepository;
         private readonly IGenericRepository<Comment> _commentRepository;
         private readonly IMapper _mapper;
+        private readonly IPublishEndpoint _publishEndpoint;
 
         public PostsController(IGenericRepository<Post> postRepository, IMapper mapper,
-            IGenericRepository<Comment> commentRepository)
+            IGenericRepository<Comment> commentRepository, IPublishEndpoint publishEndpoint)
         {
             _postRepository = postRepository;
             _mapper = mapper;
             _commentRepository = commentRepository;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet]
@@ -73,6 +77,8 @@ namespace Likr.Posts.Controllers.v1
             if (!created)
                 return BadRequest(ModelState);
 
+            await _publishEndpoint.Publish(new PostCreated(post.Id, post.Body, post.UserId));
+
             return CreatedAtAction("Get", new { id = post.Id }, _mapper.Map<PostDto>(post));
         }
 
@@ -83,6 +89,8 @@ namespace Likr.Posts.Controllers.v1
 
             if (!deleted)
                 return NotFound();
+            
+            await _publishEndpoint.Publish(new PostDeleted(id.ToString()));
 
             return NoContent();
         }
