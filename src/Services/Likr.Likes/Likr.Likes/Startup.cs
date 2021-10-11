@@ -1,4 +1,5 @@
 using Likr.Likes.Data;
+using Likr.Likes.Extensions;
 using Likr.Likes.Interfaces;
 using Likr.Likes.Mapping;
 using MassTransit;
@@ -40,6 +41,7 @@ namespace Likr.Likes
 
             services.AddMassTransit();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddMassTransitWithRabbitMq();
             
             services.AddControllers();
             services.AddSwaggerGen(c =>

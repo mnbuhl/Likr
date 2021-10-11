@@ -16,7 +16,6 @@ namespace Likr.Posts.Controllers.v1
     [Route("api/v{version:apiVersion}/[controller]")]
     public class PostsController : ControllerBase
     {
-        //private readonly IPostRepository _repository;
         private readonly IGenericRepository<Post> _postRepository;
         private readonly IGenericRepository<Comment> _commentRepository;
         private readonly IMapper _mapper;
