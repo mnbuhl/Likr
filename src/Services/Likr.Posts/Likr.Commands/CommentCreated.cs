@@ -2,5 +2,5 @@
 
 namespace Likr.Commands
 {
-    public record CommentCreated(string Id, string Body, string UserId, Guid PostId);
+    public record CommentCreated(string Id, string Body, string UserId, string PostId);
 }

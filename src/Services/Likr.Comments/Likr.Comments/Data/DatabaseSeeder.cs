@@ -8,7 +8,7 @@ namespace Likr.Comments.Data
     public class DatabaseSeeder
     {
         private readonly IDocumentStore _store;
-        private static Random _random = new Random();
+        private static readonly Random _random = new Random();
         
         public DatabaseSeeder(IDocumentStore documentStore)
         {
@@ -19,23 +19,23 @@ namespace Likr.Comments.Data
         {
             using var session = _store.OpenSession();
 
-            List<Guid> commentIds = new List<Guid>();
+            List<string> commentIds = new List<string>();
 
             for (int i = 0; i < 200; i++)
             {
-                commentIds.Add(Guid.NewGuid());
+                commentIds.Add(Guid.NewGuid().ToString());
             }
 
             foreach (var id in commentIds)        
             {
                 session.Store(new Comment
                 {
-                    Id = id.ToString(),
+                    Id = id,
                     Body = "This is a test comment",
                     LikesCount = _random.Next(0, 100),
-                    PostId = _random.Next(5) > 2 ? commentIds[_random.Next(0, 200)] : Guid.NewGuid(),
+                    PostId = _random.Next(5) > 2 ? commentIds[_random.Next(0, 200)] : Guid.NewGuid().ToString(),
                     UserId = Guid.NewGuid().ToString()
-                }, id.ToString());
+                }, id);
             }
             
             session.SaveChanges();

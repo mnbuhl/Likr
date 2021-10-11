@@ -25,7 +25,7 @@ namespace Likr.Comments.Data
             return await session.Query<Comment>().ToListAsync();
         }
 
-        public async Task<IList<Comment>> GetAllByPostId(Guid postId)
+        public async Task<IList<Comment>> GetAllByPostId(string postId)
         {
             using var session = _context.Store.OpenAsyncSession();
             return await session.Query<Comment>().Where(x => x.PostId == postId, true).ToListAsync();
@@ -35,7 +35,7 @@ namespace Likr.Comments.Data
         {
             using var session = _context.Store.OpenAsyncSession();
             var comment = await session.LoadAsync<Comment>(id);
-            comment.Comments = await GetAllByPostId(Guid.Parse(comment.Id));
+            comment.Comments = await GetAllByPostId(comment.Id);
 
             return comment;
         }

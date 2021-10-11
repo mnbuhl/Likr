@@ -38,7 +38,7 @@ namespace Likr.Comments.Controllers.v1
         [HttpGet("post/{postId:guid}")]
         public async Task<ActionResult<IList<CommentDto>>> GetCommentsByPostId(Guid postId)
         {
-            IList<Comment> comments = await _repository.GetAllByPostId(postId);
+            IList<Comment> comments = await _repository.GetAllByPostId(postId.ToString());
 
             if (comments == null)
                 return NotFound();
