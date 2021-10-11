@@ -18,12 +18,15 @@ namespace Likr.Posts.Controllers.v1
     {
         //private readonly IPostRepository _repository;
         private readonly IGenericRepository<Post> _postRepository;
+        private readonly IGenericRepository<Comment> _commentRepository;
         private readonly IMapper _mapper;
 
-        public PostsController(IGenericRepository<Post> postRepository, IMapper mapper)
+        public PostsController(IGenericRepository<Post> postRepository, IMapper mapper,
+            IGenericRepository<Comment> commentRepository)
         {
             _postRepository = postRepository;
             _mapper = mapper;
+            _commentRepository = commentRepository;
         }
 
         [HttpGet]
@@ -35,10 +38,12 @@ namespace Likr.Posts.Controllers.v1
         }
 
         [HttpGet("user/{userId}")]
-        public async Task<ActionResult<IList<PostDto>>> GetAllByUserId([FromQuery] string userId, PaginationQuery paginationQuery)
-        
+        public async Task<ActionResult<IList<PostDto>>> GetAllByUserId([FromQuery] string userId,
+            PaginationQuery paginationQuery)
+
         {
-            IList<Post> posts = await _postRepository.GetAllAsync(x => x.UserId == userId, paginationQuery: paginationQuery);
+            IList<Post> posts =
+                await _postRepository.GetAllAsync(x => x.UserId == userId, paginationQuery: paginationQuery);
 
             if (posts == null)
                 return NotFound();
@@ -49,10 +54,12 @@ namespace Likr.Posts.Controllers.v1
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PostDto>> Get(Guid id)
         {
-            var post = await _postRepository.GetAsync(x => x.Id == id.ToString(), x => x.Include(p => p.Comments));
+            var post = await _postRepository.GetAsync(x => x.Id == id.ToString());
 
             if (post == null)
                 return NotFound();
+            
+            post.Comments = await _commentRepository.GetAllAsync(x => x.PostId == id.ToString());
 
             return Ok(_mapper.Map<PostDto>(post));
         }

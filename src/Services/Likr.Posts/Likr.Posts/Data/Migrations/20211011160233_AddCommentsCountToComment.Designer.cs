@@ -3,14 +3,16 @@ using Likr.Posts.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Likr.Posts.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211011160233_AddCommentsCountToComment")]
+    partial class AddCommentsCountToComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,12 +36,14 @@ namespace Likr.Posts.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PostId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PostId");
 
                     b.ToTable("Comments");
                 });
@@ -65,6 +69,18 @@ namespace Likr.Posts.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("Likr.Posts.Entities.Comment", b =>
+                {
+                    b.HasOne("Likr.Posts.Entities.Post", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId");
+                });
+
+            modelBuilder.Entity("Likr.Posts.Entities.Post", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,10 +9,12 @@ namespace Likr.Posts.Consumers
     public class CommentCreatedConsumer : IConsumer<CommentCreated>
     {
         private readonly IGenericRepository<Comment> _commentRepository;
+        private readonly IGenericRepository<Post> _postRepository;
 
-        public CommentCreatedConsumer(IGenericRepository<Comment> commentRepository)
+        public CommentCreatedConsumer(IGenericRepository<Comment> commentRepository, IGenericRepository<Post> postRepository)
         {
             _commentRepository = commentRepository;
+            _postRepository = postRepository;
         }
 
         public async Task Consume(ConsumeContext<CommentCreated> context)
@@ -33,7 +35,16 @@ namespace Likr.Posts.Consumers
                 LikesCount = 0
             };
             
-            await _commentRepository.CreateAsync(comment);
+            bool created = await _commentRepository.CreateAsync(comment);
+            
+            if (!created)
+                return;
+
+            var post = await _postRepository.GetAsync(x => x.Id == comment.PostId);
+
+            post.CommentsCount++;
+
+            await _postRepository.UpdateAsync(post);
         }
     }
 }
