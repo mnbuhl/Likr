@@ -40,7 +40,7 @@ namespace Likr.Comments.Data
             return comment;
         }
 
-        public async Task<bool> Insert(Comment comment)
+        public async Task<bool> InsertOrUpdate(Comment comment)
         {
             using var session = _context.Store.OpenAsyncSession();
 

@@ -62,7 +62,7 @@ namespace Likr.Comments.Controllers.v1
         {
             var comment = _mapper.Map<Comment>(commentDto);
 
-            bool created = await _repository.Insert(comment);
+            bool created = await _repository.InsertOrUpdate(comment);
 
             if (!created)
                 return BadRequest();

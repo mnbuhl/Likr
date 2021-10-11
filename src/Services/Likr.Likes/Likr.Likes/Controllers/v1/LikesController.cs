@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Likr.Commands;
-using Likr.Likes.Data;
 using Likr.Likes.Dtos.v1;
 using Likr.Likes.Entities;
 using Likr.Likes.Interfaces;
@@ -51,7 +50,13 @@ namespace Likr.Likes.Controllers.v1
         [HttpPost]
         public async Task<ActionResult> Like(CreateLikeDto likeDto)
         {
-            var like = _mapper.Map<Like>(likeDto);
+            var like = await _likeRepository.GetAsync(x =>
+                x.ObserverId == likeDto.ObserverId.ToString() && x.TargetId == likeDto.TargetId.ToString());
+
+            if (like != null)
+                return BadRequest("You already liked this post");
+
+            like = _mapper.Map<Like>(likeDto);
 
             bool created = await _likeRepository.CreateAsync(like);
 
@@ -70,8 +75,8 @@ namespace Likr.Likes.Controllers.v1
                 x.ObserverId == likeDto.ObserverId.ToString() && x.TargetId == likeDto.TargetId.ToString());
 
             if (like == null)
-                return NotFound();
-            
+                return BadRequest("You haven't liked this post");
+
             bool deleted = await _likeRepository.DeleteAsync(like);
 
             if (!deleted)
