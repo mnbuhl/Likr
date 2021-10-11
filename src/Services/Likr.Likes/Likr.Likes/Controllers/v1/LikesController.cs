@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Likr.Commands;
 using Likr.Likes.Dtos.v1;
 using Likr.Likes.Entities;
 using Likr.Likes.Interfaces;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Likr.Likes.Controllers
+namespace Likr.Likes.Controllers.v1
 {
     [ApiController]
     [ApiVersion("1.0")]
@@ -17,22 +19,25 @@ namespace Likr.Likes.Controllers
     {
         private readonly IGenericRepository<Like> _likeRepository;
         private readonly IMapper _mapper;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public LikesController(IGenericRepository<Like> likeRepository, IMapper mapper)
+        public LikesController(IGenericRepository<Like> likeRepository, IMapper mapper,
+            IPublishEndpoint publishEndpoint)
         {
             _likeRepository = likeRepository;
             _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet("posts/{postId:guid}")]
         public async Task<ActionResult<IList<LikeDto>>> GetLikesByPostId(Guid postId)
         {
-            var likes = await _likeRepository.GetAllAsync(x => x.TargetId == postId.ToString(), 
+            var likes = await _likeRepository.GetAllAsync(x => x.TargetId == postId.ToString(),
                 x => x.Include(l => l.Target).Include(l => l.Observer));
 
             return Ok(_mapper.Map<IList<LikeDto>>(likes));
         }
-        
+
         [HttpGet("users/{userId:guid}")]
         public async Task<ActionResult<IList<LikeDto>>> GetLikesByUserId(Guid userId)
         {
@@ -52,16 +57,20 @@ namespace Likr.Likes.Controllers
             if (!created)
                 return BadRequest();
 
+            await _publishEndpoint.Publish(new LikeCreated(like.ObserverId, like.TargetId));
+
             return NoContent();
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Unlike(Guid postId)
+        public async Task<IActionResult> Unlike([FromQuery] DeleteLikeDto likeDto)
         {
-            bool deleted = await _likeRepository.DeleteAsync(postId.ToString());
+            bool deleted = await _likeRepository.DeleteAsync(likeDto.TargetId.ToString());
 
             if (!deleted)
                 return NotFound();
+
+            await _publishEndpoint.Publish(new LikeDeleted(likeDto.ObserverId.ToString(), likeDto.TargetId.ToString()));
 
             return NoContent();
         }
