@@ -63,6 +63,11 @@ services:
   likr.likes:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=LikesDb;User Id=sa;Password=secretpw123;"
+      - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
     restart: unless-stopped
+    depends_on:
+      - sqldata
+      - rabbitmq
     ports:
       - "8003:80"
