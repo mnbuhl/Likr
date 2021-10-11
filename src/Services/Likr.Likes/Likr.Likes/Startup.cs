@@ -1,5 +1,6 @@
 using Likr.Likes.Data;
 using Likr.Likes.Interfaces;
+using Likr.Likes.Mapping;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,8 @@ namespace Likr.Likes
                 opt.UseApiBehavior = true;
                 opt.ReportApiVersions = true;
             });
+
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
             services.AddMassTransit();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
