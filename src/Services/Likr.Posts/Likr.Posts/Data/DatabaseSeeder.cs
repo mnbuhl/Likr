@@ -144,12 +144,14 @@ namespace Likr.Posts.Data
 
                 postIds.AddRange(commentIds.GetRange(0, 10));
 
+                int counter = 0;
+
                 foreach (string id in commentIds)
                 {
                     comments.Add(new Comment
                     {
                         Id = id,
-                        Body = $"{body[new Range(0, _randomForWordGeneration.Next(body.Length))]}",
+                        Body = $"This is a test comment - {counter++}",
                         LikesCount = _random.Next(0, 1000),
                         UserId = users[_random.Next(4)].ToString(),
                         PostId = postIds[_randomForComments.Next(postIds.Count)]
@@ -167,21 +169,21 @@ namespace Likr.Posts.Data
                 {
                     var commentsCount = _context.Comments.Count(x => x.PostId == comment.PostId);
 
-                    var postsToUpdate = postsWithoutCommentsCount.Where(x => x.Id == comment.PostId).ToList();
+                    var postToUpdate = postsWithoutCommentsCount.FirstOrDefault(x => x.Id == comment.PostId);
 
-                    if (postsToUpdate.Any())
+                    if (postToUpdate != null)
                     {
-                        postsToUpdate.ForEach(x =>
-                        {
-                            x.CommentsCount = commentsCount;
-                            _context.Update(x);
-                            _context.SaveChanges();
-                        });
+                        postToUpdate.CommentsCount = commentsCount;
+                        _context.Posts.Update(postToUpdate);
+                        _context.SaveChanges();
                     }
-                    else
-                    {
-                        comment.CommentsCount = commentsCount;
-                    }
+                }
+
+                foreach (var comment in commentsWithoutCommentCount)
+                {
+                    var commentsCount = _context.Comments.Count(x => x.PostId == comment.Id);
+
+                    comment.CommentsCount = commentsCount;
                 }
                 
                 _context.Comments.UpdateRange(commentsWithoutCommentCount);
