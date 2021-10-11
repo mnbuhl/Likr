@@ -11,8 +11,5 @@ namespace Likr.Posts.Entities
         public int LikesCount { get; set; }
         public int CommentsCount { get; set; }
         public string PostId { get; set; }
-        
-        [NotMapped]
-        public ICollection<Comment> Comments { get; set; }
     }
 }

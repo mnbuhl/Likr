@@ -42,9 +42,22 @@ namespace Likr.Posts.Consumers
 
             var post = await _postRepository.GetAsync(x => x.Id == comment.PostId);
 
-            post.CommentsCount++;
+            if (post != null)
+            {
+                post.CommentsCount++;
 
-            await _postRepository.UpdateAsync(post);
+                await _postRepository.UpdateAsync(post);
+            }
+            else
+            {
+                var commentToUpdate = await _commentRepository.GetAsync(x => x.Id == comment.PostId);
+                
+                if (commentToUpdate == null)
+                    return;
+
+                commentToUpdate.CommentsCount++;
+                await _commentRepository.UpdateAsync(commentToUpdate);
+            }
         }
     }
 }
