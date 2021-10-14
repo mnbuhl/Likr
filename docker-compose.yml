@@ -28,6 +28,12 @@ services:
       context: .
       dockerfile: src/Services/Likr.Likes/Likr.Likes/Dockerfile
 
+  likr.gateway:
+    image: ${DOCKER_REGISTRY-}likrgateway
+    build:
+      context: .
+      dockerfile: src/Gateway/Likr.Gateway/Dockerfile
+
 volumes:
   mssqldata:
   rabbitmqdata:
