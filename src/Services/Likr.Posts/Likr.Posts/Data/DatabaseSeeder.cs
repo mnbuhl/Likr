@@ -160,32 +160,32 @@ namespace Likr.Posts.Data
 
                 _context.SaveChanges();
                 
-                var commentsWithoutCommentCount = _context.Comments.ToList();
-                var postsWithoutCommentsCount = _context.Posts.ToList();
-
-                foreach (var comment in commentsWithoutCommentCount)
-                {
-                    var commentsCount = _context.Comments.Count(x => x.PostId == comment.PostId);
-
-                    var postToUpdate = postsWithoutCommentsCount.FirstOrDefault(x => x.Id == comment.PostId);
-
-                    if (postToUpdate != null)
-                    {
-                        postToUpdate.CommentsCount = commentsCount;
-                        _context.Posts.Update(postToUpdate);
-                        _context.SaveChanges();
-                    }
-                }
-
-                foreach (var comment in commentsWithoutCommentCount)
-                {
-                    var commentsCount = _context.Comments.Count(x => x.PostId == comment.Id);
-
-                    comment.CommentsCount = commentsCount;
-                }
-                
-                _context.Comments.UpdateRange(commentsWithoutCommentCount);
-                _context.SaveChanges();
+                // var commentsWithoutCommentCount = _context.Comments.ToList();
+                // var postsWithoutCommentsCount = _context.Posts.ToList();
+                //
+                // foreach (var comment in commentsWithoutCommentCount)
+                // {
+                //     var commentsCount = _context.Comments.Count(x => x.PostId == comment.PostId);
+                //
+                //     var postToUpdate = postsWithoutCommentsCount.FirstOrDefault(x => x.Id == comment.PostId);
+                //
+                //     if (postToUpdate != null)
+                //     {
+                //         postToUpdate.CommentsCount = commentsCount;
+                //         _context.Posts.Update(postToUpdate);
+                //         _context.SaveChanges();
+                //     }
+                // }
+                //
+                // foreach (var comment in commentsWithoutCommentCount)
+                // {
+                //     var commentsCount = _context.Comments.Count(x => x.PostId == comment.Id);
+                //
+                //     comment.CommentsCount = commentsCount;
+                // }
+                //
+                // _context.Comments.UpdateRange(commentsWithoutCommentCount);
+                // _context.SaveChanges();
             }
         }
     }

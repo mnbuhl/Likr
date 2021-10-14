@@ -48,11 +48,11 @@ namespace Likr.Posts.Consumers
             }
             
             // Comment to comment logic
-            var comment = await _commentRepository.GetAsync(x => x.Id == message.Id);
+            var comment = await _commentRepository.GetAsync(x => x.Id == message.PostId);
 
             if (comment == null)
             {
-                _logger.LogInformation($"Tried to update CommentsCount on Comment but no Comment was with Id {message.Id} was found");
+                _logger.LogInformation($"Tried to increase CommentsCount on Comment but no Comment was with Id {message.Id} was found");
                 return;
             }
 
