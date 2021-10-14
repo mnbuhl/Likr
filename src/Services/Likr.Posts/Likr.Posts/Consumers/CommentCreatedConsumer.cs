@@ -3,6 +3,7 @@ using Likr.Commands;
 using Likr.Posts.Entities;
 using Likr.Posts.Interfaces;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 
 namespace Likr.Posts.Consumers
 {
@@ -10,54 +11,51 @@ namespace Likr.Posts.Consumers
     {
         private readonly IGenericRepository<Comment> _commentRepository;
         private readonly IGenericRepository<Post> _postRepository;
+        private readonly ILogger<CommentCreatedConsumer> _logger;
 
-        public CommentCreatedConsumer(IGenericRepository<Comment> commentRepository, IGenericRepository<Post> postRepository)
+        public CommentCreatedConsumer(IGenericRepository<Comment> commentRepository, IGenericRepository<Post> postRepository, ILogger<CommentCreatedConsumer> logger)
         {
             _commentRepository = commentRepository;
             _postRepository = postRepository;
+            _logger = logger;
         }
 
         public async Task Consume(ConsumeContext<CommentCreated> context)
         {
             var message = context.Message;
 
-            var comment = await _commentRepository.GetAsync(x => x.Id == message.Id);
+            bool commentToPost = (await _postRepository.GetAsync(x => x.Id == message.PostId)) != null;
 
-            if (comment != null)
-                return;
-
-            comment = new Comment
+            if (commentToPost)
             {
-                Id = message.Id,
-                Body = message.Body,
-                PostId = message.PostId,
-                UserId = message.UserId,
-                LikesCount = 0
-            };
-            
-            bool created = await _commentRepository.CreateAsync(comment);
-            
-            if (!created)
-                return;
+                bool exists = (await _commentRepository.GetAsync(x => x.Id == message.Id)) != null;
 
-            var post = await _postRepository.GetAsync(x => x.Id == comment.PostId);
-
-            if (post != null)
-            {
-                post.CommentsCount++;
-
-                await _postRepository.UpdateAsync(post);
-            }
-            else
-            {
-                var commentToUpdate = await _commentRepository.GetAsync(x => x.Id == comment.PostId);
-                
-                if (commentToUpdate == null)
+                if (!exists)
                     return;
 
-                commentToUpdate.CommentsCount++;
-                await _commentRepository.UpdateAsync(commentToUpdate);
+                await _commentRepository.CreateAsync(new Comment
+                {
+                    Id = message.Id,
+                    Body = message.Body,
+                    PostId = message.PostId,
+                    UserId = message.UserId,
+                    LikesCount = 0,
+                    CommentsCount = 0
+                });
+                return;
             }
+            
+            // Comment to comment logic
+            var comment = await _commentRepository.GetAsync(x => x.Id == message.Id);
+
+            if (comment == null)
+            {
+                _logger.LogInformation($"Tried to update CommentsCount on Comment but no Comment was with Id {message.Id} was found");
+                return;
+            }
+
+            comment.CommentsCount++;
+            await _commentRepository.UpdateAsync(comment);
         }
     }
 }

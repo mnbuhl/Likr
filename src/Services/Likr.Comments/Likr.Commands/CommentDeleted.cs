@@ -1,4 +1,4 @@
 ﻿namespace Likr.Commands
 {
-    public record CommentDeleted(string Id);
+    public record CommentDeleted(string Id, string PostId);
 }

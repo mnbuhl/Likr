@@ -74,5 +74,12 @@ namespace Likr.Comments.Data
             await session.SaveChangesAsync();
             return true;
         }
+
+        public async Task Delete(Comment comment)
+        {
+            using var session = _context.Store.OpenAsyncSession();
+            session.Delete(comment);
+            await session.SaveChangesAsync();
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace Likr.Comments.Interfaces
         Task<Comment> Get(string id);
         Task<bool> InsertOrUpdate(Comment comment);
         Task<bool> Delete(Guid id);
+        Task Delete(Comment comment);
     }
 }

@@ -3,6 +3,7 @@ using Likr.Commands;
 using Likr.Posts.Entities;
 using Likr.Posts.Interfaces;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 
 namespace Likr.Posts.Consumers
 {
@@ -10,12 +11,14 @@ namespace Likr.Posts.Consumers
     {
         private readonly IGenericRepository<Comment> _commentRepository;
         private readonly IGenericRepository<Post> _postRepository;
+        private readonly ILogger<CommentDeletedConsumer> _logger;
 
         public CommentDeletedConsumer(IGenericRepository<Comment> commentRepository,
-            IGenericRepository<Post> postRepository)
+            IGenericRepository<Post> postRepository, ILogger<CommentDeletedConsumer> logger)
         {
             _commentRepository = commentRepository;
             _postRepository = postRepository;
+            _logger = logger;
         }
 
         public async Task Consume(ConsumeContext<CommentDeleted> context)
@@ -24,31 +27,24 @@ namespace Likr.Posts.Consumers
 
             var comment = await _commentRepository.GetAsync(x => x.Id == message.Id);
 
-            if (comment == null)
-                return;
-
-            bool deleted = await _commentRepository.DeleteAsync(message.Id);
-
-            if (!deleted)
-                return;
-
-            var post = await _postRepository.GetAsync(x => x.Id == comment.PostId);
-
-            if (post != null)
+            if (comment != null)
             {
-                post.CommentsCount--;
-                await _postRepository.UpdateAsync(post);
-            }
-            else
-            {
-                var commentToUpdate = await _commentRepository.GetAsync(x => x.Id == comment.PostId);
-                
-                if (commentToUpdate == null)
+                bool deleted = await _commentRepository.DeleteAsync(message.Id);
+
+                if (!deleted)
                     return;
-
-                commentToUpdate.CommentsCount--;
-                await _commentRepository.UpdateAsync(commentToUpdate);
             }
+
+            var commentToComment = await _commentRepository.GetAsync(x => x.Id == message.PostId);
+
+            if (commentToComment == null)
+            {
+                _logger.LogInformation($"Tried to decrease CommentsCount of Comment with {message.PostId}, but no Comment found");
+                return;
+            }
+            
+            commentToComment.CommentsCount--;
+            await _commentRepository.UpdateAsync(commentToComment);
         }
     }
 }
