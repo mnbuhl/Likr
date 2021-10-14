@@ -142,8 +142,6 @@ namespace Likr.Posts.Data
 
                 comments = new List<Comment>();
 
-                postIds.AddRange(commentIds.GetRange(0, 10));
-
                 int counter = 0;
 
                 foreach (string id in commentIds)
