@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectItems", "ProjectItem
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		README.md = README.md
+		sql\decrease_comments_count.sql = sql\decrease_comments_count.sql
+		sql\increase_comments_count.sql = sql\increase_comments_count.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Likr.Posts", "Likr.Posts", "{2223BBEF-652A-4DB7-B972-4003B9EC58E6}"

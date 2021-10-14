@@ -25,12 +25,14 @@ namespace Likr.Posts.Consumers
             var message = context.Message;
 
             bool commentToPost = (await _postRepository.GetAsync(x => x.Id == message.PostId)) != null;
+            _logger.LogInformation($"commentToPost: {commentToPost}");
 
             if (commentToPost)
             {
                 bool exists = (await _commentRepository.GetAsync(x => x.Id == message.Id)) != null;
+                _logger.LogInformation($"exists: {exists}");
 
-                if (!exists)
+                if (exists)
                     return;
 
                 await _commentRepository.CreateAsync(new Comment

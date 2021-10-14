@@ -81,7 +81,7 @@ namespace Likr.Comments.Controllers.v1
             if (comment == null)
                 return NotFound();
 
-            await _repository.Delete(comment);
+            await _repository.Delete(Guid.Parse(comment.Id));
 
             await _publishEndpoint.Publish(new CommentDeleted(id.ToString(), comment.PostId));
 
