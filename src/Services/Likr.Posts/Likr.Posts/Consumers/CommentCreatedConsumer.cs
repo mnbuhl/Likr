@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Likr.Commands;
 using Likr.Posts.Entities;
 using Likr.Posts.Interfaces;
 using MassTransit;
@@ -7,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Likr.Posts.Consumers
 {
-    public class CommentCreatedConsumer : IConsumer<CommentCreated>
+    public class CommentCreatedConsumer : IConsumer<Likr.Commands.CommentCreated>
     {
         private readonly IGenericRepository<Comment> _commentRepository;
         private readonly IGenericRepository<Post> _postRepository;
@@ -20,7 +19,7 @@ namespace Likr.Posts.Consumers
             _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<CommentCreated> context)
+        public async Task Consume(ConsumeContext<Likr.Commands.CommentCreated> context)
         {
             var message = context.Message;
 

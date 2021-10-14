@@ -11,8 +11,8 @@ namespace Likr.Likes.Extensions
         {
             services.AddMassTransit(configure =>
             {
-                configure.AddConsumer<CommentCreatedConsumer>();
-                configure.AddConsumer<CommentDeletedConsumer>();
+                //configure.AddConsumer<CommentCreatedConsumer>();
+                //configure.AddConsumer<CommentDeletedConsumer>();
                 configure.AddConsumer<PostCreatedConsumer>();
                 configure.AddConsumer<PostDeletedConsumer>();
                 
