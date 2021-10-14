@@ -119,17 +119,6 @@ namespace Likr.Comments.Data
                     PostId = postIds[_randomForComments.Next(postIds.Count)].ToLower(),
                     UserId = Guid.NewGuid().ToString()
                 }, id.ToLower());
-
-                var newId = Guid.NewGuid().ToString();
-                
-                session.Store(new Comment
-                {
-                    Id = newId,
-                    Body = $"This is a test comment - {counter++}",
-                    LikesCount = _random.Next(0, 100),
-                    PostId = commentIds[new Random().Next(commentIds.Count)].ToLower(),
-                    UserId = Guid.NewGuid().ToString()
-                }, newId);
             }
 
             session.SaveChanges();
