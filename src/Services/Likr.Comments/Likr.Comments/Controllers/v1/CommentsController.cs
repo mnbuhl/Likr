@@ -70,6 +70,8 @@ namespace Likr.Comments.Controllers.v1
             await _publishEndpoint.Publish(new CommentCreated(comment.Id, comment.Body, comment.UserId,
                 comment.PostId));
 
+            await _publishEndpoint.Publish(new PostCreated(comment.Id, comment.Body, comment.UserId));
+
             return CreatedAtAction("Get", new { id = comment.Id }, _mapper.Map<CommentDto>(comment));
         }
 
@@ -84,6 +86,7 @@ namespace Likr.Comments.Controllers.v1
             await _repository.Delete(Guid.Parse(comment.Id));
 
             await _publishEndpoint.Publish(new CommentDeleted(id.ToString(), comment.PostId));
+            await _publishEndpoint.Publish(new PostDeleted(id.ToString()));
 
             return NoContent();
         }
