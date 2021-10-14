@@ -108,20 +108,17 @@ namespace Likr.Comments.Data
                 "89930EF5-A856-4E39-B519-538295D09FF3"
             };
 
-            postIds.AddRange(commentIds.GetRange(0, 10));
-
-
             int counter = 0;
             foreach (string id in commentIds)
             {
                 session.Store(new Comment
                 {
-                    Id = id,
+                    Id = id.ToLower(),
                     Body = $"This is a test comment - {counter++}",
                     LikesCount = _random.Next(0, 100),
-                    PostId = postIds[_randomForComments.Next(postIds.Count)],
+                    PostId = postIds[_randomForComments.Next(postIds.Count)].ToLower(),
                     UserId = Guid.NewGuid().ToString()
-                }, id);
+                }, id.ToLower());
             }
 
             session.SaveChanges();

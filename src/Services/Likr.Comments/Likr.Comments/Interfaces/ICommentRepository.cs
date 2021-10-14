@@ -10,7 +10,8 @@ namespace Likr.Comments.Interfaces
         Task<IList<Comment>> GetAll();
         Task<IList<Comment>> GetAllByPostId(string postId);
         Task<Comment> Get(string id);
-        Task<bool> Insert(Comment comment);
+        Task<bool> InsertOrUpdate(Comment comment);
         Task<bool> Delete(Guid id);
+        Task Delete(Comment comment);
     }
 }

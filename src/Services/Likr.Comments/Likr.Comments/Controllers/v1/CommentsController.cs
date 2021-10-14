@@ -62,7 +62,7 @@ namespace Likr.Comments.Controllers.v1
         {
             var comment = _mapper.Map<Comment>(commentDto);
 
-            bool created = await _repository.Insert(comment);
+            bool created = await _repository.InsertOrUpdate(comment);
 
             if (!created)
                 return BadRequest();
@@ -70,18 +70,23 @@ namespace Likr.Comments.Controllers.v1
             await _publishEndpoint.Publish(new CommentCreated(comment.Id, comment.Body, comment.UserId,
                 comment.PostId));
 
+            await _publishEndpoint.Publish(new PostCreated(comment.Id, comment.Body, comment.UserId));
+
             return CreatedAtAction("Get", new { id = comment.Id }, _mapper.Map<CommentDto>(comment));
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            bool deleted = await _repository.Delete(id);
+            var comment = await _repository.Get(id.ToString());
 
-            if (!deleted)
+            if (comment == null)
                 return NotFound();
 
-            await _publishEndpoint.Publish(new CommentDeleted(id.ToString()));
+            await _repository.Delete(Guid.Parse(comment.Id));
+
+            await _publishEndpoint.Publish(new CommentDeleted(id.ToString(), comment.PostId));
+            await _publishEndpoint.Publish(new PostDeleted(id.ToString()));
 
             return NoContent();
         }

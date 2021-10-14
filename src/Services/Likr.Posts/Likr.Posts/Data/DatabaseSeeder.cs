@@ -75,7 +75,7 @@ namespace Likr.Posts.Data
                 {
                     posts.Add(new Post
                     {
-                        Id = id,
+                        Id = id.ToLower(),
                         Body = $"{body[new Range(0, _randomForWordGeneration.Next(body.Length))]}",
                         LikesCount = _random.Next(0, 1000),
                         UserId = users[_random.Next(4)].ToString()
@@ -142,19 +142,17 @@ namespace Likr.Posts.Data
 
                 comments = new List<Comment>();
 
-                postIds.AddRange(commentIds.GetRange(0, 10));
-
                 int counter = 0;
 
                 foreach (string id in commentIds)
                 {
                     comments.Add(new Comment
                     {
-                        Id = id,
+                        Id = id.ToLower(),
                         Body = $"This is a test comment - {counter++}",
                         LikesCount = _random.Next(0, 1000),
                         UserId = users[_random.Next(4)].ToString(),
-                        PostId = postIds[_randomForComments.Next(postIds.Count)]
+                        PostId = postIds[_randomForComments.Next(postIds.Count)].ToLower()
                     });
                 }
                 
@@ -162,32 +160,32 @@ namespace Likr.Posts.Data
 
                 _context.SaveChanges();
                 
-                var commentsWithoutCommentCount = _context.Comments.ToList();
-                var postsWithoutCommentsCount = _context.Posts.ToList();
-
-                foreach (var comment in commentsWithoutCommentCount)
-                {
-                    var commentsCount = _context.Comments.Count(x => x.PostId == comment.PostId);
-
-                    var postToUpdate = postsWithoutCommentsCount.FirstOrDefault(x => x.Id == comment.PostId);
-
-                    if (postToUpdate != null)
-                    {
-                        postToUpdate.CommentsCount = commentsCount;
-                        _context.Posts.Update(postToUpdate);
-                        _context.SaveChanges();
-                    }
-                }
-
-                foreach (var comment in commentsWithoutCommentCount)
-                {
-                    var commentsCount = _context.Comments.Count(x => x.PostId == comment.Id);
-
-                    comment.CommentsCount = commentsCount;
-                }
-                
-                _context.Comments.UpdateRange(commentsWithoutCommentCount);
-                _context.SaveChanges();
+                // var commentsWithoutCommentCount = _context.Comments.ToList();
+                // var postsWithoutCommentsCount = _context.Posts.ToList();
+                //
+                // foreach (var comment in commentsWithoutCommentCount)
+                // {
+                //     var commentsCount = _context.Comments.Count(x => x.PostId == comment.PostId);
+                //
+                //     var postToUpdate = postsWithoutCommentsCount.FirstOrDefault(x => x.Id == comment.PostId);
+                //
+                //     if (postToUpdate != null)
+                //     {
+                //         postToUpdate.CommentsCount = commentsCount;
+                //         _context.Posts.Update(postToUpdate);
+                //         _context.SaveChanges();
+                //     }
+                // }
+                //
+                // foreach (var comment in commentsWithoutCommentCount)
+                // {
+                //     var commentsCount = _context.Comments.Count(x => x.PostId == comment.Id);
+                //
+                //     comment.CommentsCount = commentsCount;
+                // }
+                //
+                // _context.Comments.UpdateRange(commentsWithoutCommentCount);
+                // _context.SaveChanges();
             }
         }
     }
