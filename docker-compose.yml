@@ -34,7 +34,14 @@ services:
       context: .
       dockerfile: src/Gateway/Likr.Gateway/Dockerfile
 
+  likr.identity:
+    image: ${DOCKER_REGISTRY-}likridentity
+    build:
+      context: .
+      dockerfile: src/Services/Likr.Identity/Likr.Identity/Dockerfile
+
 volumes:
   mssqldata:
   rabbitmqdata:
   ravendbdata:
+
