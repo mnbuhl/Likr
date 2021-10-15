@@ -24,8 +24,7 @@ namespace Likr.Identity
             var context = services.GetRequiredService<ApplicationDbContext>();
 
             context.Database.EnsureCreated();
-            //context.Database.Migrate();
-            
+
             scope.Dispose();
 
             host.Run();

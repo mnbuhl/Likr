@@ -1,4 +1,7 @@
+using System;
 using Likr.Identity.Data;
+using Likr.Identity.Models;
+using Likr.Identity.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -27,9 +30,28 @@ namespace Likr.Identity
             
             services.AddDatabaseDeveloperPageExceptionFilter();
             
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            var identityServerSettings = new IdentityServerSettings(Configuration);
+
+            services.AddIdentityServer(x =>
+            {
+                x.Authentication.CookieLifetime = TimeSpan.FromHours(2);
+                x.Events.RaiseSuccessEvents = true;
+                x.Events.RaiseFailureEvents = true;
+                x.Events.RaiseErrorEvents = true;
+            })
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddInMemoryApiScopes(identityServerSettings.ApiScopes)
+                .AddInMemoryApiResources(identityServerSettings.ApiResources)
+                .AddInMemoryClients(identityServerSettings.Clients)
+                .AddInMemoryIdentityResources(identityServerSettings.IdentityResources)
+                .AddDeveloperSigningCredential();
+
+            services.AddLocalApiAuthentication();
+
             services.AddRazorPages();
         }
 
@@ -41,6 +63,7 @@ namespace Likr.Identity
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthentication();
