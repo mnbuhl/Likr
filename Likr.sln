@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Likr.Commands", "src\Servic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{C7BEA84C-6042-4D7D-9513-FE5DC4B6958B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Likr.Gateway", "src\Gateway\Likr.Gateway\Likr.Gateway.csproj", "{13822CAD-8C9C-463F-9025-C92C23AC9B05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Likr.Gateway", "src\Gateway\Likr.Gateway\Likr.Gateway.csproj", "{13822CAD-8C9C-463F-9025-C92C23AC9B05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

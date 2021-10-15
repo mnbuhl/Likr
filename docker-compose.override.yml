@@ -37,6 +37,7 @@ services:
       - rabbitmqdata:/var/lib/rabbitmq
   
   likr.posts:
+    container_name: likr.posts
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=PostsDb;User Id=sa;Password=secretpw123;"
@@ -49,6 +50,7 @@ services:
       - "8001:80"
   
   likr.comments:
+    container_name: likr.comments
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "Database:Urls:0=http://ravendb:8080"
@@ -61,6 +63,7 @@ services:
       - "8002:80"
 
   likr.likes:
+    container_name: likr.likes
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=LikesDb;User Id=sa;Password=secretpw123;"
@@ -71,3 +74,11 @@ services:
       - rabbitmq
     ports:
       - "8003:80"
+
+  likr.gateway:
+    container_name: likr.gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5200:80"
+
