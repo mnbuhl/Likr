@@ -1,18 +1,22 @@
 ﻿using System.Collections.Generic;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace Likr.Identity.Settings
 {
     public class IdentityServerSettings
     {
         private readonly string _serviceUrl;
-        
-        public IdentityServerSettings(IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+
+        public IdentityServerSettings(IConfiguration configuration, IWebHostEnvironment env)
         {
+            _env = env;
             _serviceUrl = configuration.GetValue<string>("ServiceUrl");
         }
-        
+
         public readonly IReadOnlyCollection<ApiScope> ApiScopes = new ApiScope[]
         {
             new ApiScope { Name = "posts" },
@@ -66,7 +70,27 @@ namespace Likr.Identity.Settings
                 },
                 AlwaysIncludeUserClaimsInIdToken = true,
                 PostLogoutRedirectUris = new List<string> { $"{_serviceUrl}/authentication/logout-callback" }
-            }
+            },
+            _env.IsDevelopment()
+                ? new Client
+                {
+                    ClientId = "postman",
+                    AllowedGrantTypes = new List<string> { "authorization_code" },
+                    RequireClientSecret = false,
+                    RedirectUris = new List<string> { "urn:ietf:wg:oauth:2.0:oob" },
+                    AllowedScopes = new List<string>
+                    {
+                        "openid",
+                        "profile",
+                        "posts",
+                        "comments",
+                        "likes",
+                        "profiles",
+                        "IdentityServerApi"
+                    },
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                }
+                : new Client()
         };
 
         public IReadOnlyCollection<IdentityResource> IdentityResources =>
