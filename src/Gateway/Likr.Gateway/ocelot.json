@@ -46,7 +46,11 @@
         "POST",
         "DELETE",
         "GET"
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKey",
+        "AllowedScopes": [ "likes" ]
+      }
     }
   ],
   "GlobalConfiguration": {

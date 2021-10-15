@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Likr.Identity.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
     public class UsersController : ControllerBase
     {
