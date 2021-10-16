@@ -11,9 +11,22 @@
       ],
       "UpstreamPathTemplate": "/api/{version}/p/{everything}",
       "UpstreamHttpMethod": [
-        "POST",
-        "DELETE",
         "GET"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "likr.posts",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/p/{everything}",
+      "UpstreamHttpMethod": [
+        "POST",
+        "DELETE"
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "IdentityApiKey",
@@ -31,9 +44,22 @@
       ],
       "UpstreamPathTemplate": "/api/{version}/c/{everything}",
       "UpstreamHttpMethod": [
-        "POST",
-        "DELETE",
         "GET"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "likr.comments",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/c/{everything}",
+      "UpstreamHttpMethod": [
+        "POST",
+        "DELETE"
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "IdentityApiKey",
@@ -51,9 +77,22 @@
       ],
       "UpstreamPathTemplate": "/api/{version}/l/{everything}",
       "UpstreamHttpMethod": [
-        "POST",
-        "DELETE",
         "GET"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "likr.likes",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/l/{everything}",
+      "UpstreamHttpMethod": [
+        "POST",
+        "DELETE"
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "IdentityApiKey",

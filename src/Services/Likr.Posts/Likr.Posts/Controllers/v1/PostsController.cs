@@ -68,6 +68,7 @@ namespace Likr.Posts.Controllers.v1
             return Ok(_mapper.Map<PostDto>(post));
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<PostDto>> Create([FromBody] CreatePostDto postDto)
         {
@@ -83,6 +84,7 @@ namespace Likr.Posts.Controllers.v1
             return CreatedAtAction("Get", new { id = post.Id }, _mapper.Map<PostDto>(post));
         }
 
+        [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
