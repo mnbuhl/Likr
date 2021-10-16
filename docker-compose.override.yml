@@ -55,6 +55,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "Database:Urls:0=http://ravendb:8080"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
+      - "IdentityUrl=http://likr.identity"
     restart: unless-stopped
     depends_on:
       - ravendb
@@ -75,13 +76,6 @@ services:
     ports:
       - "8003:80"
 
-  likr.gateway:
-    container_name: likr.gateway
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "5200:80"
-
   likr.identity:
     container_name: likr.identity
     environment:
@@ -95,3 +89,11 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  likr.gateway:
+    container_name: likr.gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "IdentityUrl=http://likr.identity"
+    ports:
+      - "5200:80"

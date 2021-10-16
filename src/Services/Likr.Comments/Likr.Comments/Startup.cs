@@ -2,6 +2,7 @@ using Likr.Comments.Data;
 using Likr.Comments.Interfaces;
 using Likr.Comments.Mapping;
 using Likr.Comments.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +41,20 @@ namespace Likr.Comments
             services.AddSingleton<IRavenDbStore, RavenDbStore>();
             services.AddSingleton(typeof(ICommentRepository), typeof(CommentRepository));
 
+            var identityUrl = _configuration.GetValue<string>("IdentityUrl");
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(opt =>
+                {
+                    opt.Authority = identityUrl;
+                    opt.RequireHttpsMetadata = false;
+                    opt.Audience = "comments";
+                });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -61,6 +76,7 @@ namespace Likr.Comments
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

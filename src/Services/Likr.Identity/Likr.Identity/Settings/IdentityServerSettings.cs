@@ -19,11 +19,11 @@ namespace Likr.Identity.Settings
 
         public readonly IReadOnlyCollection<ApiScope> ApiScopes = new ApiScope[]
         {
-            new ApiScope { Name = "posts" },
+            new ApiScope { Name = "posts"  },
             new ApiScope { Name = "comments" },
             new ApiScope { Name = "likes" },
             new ApiScope { Name = "profiles" },
-            new ApiScope { Name = "IdentityServerApi" }
+            new ApiScope { Name = "IdentityServerApi" },
         };
 
         public readonly IReadOnlyCollection<ApiResource> ApiResources = new ApiResource[]
