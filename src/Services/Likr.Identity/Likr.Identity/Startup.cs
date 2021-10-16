@@ -4,6 +4,7 @@ using Likr.Identity.Models;
 using Likr.Identity.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -47,12 +48,14 @@ namespace Likr.Identity
                     x.IssuerUri = Configuration.GetValue<string>("ServiceUrl");
                 })
                 .AddAspNetIdentity<ApplicationUser>()
+                //.AddDefaultEndpoints()
                 .AddInMemoryApiScopes(identityServerSettings.ApiScopes)
                 .AddInMemoryApiResources(identityServerSettings.ApiResources)
                 .AddInMemoryClients(identityServerSettings.Clients)
                 .AddInMemoryIdentityResources(identityServerSettings.IdentityResources)
                 .AddDeveloperSigningCredential();
 
+            services.AddCors();
             services.AddLocalApiAuthentication();
 
             services.AddRazorPages();
@@ -65,6 +68,15 @@ namespace Likr.Identity
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict });
+
+            app.UseCors(builder =>
+            {
+                builder.WithOrigins(Configuration.GetSection("AllowedOrigins").Get<string[]>())
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
 
             app.UseStaticFiles();
             app.UseRouting();

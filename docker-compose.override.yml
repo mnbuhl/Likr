@@ -89,9 +89,6 @@ services:
       - sqldata
     ports:
       - "8004:80"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   likr.gateway:
     container_name: likr.gateway

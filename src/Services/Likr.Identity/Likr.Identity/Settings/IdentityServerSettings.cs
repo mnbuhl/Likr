@@ -55,9 +55,9 @@ namespace Likr.Identity.Settings
             new Client
             {
                 ClientId = "client-spa",
-                AllowedGrantTypes = new List<string> { "authorization_code" },
+                AllowedGrantTypes = new List<string> { "implicit" },
                 RequireClientSecret = false,
-                RedirectUris = new List<string> { $"{_serviceUrl}/authentication/login-callback" },
+                RedirectUris = new List<string> { $"https://localhost:5005/authentication/login-callback" },
                 AllowedScopes = new List<string>
                 {
                     "openid",
@@ -69,7 +69,11 @@ namespace Likr.Identity.Settings
                     "IdentityServerApi"
                 },
                 AlwaysIncludeUserClaimsInIdToken = true,
-                PostLogoutRedirectUris = new List<string> { $"{_serviceUrl}/authentication/logout-callback" }
+                PostLogoutRedirectUris = new List<string> { $"https://localhost:5005/authentication/logout-callback" },
+                AllowedCorsOrigins = new List<string>
+                {
+                    "https://localhost:5005"
+                }
             },
             _env.IsDevelopment()
                 ? new Client
