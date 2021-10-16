@@ -7,6 +7,7 @@ using Likr.Likes.Dtos.v1;
 using Likr.Likes.Entities;
 using Likr.Likes.Interfaces;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,6 +48,7 @@ namespace Likr.Likes.Controllers.v1
             return Ok(_mapper.Map<IList<LikeDto>>(likes));
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Like(CreateLikeDto likeDto)
         {
@@ -68,6 +70,7 @@ namespace Likr.Likes.Controllers.v1
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> Unlike([FromQuery] DeleteLikeDto likeDto)
         {

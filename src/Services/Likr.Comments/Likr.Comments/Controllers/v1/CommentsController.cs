@@ -7,6 +7,7 @@ using Likr.Comments.Dtos.v1;
 using Likr.Comments.Entities;
 using Likr.Comments.Interfaces;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Likr.Comments.Controllers.v1
@@ -57,6 +58,7 @@ namespace Likr.Comments.Controllers.v1
             return Ok(_mapper.Map<CommentDto>(comment));
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<CommentDto>> Create([FromBody] CreateCommentDto commentDto)
         {
@@ -75,6 +77,7 @@ namespace Likr.Comments.Controllers.v1
             return CreatedAtAction("Get", new { id = comment.Id }, _mapper.Map<CommentDto>(comment));
         }
 
+        [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {

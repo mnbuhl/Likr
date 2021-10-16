@@ -1,12 +1,11 @@
+using System;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -14,10 +13,30 @@ namespace Likr.Gateway
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            string identityUrl = _configuration.GetValue<string>("IdentityUrl");
+            string authProviderKey = "IdentityApiKey";
+            
+            Console.WriteLine(identityUrl);
+
+            services.AddAuthentication()
+                .AddJwtBearer(authProviderKey, x =>
+                {
+                    x.Authority = identityUrl;
+                    x.RequireHttpsMetadata = false;
+                    x.TokenValidationParameters.ValidateAudience = false;
+                });
+            
             services.AddOcelot();
         }
 
@@ -29,6 +48,8 @@ namespace Likr.Gateway
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseRouting();
+            
             app.UseOcelot().Wait();
         }
     }

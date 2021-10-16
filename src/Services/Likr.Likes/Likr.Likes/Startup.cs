@@ -38,9 +38,9 @@ namespace Likr.Likes
             });
 
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
-
-            services.AddMassTransit();
+            
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddIdentityServerAuth(_configuration);
             services.AddMassTransitWithRabbitMq();
             
             services.AddControllers();

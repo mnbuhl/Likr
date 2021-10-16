@@ -2,6 +2,7 @@ using Likr.Posts.Data;
 using Likr.Posts.Interfaces;
 using Likr.Posts.Mapping;
 using Likr.Posts.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace Likr.Posts
@@ -37,6 +39,7 @@ namespace Likr.Posts
             });
 
             services.AddMassTransitWithRabbitMq();
+            services.AddIdentityServerAuth(_configuration);
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
@@ -61,6 +64,7 @@ namespace Likr.Posts
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
