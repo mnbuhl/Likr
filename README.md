@@ -1,3 +1,40 @@
+# Likr - Social Media
+Likr is a social media developed for my self chosen 4th Semester Computer Science exam.
+
+Project can be viewed and used in real time here: [TODO]
+
+### Technologies used:
+Client service
+* Blazor
+* ASP.NET Core
+
+Posts service
+* ASP.NET Core Web API
+* SQL Server
+* MassTransit w/RabbitMQ
+
+Comments service
+* ASP.NET Core Web API
+* RavenDB
+* MassTransit w/RabbitMQ
+
+Likes service
+* ASP.NET Core Web API
+* SQL Server
+* MassTransit w/RabbitMQ
+
+Identity service
+* ASP.NET Core Web API
+* IdentityServer4
+* SQL Server
+
+Gateway service
+* ASP.NET Core Web App
+* Ocelot API Gateway
+
+Orchestration
+* Docker & Docker Compose
+
 ### Useful documentation:
 
 #### Docker commands:
@@ -10,3 +47,6 @@ Build & run:
 Rebuild: ```docker compose up -d --build --force-recreate```
 
 Stop: ```docker compose down```
+
+#### Images
+Coming soon
