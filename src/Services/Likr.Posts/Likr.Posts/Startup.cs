@@ -39,20 +39,9 @@ namespace Likr.Posts
             });
 
             services.AddMassTransitWithRabbitMq();
+            services.AddIdentityServerAuth(_configuration);
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-            services.AddAuthentication(opt =>
-            {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(options =>
-            {
-                options.Authority = "http://likr.identity";
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters.ValidateAudience = false;
-            });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

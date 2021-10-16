@@ -41,19 +41,7 @@ namespace Likr.Comments
             services.AddSingleton<IRavenDbStore, RavenDbStore>();
             services.AddSingleton(typeof(ICommentRepository), typeof(CommentRepository));
 
-            var identityUrl = _configuration.GetValue<string>("IdentityUrl");
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(opt =>
-                {
-                    opt.Authority = identityUrl;
-                    opt.RequireHttpsMetadata = false;
-                    opt.Audience = "comments";
-                });
+            services.AddIdentityServerAuth(_configuration);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

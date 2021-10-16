@@ -42,6 +42,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=PostsDb;User Id=sa;Password=secretpw123;"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
+      - "IdentityUrl=http://likr.identity"
     restart: unless-stopped
     depends_on:
       - sqldata
@@ -69,6 +70,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=LikesDb;User Id=sa;Password=secretpw123;"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
+      - "IdentityUrl=http://likr.identity"
     restart: unless-stopped
     depends_on:
       - sqldata
