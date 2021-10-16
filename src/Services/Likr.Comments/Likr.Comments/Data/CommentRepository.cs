@@ -35,18 +35,22 @@ namespace Likr.Comments.Data
         {
             using var session = _context.Store.OpenAsyncSession();
             var comment = await session.LoadAsync<Comment>(id);
-            comment.Comments = await GetAllByPostId(comment.Id);
+
+            if (comment != null)
+            {
+                comment.Comments = await GetAllByPostId(comment.Id);
+            }
 
             return comment;
         }
 
-        public async Task<bool> Insert(Comment comment)
+        public async Task<bool> InsertOrUpdate(Comment comment)
         {
             using var session = _context.Store.OpenAsyncSession();
 
             try
             {
-                await session.StoreAsync(comment, Guid.NewGuid().ToString());
+                await session.StoreAsync(comment, comment.Id ?? Guid.NewGuid().ToString());
                 await session.SaveChangesAsync();
             }
             catch (Exception e)
@@ -65,10 +69,17 @@ namespace Likr.Comments.Data
 
             if (comment == null)
                 return false;
-            
+
             session.Delete(comment);
             await session.SaveChangesAsync();
             return true;
+        }
+
+        public async Task Delete(Comment comment)
+        {
+            using var session = _context.Store.OpenAsyncSession();
+            session.Delete(comment);
+            await session.SaveChangesAsync();
         }
     }
 }

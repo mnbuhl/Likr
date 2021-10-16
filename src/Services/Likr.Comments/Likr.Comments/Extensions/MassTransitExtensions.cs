@@ -1,10 +1,5 @@
-﻿using System;
-using System.Reflection;
-using GreenPipes;
+﻿using Likr.Comments.Consumers;
 using MassTransit;
-using MassTransit.Definition;
-using MassTransit.RabbitMqTransport.Topology.Topologies;
-using MassTransit.Topology.Topologies;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +11,9 @@ namespace Likr.Comments.Extensions
         {
             services.AddMassTransit(configure =>
             {
+                configure.AddConsumer<LikeCreatedConsumer>();
+                configure.AddConsumer<LikeDeletedConsumer>();
+
                 configure.UsingRabbitMq((context, cfg) =>
                 {
                     var configuration = context.GetRequiredService<IConfiguration>();
@@ -24,11 +22,10 @@ namespace Likr.Comments.Extensions
                     cfg.Host(rabbitMqHost);
                     cfg.ConfigureEndpoints(context);
                 });
-                
             });
 
             services.AddMassTransitHostedService();
-            
+
             return services;
         }
     }

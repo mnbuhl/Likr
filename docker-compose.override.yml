@@ -37,10 +37,12 @@ services:
       - rabbitmqdata:/var/lib/rabbitmq
   
   likr.posts:
+    container_name: likr.posts
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=PostsDb;User Id=sa;Password=secretpw123;"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
+      - "IdentityUrl=http://likr.identity"
     restart: unless-stopped
     depends_on:
       - sqldata
@@ -49,10 +51,12 @@ services:
       - "8001:80"
   
   likr.comments:
+    container_name: likr.comments
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "Database:Urls:0=http://ravendb:8080"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
+      - "IdentityUrl=http://likr.identity"
     restart: unless-stopped
     depends_on:
       - ravendb
@@ -61,8 +65,38 @@ services:
       - "8002:80"
 
   likr.likes:
+    container_name: likr.likes
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=LikesDb;User Id=sa;Password=secretpw123;"
+      - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
+      - "IdentityUrl=http://likr.identity"
     restart: unless-stopped
+    depends_on:
+      - sqldata
+      - rabbitmq
     ports:
       - "8003:80"
+
+  likr.identity:
+    container_name: likr.identity
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=IdentityDb;User Id=sa;Password=secretpw123;"
+      - "ServiceUrl=http://likr.identity"
+    restart: unless-stopped
+    depends_on:
+      - sqldata
+    ports:
+      - "8004:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  likr.gateway:
+    container_name: likr.gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "IdentityUrl=http://likr.identity"
+    ports:
+      - "5200:80"
