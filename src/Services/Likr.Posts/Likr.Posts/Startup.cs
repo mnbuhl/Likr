@@ -2,6 +2,7 @@ using Likr.Posts.Data;
 using Likr.Posts.Interfaces;
 using Likr.Posts.Mapping;
 using Likr.Posts.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -41,14 +42,16 @@ namespace Likr.Posts
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-            services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
             {
                 options.Authority = "http://likr.identity";
                 options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateAudience = false
-                };
+                options.TokenValidationParameters.ValidateAudience = false;
             });
 
             services.AddControllers();

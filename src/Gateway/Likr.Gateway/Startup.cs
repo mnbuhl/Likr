@@ -32,14 +32,9 @@ namespace Likr.Gateway
             services.AddAuthentication()
                 .AddJwtBearer(authProviderKey, x =>
                 {
-                    x.Authority = "http://likr.identity";
+                    x.Authority = identityUrl;
                     x.RequireHttpsMetadata = false;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = false,
-                        ValidateIssuer = false,
-                        //ValidAudiences = new[] { "posts", "comments", "likes", "profiles" }
-                    };
+                    x.TokenValidationParameters.ValidateAudience = false;
                 });
             
             services.AddOcelot();

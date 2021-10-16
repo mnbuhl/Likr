@@ -45,6 +45,7 @@ namespace Likr.Identity
                 x.Events.RaiseSuccessEvents = true;
                 x.Events.RaiseFailureEvents = true;
                 x.Events.RaiseErrorEvents = true;
+                x.IssuerUri = Configuration.GetValue<string>("ServiceUrl");
             })
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddInMemoryApiScopes(identityServerSettings.ApiScopes)

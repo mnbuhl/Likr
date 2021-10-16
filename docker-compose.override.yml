@@ -81,6 +81,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=IdentityDb;User Id=sa;Password=secretpw123;"
+      - "ServiceUrl=http://likr.identity"
     restart: unless-stopped
     depends_on:
       - sqldata

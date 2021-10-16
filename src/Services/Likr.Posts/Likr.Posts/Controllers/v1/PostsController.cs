@@ -8,6 +8,7 @@ using Likr.Posts.Entities;
 using Likr.Posts.Helpers;
 using Likr.Posts.Interfaces;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +32,7 @@ namespace Likr.Posts.Controllers.v1
             _commentRepository = commentRepository;
             _publishEndpoint = publishEndpoint;
         }
-
+        
         [HttpGet]
         public async Task<ActionResult<IList<PostDto>>> GetAll([FromQuery] PaginationQuery paginationQuery)
         {
