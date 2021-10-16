@@ -1,5 +1,4 @@
 using System;
-using Likr.Comments.Data;
 using Likr.Comments.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +16,7 @@ namespace Likr.Comments
             var services = scope.ServiceProvider;
             var store = services.GetRequiredService<IRavenDbStore>();
             Console.WriteLine(store.Store.Identifier);
-            
+
             scope.Dispose();
 
             host.Run();

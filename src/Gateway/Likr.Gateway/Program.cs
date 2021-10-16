@@ -1,11 +1,6 @@
-using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
 
 namespace Likr.Gateway
 {
@@ -23,7 +18,8 @@ namespace Likr.Gateway
                     config
                         .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
                         .AddJsonFile("appsettings.json", true, true)
-                        .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
+                        .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true,
+                            true)
                         .AddJsonFile("ocelot.json", false, false)
                         .AddEnvironmentVariables();
                 })

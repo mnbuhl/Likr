@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using IdentityServer4.Services;
 using Likr.Identity.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +16,8 @@ namespace Likr.Identity.Areas.Identity.Pages.Account
         private readonly ILogger<LogoutModel> _logger;
         private readonly IIdentityServerInteractionService _interaction;
 
-        public LogoutModel(SignInManager<ApplicationUser> signInManager, ILogger<LogoutModel> logger, IIdentityServerInteractionService interaction)
+        public LogoutModel(SignInManager<ApplicationUser> signInManager, ILogger<LogoutModel> logger,
+            IIdentityServerInteractionService interaction)
         {
             _signInManager = signInManager;
             _logger = logger;

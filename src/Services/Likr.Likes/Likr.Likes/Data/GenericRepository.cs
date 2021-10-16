@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Likr.Likes.Entities;
 using Likr.Likes.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -56,7 +55,7 @@ namespace Likr.Likes.Data
             {
                 query = orderBy(query);
             }
-            
+
 
             return await query.AsNoTracking().ToListAsync();
         }
@@ -82,7 +81,7 @@ namespace Likr.Likes.Data
         public async Task<bool> DeleteAsync(string id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
-            
+
             if (entity == null)
                 return false;
 

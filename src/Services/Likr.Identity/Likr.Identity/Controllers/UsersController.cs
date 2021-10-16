@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using IdentityServer4;
 using Likr.Identity.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +18,7 @@ namespace Likr.Identity.Controllers
         {
             _userManger = userManger;
         }
-        
+
         [HttpGet("{username}")]
         public async Task<IActionResult> GetUserByUsername(string username)
         {

@@ -44,16 +44,6 @@ namespace Likr.Comments.Data
                 "FA18449B-D1E2-461E-9A18-CEFE83FA226A"
             };
 
-            string body =
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-                "Donec tincidunt, lectus nec dapibus tempus, nisl arcu facilisis massa, " +
-                "finibus iaculis dolor ligula vel augue. Nulla et condimentum purus, at congue ante. " +
-                "Sed fermentum purus eget tincidunt eleifend. Aliquam consequat finibus mauris non tristique. " +
-                "Morbi elit arcu, varius ac interdum varius, gravida sed urna. Etiam gravida quam sit amet mi " +
-                "sagittis tincidunt. Morbi sed aliquet ante. Donec dui urna, finibus vel elementum id, " +
-                "ullamcorper in ante. Sed sodales ante sed erat tincidunt tincidunt. Phasellus tellus ligula, " +
-                "sollicitudin eu ante sit amet, vulputate gravida dolor. Proin vitae diam volutpat, consectetur elit vel.";
-
             var commentIds = new List<string>
             {
                 "4CDA3F89-0EDD-4D0B-97DF-A3CBEA10DA44",

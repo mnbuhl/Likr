@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Likr.Identity
 {
@@ -30,23 +29,23 @@ namespace Likr.Identity
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            
+
             services.AddDatabaseDeveloperPageExceptionFilter();
-            
+
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            
+
             var identityServerSettings = new IdentityServerSettings(Configuration, Environment);
 
             services.AddIdentityServer(x =>
-            {
-                x.Authentication.CookieLifetime = TimeSpan.FromHours(2);
-                x.Events.RaiseSuccessEvents = true;
-                x.Events.RaiseFailureEvents = true;
-                x.Events.RaiseErrorEvents = true;
-                x.IssuerUri = Configuration.GetValue<string>("ServiceUrl");
-            })
+                {
+                    x.Authentication.CookieLifetime = TimeSpan.FromHours(2);
+                    x.Events.RaiseSuccessEvents = true;
+                    x.Events.RaiseFailureEvents = true;
+                    x.Events.RaiseErrorEvents = true;
+                    x.IssuerUri = Configuration.GetValue<string>("ServiceUrl");
+                })
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddInMemoryApiScopes(identityServerSettings.ApiScopes)
                 .AddInMemoryApiResources(identityServerSettings.ApiResources)

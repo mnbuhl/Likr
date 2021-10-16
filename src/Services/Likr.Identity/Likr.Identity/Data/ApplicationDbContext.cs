@@ -1,6 +1,4 @@
-﻿using IdentityServer4.EntityFramework.Interfaces;
-using Likr.Identity.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Likr.Identity.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

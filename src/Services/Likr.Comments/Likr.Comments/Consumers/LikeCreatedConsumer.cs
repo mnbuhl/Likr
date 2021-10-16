@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Likr.Commands;
-using Likr.Comments.Entities;
 using Likr.Comments.Interfaces;
 using MassTransit;
 
