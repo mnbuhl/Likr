@@ -1,3 +1,8 @@
+#Likr - Social Media
+Likr is a social media developed for my self chosen 4th Semester Computer Science exam.
+
+Project can be viewed and used in real time here: [TODO]
+
 ### Useful documentation:
 
 #### Docker commands:
@@ -10,3 +15,6 @@ Build & run:
 Rebuild: ```docker compose up -d --build --force-recreate```
 
 Stop: ```docker compose down```
+
+#### Images
+Coming soon
