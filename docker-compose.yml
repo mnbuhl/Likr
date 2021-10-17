@@ -46,9 +46,16 @@ services:
 #      context: .
 #      dockerfile: src/Client/Likr.Client/Dockerfile
 
+  likr.server:
+    image: ${DOCKER_REGISTRY-}likrserver
+    build:
+      context: .
+      dockerfile: src/Client/Likr/Server/Dockerfile
+
 volumes:
   mssqldata:
   rabbitmqdata:
   ravendbdata:
+
 
 
