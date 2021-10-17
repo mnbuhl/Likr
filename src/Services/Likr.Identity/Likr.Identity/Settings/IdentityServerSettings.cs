@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using IdentityServer4.Models;
+﻿using IdentityServer4.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 
 namespace Likr.Identity.Settings
 {
@@ -57,7 +57,9 @@ namespace Likr.Identity.Settings
                 ClientId = "client-spa",
                 AllowedGrantTypes = new List<string> { "implicit" },
                 RequireClientSecret = false,
-                RedirectUris = new List<string> { $"https://localhost:5005/authentication/login-callback" },
+                RedirectUris = new List<string> {
+                    "https://localhost:5005/authentication/login-callback",
+                },
                 AllowedScopes = new List<string>
                 {
                     "openid",
@@ -69,7 +71,7 @@ namespace Likr.Identity.Settings
                     "IdentityServerApi"
                 },
                 AlwaysIncludeUserClaimsInIdToken = true,
-                PostLogoutRedirectUris = new List<string> { $"https://localhost:5005/authentication/logout-callback" },
+                PostLogoutRedirectUris = new List<string> { "https://localhost:5005/authentication/logout-callback" },
                 AllowedCorsOrigins = new List<string>
                 {
                     "https://localhost:5005"

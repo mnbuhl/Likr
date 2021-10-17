@@ -40,11 +40,11 @@ services:
       context: .
       dockerfile: src/Services/Likr.Identity/Likr.Identity/Dockerfile
 
-  likr.client:
-    image: ${DOCKER_REGISTRY-}likrclient
-    build:
-      context: .
-      dockerfile: src/Client/Likr.Client/Dockerfile
+#  likr.client:
+#    image: ${DOCKER_REGISTRY-}likrclient
+#    build:
+#      context: .
+#      dockerfile: src/Client/Likr.Client/Dockerfile
 
 volumes:
   mssqldata:

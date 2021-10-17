@@ -84,7 +84,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=IdentityDb;User Id=sa;Password=secretpw123;"
       - "ServiceUrl=http://likr.identity"
-      - "AllowedOrigins:0=http://ravendb:8080"
+#      - "AllowedOrigins:0=https://likr.client:8100"
     restart: unless-stopped
     depends_on:
       - sqldata
@@ -99,14 +99,14 @@ services:
     ports:
       - "5200:80"
 
-  likr.client:
-    container_name: likr.client
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-      - "Local:Authority=http://likr.identity"
-    ports:
-      - "8009:80"
-      - "8010:443"
-    volumes:
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+#  likr.client:
+#    container_name: likr.client
+#    environment:
+#      - ASPNETCORE_ENVIRONMENT=Development
+#      - ASPNETCORE_URLS=https://+:443;http://+:80
+#      - "Local:Authority=http://likr.identity"
+#    ports:
+#      - "8009:80"
+#      - "8010:443"
+#    volumes:
+#      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

@@ -1,4 +1,3 @@
-using System;
 using Likr.Identity.Data;
 using Likr.Identity.Models;
 using Likr.Identity.Settings;
@@ -10,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Likr.Identity
 {
@@ -48,7 +48,7 @@ namespace Likr.Identity
                     x.IssuerUri = Configuration.GetValue<string>("ServiceUrl");
                 })
                 .AddAspNetIdentity<ApplicationUser>()
-                //.AddDefaultEndpoints()
+                .AddDefaultEndpoints()
                 .AddInMemoryApiScopes(identityServerSettings.ApiScopes)
                 .AddInMemoryApiResources(identityServerSettings.ApiResources)
                 .AddInMemoryClients(identityServerSettings.Clients)
