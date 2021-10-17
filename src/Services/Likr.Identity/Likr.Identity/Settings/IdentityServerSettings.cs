@@ -9,6 +9,7 @@ namespace Likr.Identity.Settings
     public class IdentityServerSettings
     {
         private readonly string _serviceUrl;
+        
         private readonly IWebHostEnvironment _env;
 
         public IdentityServerSettings(IConfiguration configuration, IWebHostEnvironment env)
@@ -58,7 +59,7 @@ namespace Likr.Identity.Settings
                 AllowedGrantTypes = new List<string> { "implicit" },
                 RequireClientSecret = false,
                 RedirectUris = new List<string> {
-                    "https://localhost:5005/authentication/login-callback",
+                    "http://localhost:5004/authentication/login-callback",
                 },
                 AllowedScopes = new List<string>
                 {
@@ -71,10 +72,35 @@ namespace Likr.Identity.Settings
                     "IdentityServerApi"
                 },
                 AlwaysIncludeUserClaimsInIdToken = true,
-                PostLogoutRedirectUris = new List<string> { "https://localhost:5005/authentication/logout-callback" },
+                PostLogoutRedirectUris = new List<string> { "http://localhost:5004" },
                 AllowedCorsOrigins = new List<string>
                 {
-                    "https://localhost:5005"
+                    "http://localhost:5004"
+                }
+            },
+            new Client
+            {
+                ClientId = "client-spa-container",
+                AllowedGrantTypes = new List<string> { "implicit" },
+                RequireClientSecret = false,
+                RedirectUris = new List<string> {
+                    "http://localhost:8100/authentication/login-callback",
+                },
+                AllowedScopes = new List<string>
+                {
+                    "openid",
+                    "profile",
+                    "posts",
+                    "comments",
+                    "likes",
+                    "profiles",
+                    "IdentityServerApi"
+                },
+                AlwaysIncludeUserClaimsInIdToken = true,
+                PostLogoutRedirectUris = new List<string> { "http://localhost:8100" },
+                AllowedCorsOrigins = new List<string>
+                {
+                    "http://localhost:8100"
                 }
             },
             _env.IsDevelopment()

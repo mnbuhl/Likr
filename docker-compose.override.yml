@@ -84,7 +84,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=IdentityDb;User Id=sa;Password=secretpw123;"
       - "ServiceUrl=http://likr.identity"
-#      - "AllowedOrigins:0=https://likr.client:8100"
+#      - "AllowedOrigins:0=http://likr.client" Insert deployment URL when deployed
     restart: unless-stopped
     depends_on:
       - sqldata
@@ -99,27 +99,17 @@ services:
     ports:
       - "5200:80"
 
-#  likr.client:
-#    container_name: likr.client
-#    environment:
-#      - ASPNETCORE_ENVIRONMENT=Development
-#      - ASPNETCORE_URLS=https://+:443;http://+:80
-#      - "Local:Authority=http://likr.identity"
-#    ports:
-#      - "8009:80"
-#      - "8010:443"
-#    volumes:
-#      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-
-  likr.server:
+  likr.client:
+    container_name: likr.client
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=localhost
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - "Local:ClientId=client-spa-container"
     ports:
-      - "8099:80"
-      - "8100:443"
+      - "8100:80"
+#      - "8100:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ~/.aspnet/https:/https:ro
