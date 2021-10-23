@@ -1,3 +1,5 @@
+using IdentityServer4;
+using IdentityServer4.Models;
 using Likr.Identity.Server.Data;
 using Likr.Identity.Server.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -13,12 +15,14 @@ namespace Likr.Identity.Server
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        private readonly IWebHostEnvironment _env;
+        private readonly IConfiguration _configuration;
 
-        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        {
+            _env = env;
+            _configuration = configuration;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -26,18 +30,36 @@ namespace Likr.Identity.Server
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    _configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(opt =>
+                {
+                    opt.ApiScopes.Add(new ApiScope(IdentityServerConstants.LocalApi.ScopeName));
+
+                    if (_env.IsDevelopment())
+                    {
+                        opt.Clients.AddSPA("Postman", spa =>
+                        {
+                            spa.WithClientId("postman");
+                            spa.WithRedirectUri("urn:ietf:wg:oauth:2.0:oob");
+                            spa.WithoutClientSecrets();
+                            spa.WithScopes("openid", "profile", "IdentityServerApi");
+                        });
+                    }
+                })
+                .AddDeveloperSigningCredential();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            services.AddCors();
+            services.AddLocalApiAuthentication();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -62,7 +84,7 @@ namespace Likr.Identity.Server
 
             app.UseCors(builder =>
             {
-                builder.WithOrigins(Configuration.GetSection("AllowedOrigins").Get<string[]>())
+                builder.WithOrigins(_configuration.GetSection("AllowedOrigins").Get<string[]>())
                     .AllowAnyHeader()
                     .AllowAnyMethod();
             });
