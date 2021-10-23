@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using IdentityServer4;
 using IdentityServer4.Models;
@@ -39,7 +39,14 @@ namespace Likr.Identity.Server
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentityServer()
+            services.AddIdentityServer(x =>
+                {
+                    x.IssuerUri = _configuration.GetValue<string>("ServiceUrl");
+                    x.Events.RaiseSuccessEvents = true;
+                    x.Events.RaiseFailureEvents = true;
+                    x.Events.RaiseErrorEvents = true;
+                    x.Authentication.CookieLifetime = TimeSpan.FromHours(2);
+                })
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(opt =>
                 {
                     opt.ApiScopes.Add(new ApiScope(IdentityServerConstants.LocalApi.ScopeName));
@@ -47,8 +54,10 @@ namespace Likr.Identity.Server
                     opt.Clients.AddSPA("Likr.Client", spa =>
                     {
                         spa.WithClientId("likr-client");
-                        spa.WithRedirectUri(_configuration.GetValue<string>("Urls:RedirectUri"));
-                        spa.WithLogoutRedirectUri(_configuration.GetValue<string>("Urls:PostLogoutRedirectUri"));
+                        spa.WithRedirectUri(
+                            _configuration.GetValue<string>("Urls:BaseUri" + "/authentication/login-callback"));
+                        spa.WithLogoutRedirectUri(
+                            _configuration.GetValue<string>("Urls:BaseUri" + "/authentication/logout-callback"));
                         spa.WithScopes("openid", "profile", "IdentityServerApi");
                         spa.WithoutClientSecrets();
                     });

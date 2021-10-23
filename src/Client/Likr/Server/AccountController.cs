@@ -19,7 +19,9 @@ namespace Likr.Server
         [HttpGet("Register")]
         public IActionResult Register(string returnUrl)
         {
-            return Redirect(_configuration.GetValue<string>("Authority") + "/Identity/Account/Register?returnUrl=http://localhost:5004" + returnUrl);
+            return Redirect(_configuration.GetValue<string>("Authority")
+                            + "/Identity/Account/Register?returnUrl=" + _configuration.GetValue<string>("ServiceUrl") +
+                            returnUrl);
         }
     }
 }
