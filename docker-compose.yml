@@ -34,8 +34,8 @@ services:
       context: .
       dockerfile: src/Gateway/Likr.Gateway/Dockerfile
 
-  likr.identity:
-    image: ${DOCKER_REGISTRY-}likridentity
+  likr.identity.server:
+    image: ${DOCKER_REGISTRY-}likridentityserver
     build:
       context: .
       dockerfile: src/Services/Likr.Identity/Likr.Identity/Dockerfile
@@ -50,6 +50,7 @@ volumes:
   mssqldata:
   rabbitmqdata:
   ravendbdata:
+
 
 
 

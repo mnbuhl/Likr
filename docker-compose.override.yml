@@ -78,14 +78,25 @@ services:
     ports:
       - "8003:80"
 
-  likr.identity:
+#  likr.identity:
+#    container_name: likr.identity
+#    environment:
+#      - ASPNETCORE_ENVIRONMENT=Development
+#      - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=IdentityDb;User Id=sa;Password=secretpw123;"
+#      - "ServiceUrl=http://likr.identity"
+##      - "AllowedOrigins:0=http://likr.client" Insert deployment URL when deployed
+#    restart: unless-stopped
+#    depends_on:
+#      - sqldata
+#    ports:
+#      - "8004:80"
+
+  likr.identity.server:
     container_name: likr.identity
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=IdentityDb;User Id=sa;Password=secretpw123;"
-      - "ServiceUrl=http://likr.identity"
-#      - "AllowedOrigins:0=http://likr.client" Insert deployment URL when deployed
-    restart: unless-stopped
+      -  "ServiceUrl=http://likr.identity"
     depends_on:
       - sqldata
     ports:
@@ -95,7 +106,7 @@ services:
     container_name: likr.gateway
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "IdentityUrl=http://likr.identity"
+#      - "IdentityUrl=http://likr.identity"
     ports:
       - "5200:80"
 

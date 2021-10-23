@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using IdentityServer4;
 using IdentityServer4.Models;
 using Likr.Identity.Server.Data;
@@ -41,6 +43,23 @@ namespace Likr.Identity.Server
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(opt =>
                 {
                     opt.ApiScopes.Add(new ApiScope(IdentityServerConstants.LocalApi.ScopeName));
+
+                    opt.Clients.AddSPA("Likr.Client", spa =>
+                    {
+                        spa.WithClientId("likr-client");
+                        spa.WithRedirectUri(_configuration.GetValue<string>("Urls:RedirectUri"));
+                        spa.WithLogoutRedirectUri(_configuration.GetValue<string>("Urls:PostLogoutRedirectUri"));
+                        spa.WithScopes("openid", "profile", "IdentityServerApi");
+                        spa.WithoutClientSecrets();
+                    });
+
+                    var client = opt.Clients.FirstOrDefault(x => x.ClientId == "likr-client");
+
+                    if (client != null)
+                    {
+                        client.AllowedGrantTypes = new[] { "implicit" };
+                        client.AllowedCorsOrigins = _configuration.GetSection("AllowedOrigins").Get<string[]>();
+                    }
 
                     if (_env.IsDevelopment())
                     {
