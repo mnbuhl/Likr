@@ -104,7 +104,7 @@ namespace Likr.Identity.Server.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: true);
-                        return LocalRedirect(returnUrl);
+                        return Redirect(returnUrl);
                     }
                 }
                 foreach (var error in result.Errors)

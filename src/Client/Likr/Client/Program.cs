@@ -16,6 +16,7 @@ builder.Services.AddOidcAuthentication(options =>
 {
     builder.Configuration.Bind("Local", options.ProviderOptions);
     options.AuthenticationPaths.LogOutCallbackPath = "/";
+    options.AuthenticationPaths.RemoteRegisterPath = "Account/Register";
 });
 
 await builder.Build().RunAsync();

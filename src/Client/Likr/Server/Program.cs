@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //builder.Services.AddOidcAuthentication(options => { builder.Configuration.Bind("Local", options.ProviderOptions); });
 builder.Services.AddRazorPages();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -33,6 +34,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.MapRazorPages();
+app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
