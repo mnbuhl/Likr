@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
-namespace Likr.Server
+namespace Likr.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -20,8 +19,8 @@ namespace Likr.Server
         public IActionResult Register(string returnUrl)
         {
             return Redirect(_configuration.GetValue<string>("Authority")
-                            + "/Identity/Account/Register?returnUrl=" + _configuration.GetValue<string>("ServiceUrl") +
-                            returnUrl);
+                + "/Identity/Account/Register?returnUrl=" + _configuration.GetValue<string>("ServiceUrl") +
+                returnUrl);
         }
     }
 }

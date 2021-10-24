@@ -55,9 +55,9 @@ namespace Likr.Identity.Server
                     {
                         spa.WithClientId("likr-client");
                         spa.WithRedirectUri(
-                            _configuration.GetValue<string>("Urls:BaseUri" + "/authentication/login-callback"));
+                            _configuration.GetValue<string>("Urls:BaseUri") + "/authentication/login-callback");
                         spa.WithLogoutRedirectUri(
-                            _configuration.GetValue<string>("Urls:BaseUri" + "/authentication/logout-callback"));
+                            _configuration.GetValue<string>("Urls:BaseUri") + "/authentication/logout-callback");
                         spa.WithScopes("openid", "profile", "IdentityServerApi");
                         spa.WithoutClientSecrets();
                     });
