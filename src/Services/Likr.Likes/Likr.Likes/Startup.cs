@@ -2,7 +2,6 @@ using Likr.Likes.Data;
 using Likr.Likes.Extensions;
 using Likr.Likes.Interfaces;
 using Likr.Likes.Mapping;
-using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +16,7 @@ namespace Likr.Likes
     public class Startup
     {
         private readonly IConfiguration _configuration;
-        
+
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -28,7 +27,7 @@ namespace Likr.Likes
         {
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
-            
+
             services.AddApiVersioning(opt =>
             {
                 opt.DefaultApiVersion = new ApiVersion(1, 0);
@@ -38,11 +37,11 @@ namespace Likr.Likes
             });
 
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
-            
+
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddIdentityServerAuth(_configuration);
             services.AddMassTransitWithRabbitMq();
-            
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -66,10 +65,7 @@ namespace Likr.Likes
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

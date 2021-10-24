@@ -56,7 +56,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "Database:Urls:0=http://ravendb:8080"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
-      - "IdentityUrl=http://likr.identity"
+      - "IdentityUrl=http://likr.identity" 
     restart: unless-stopped
     depends_on:
       - ravendb
@@ -78,25 +78,31 @@ services:
     ports:
       - "8003:80"
 
-  likr.identity:
+  likr.identity.server:
     container_name: likr.identity
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=IdentityDb;User Id=sa;Password=secretpw123;"
-      - "ServiceUrl=http://likr.identity"
-    restart: unless-stopped
+#      - "ServiceUrl=http://likr.identity" # Change to deployed URL once deployed
+#      - "Urls:BaseUri=http://localhost:8100" Change to deployed URL once deployed
     depends_on:
       - sqldata
     ports:
       - "8004:80"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   likr.gateway:
     container_name: likr.gateway
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "IdentityUrl=http://likr.identity"
+      - "IdentityUrl=http://likr.identity" 
     ports:
       - "5200:80"
+
+  likr.client:
+    container_name: likr.client
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+#      - "Authority=http://localhost:8004" Change to deployed URL once deployed
+      - "ServiceUrl=http://likr.client:8100"
+    ports:
+      - "8100:80"

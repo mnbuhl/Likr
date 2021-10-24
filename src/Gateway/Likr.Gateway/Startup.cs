@@ -1,11 +1,9 @@
 using System;
-using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -26,7 +24,7 @@ namespace Likr.Gateway
         {
             string identityUrl = _configuration.GetValue<string>("IdentityUrl");
             string authProviderKey = "IdentityApiKey";
-            
+
             Console.WriteLine(identityUrl);
 
             services.AddAuthentication()
@@ -36,7 +34,8 @@ namespace Likr.Gateway
                     x.RequireHttpsMetadata = false;
                     x.TokenValidationParameters.ValidateAudience = false;
                 });
-            
+
+            services.AddCors();
             services.AddOcelot();
         }
 
@@ -47,9 +46,16 @@ namespace Likr.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.UseCors(builder =>
+            {
+                builder.WithOrigins(_configuration.GetSection("AllowedOrigins").Get<string[]>())
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
 
             app.UseRouting();
-            
+
             app.UseOcelot().Wait();
         }
     }

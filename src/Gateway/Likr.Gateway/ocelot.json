@@ -10,9 +10,11 @@
         }
       ],
       "UpstreamPathTemplate": "/api/{version}/p/{everything}",
+      "UpstreamScheme": "http",
       "UpstreamHttpMethod": [
         "GET"
-      ]
+      ],
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/{version}/{everything}",
@@ -30,7 +32,7 @@
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "IdentityApiKey",
-        "AllowedScopes": [  ]
+        "AllowedScopes": [ "IdentityServerApi" ]
       }
     },
     {
@@ -63,7 +65,7 @@
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "IdentityApiKey",
-        "AllowedScopes": [  ]
+        "AllowedScopes": [ "IdentityServerApi" ]
       }
     },
     {
@@ -96,7 +98,7 @@
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "IdentityApiKey",
-        "AllowedScopes": [  ]
+        "AllowedScopes": [ "IdentityServerApi" ]
       }
     }
   ],

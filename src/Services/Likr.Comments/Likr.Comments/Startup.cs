@@ -1,8 +1,7 @@
 using Likr.Comments.Data;
+using Likr.Comments.Extensions;
 using Likr.Comments.Interfaces;
 using Likr.Comments.Mapping;
-using Likr.Comments.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +15,7 @@ namespace Likr.Comments
     public class Startup
     {
         private IConfiguration _configuration;
-        
+
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -25,7 +24,6 @@ namespace Likr.Comments
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddApiVersioning(opt =>
             {
                 opt.DefaultApiVersion = new ApiVersion(1, 0);
@@ -67,10 +65,7 @@ namespace Likr.Comments
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

@@ -1,5 +1,5 @@
 # Likr - Social Media
-Likr is a social media developed for my self chosen 4th Semester Computer Science exam.
+Likr is a social media developed with microservice technologies for my self chosen 4th Semester Computer Science exam.
 
 Project can be viewed and used in real time here: [TODO]
 

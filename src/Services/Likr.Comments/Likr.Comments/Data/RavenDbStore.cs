@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Likr.Comments.Interfaces;
+﻿using Likr.Comments.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;

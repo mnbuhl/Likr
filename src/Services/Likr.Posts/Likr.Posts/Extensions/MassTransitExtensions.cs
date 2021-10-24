@@ -1,7 +1,5 @@
-﻿using Likr.Commands;
-using Likr.Posts.Consumers;
+﻿using Likr.Posts.Consumers;
 using MassTransit;
-using MassTransit.Definition;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

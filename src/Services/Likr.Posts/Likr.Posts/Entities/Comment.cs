@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Likr.Posts.Entities
+﻿namespace Likr.Posts.Entities
 {
     public class Comment : BaseEntity
     {

@@ -1,6 +1,4 @@
-﻿using Likr.Likes.Interfaces;
-
-namespace Likr.Likes.Entities
+﻿namespace Likr.Likes.Entities
 {
     public class Like
     {

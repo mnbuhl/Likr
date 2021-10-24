@@ -10,7 +10,6 @@ using Likr.Posts.Interfaces;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Likr.Posts.Controllers.v1
 {
@@ -32,7 +31,7 @@ namespace Likr.Posts.Controllers.v1
             _commentRepository = commentRepository;
             _publishEndpoint = publishEndpoint;
         }
-        
+
         [HttpGet]
         public async Task<ActionResult<IList<PostDto>>> GetAll([FromQuery] PaginationQuery paginationQuery)
         {
@@ -62,7 +61,7 @@ namespace Likr.Posts.Controllers.v1
 
             if (post == null)
                 return NotFound();
-            
+
             post.Comments = await _commentRepository.GetAllAsync(x => x.PostId == id.ToString());
 
             return Ok(_mapper.Map<PostDto>(post));
@@ -92,7 +91,7 @@ namespace Likr.Posts.Controllers.v1
 
             if (!deleted)
                 return NotFound();
-            
+
             await _publishEndpoint.Publish(new PostDeleted(id.ToString()));
 
             return NoContent();

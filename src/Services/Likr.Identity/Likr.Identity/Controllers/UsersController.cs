@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using IdentityServer4;
-using Likr.Identity.Models;
+﻿using IdentityServer4;
+using Likr.Identity.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
-namespace Likr.Identity.Controllers
+namespace Likr.Identity.Server.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -19,7 +18,7 @@ namespace Likr.Identity.Controllers
         {
             _userManger = userManger;
         }
-        
+
         [HttpGet("{username}")]
         public async Task<IActionResult> GetUserByUsername(string username)
         {
@@ -29,9 +28,7 @@ namespace Likr.Identity.Controllers
             {
                 user.Id,
                 user.Email,
-                user.UserName,
-                user.DisplayName,
-                user.Image
+                user.UserName
             });
         }
     }

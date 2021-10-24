@@ -12,7 +12,8 @@ namespace Likr.Posts.Consumers
         private readonly IGenericRepository<Post> _postRepository;
         private readonly ILogger<CommentCreatedConsumer> _logger;
 
-        public CommentCreatedConsumer(IGenericRepository<Comment> commentRepository, IGenericRepository<Post> postRepository, ILogger<CommentCreatedConsumer> logger)
+        public CommentCreatedConsumer(IGenericRepository<Comment> commentRepository,
+            IGenericRepository<Post> postRepository, ILogger<CommentCreatedConsumer> logger)
         {
             _commentRepository = commentRepository;
             _postRepository = postRepository;
@@ -45,13 +46,14 @@ namespace Likr.Posts.Consumers
                 });
                 return;
             }
-            
+
             // Comment to comment logic
             var comment = await _commentRepository.GetAsync(x => x.Id == message.PostId);
 
             if (comment == null)
             {
-                _logger.LogInformation($"Tried to increase CommentsCount on Comment but no Comment was with Id {message.Id} was found");
+                _logger.LogInformation(
+                    $"Tried to increase CommentsCount on Comment but no Comment was with Id {message.Id} was found");
                 return;
             }
 

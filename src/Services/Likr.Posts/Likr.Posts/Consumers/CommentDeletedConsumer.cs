@@ -10,14 +10,11 @@ namespace Likr.Posts.Consumers
     public class CommentDeletedConsumer : IConsumer<CommentDeleted>
     {
         private readonly IGenericRepository<Comment> _commentRepository;
-        private readonly IGenericRepository<Post> _postRepository;
         private readonly ILogger<CommentDeletedConsumer> _logger;
 
-        public CommentDeletedConsumer(IGenericRepository<Comment> commentRepository,
-            IGenericRepository<Post> postRepository, ILogger<CommentDeletedConsumer> logger)
+        public CommentDeletedConsumer(IGenericRepository<Comment> commentRepository, ILogger<CommentDeletedConsumer> logger)
         {
             _commentRepository = commentRepository;
-            _postRepository = postRepository;
             _logger = logger;
         }
 
@@ -39,10 +36,11 @@ namespace Likr.Posts.Consumers
 
             if (commentToComment == null)
             {
-                _logger.LogInformation($"Tried to decrease CommentsCount of Comment with {message.PostId}, but no Comment found");
+                _logger.LogInformation(
+                    $"Tried to decrease CommentsCount of Comment with {message.PostId}, but no Comment found");
                 return;
             }
-            
+
             commentToComment.CommentsCount--;
             await _commentRepository.UpdateAsync(commentToComment);
         }
