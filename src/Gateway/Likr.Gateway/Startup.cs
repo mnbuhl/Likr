@@ -35,6 +35,7 @@ namespace Likr.Gateway
                     x.TokenValidationParameters.ValidateAudience = false;
                 });
 
+            services.AddCors();
             services.AddOcelot();
         }
 
@@ -45,6 +46,13 @@ namespace Likr.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.UseCors(builder =>
+            {
+                builder.WithOrigins(_configuration.GetSection("AllowedOrigins").Get<string[]>())
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
 
             app.UseRouting();
 

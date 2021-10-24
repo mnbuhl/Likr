@@ -1,15 +1,20 @@
-﻿namespace Likr.Client.Helpers;
+﻿using System.Net.Http;
 
-public class HttpResponseWrapper<T>
+namespace Likr.Client.Helpers
 {
-    public bool Success { get; set; }
-    public T Response { get; set; }
-    public HttpResponseMessage HttpResponseMessage { get; set; }
-
-    public HttpResponseWrapper(bool success, T response, HttpResponseMessage httpResponseMessage)
+    public class HttpResponseWrapper<T>
     {
-        Success = success;
-        Response = response;
-        HttpResponseMessage = httpResponseMessage;
+        public bool Success { get; set; }
+        public T Response { get; set; }
+        public HttpResponseMessage HttpResponseMessage { get; set; }
+
+        public HttpResponseWrapper(bool success, T response, HttpResponseMessage httpResponseMessage)
+        {
+            Success = success;
+            Response = response;
+            HttpResponseMessage = httpResponseMessage;
+        }
     }
 }
+
+

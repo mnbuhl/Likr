@@ -1,12 +1,22 @@
 ﻿@page "/"
-@inject IHttpService _httpService
 
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+<p>Sub: @_userId</p>
 
-@code {
-    
+@if(_posts.Count > 0)
+{
+    @foreach(var post in _posts)
+    {
+        <p>@post.Body</p>
+    }
 }
+
+<EditForm Model="body" OnSubmit="CreatePost">
+    <InputTextArea @bind-Value="body"></InputTextArea>
+    <button type="submit">submit</button>
+</EditForm>
+
+Welcome to your new app.
