@@ -16,10 +16,10 @@ namespace Likr.Client.Pages
     {
         [Inject]
         public IHttpService HttpService { get; set; }
-        
+
         [Inject]
         public IAccessTokenProvider TokenProvider { get; set; }
-        
+
         [Inject]
         public AuthenticationStateProvider AuthStateProvider { get; set; }
 
