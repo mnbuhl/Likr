@@ -7,6 +7,7 @@ Project can be viewed and used in real time here: [TODO]
 Client service
 * Blazor
 * ASP.NET Core
+* Tailwind CSS
 
 Posts service
 * ASP.NET Core Web API
