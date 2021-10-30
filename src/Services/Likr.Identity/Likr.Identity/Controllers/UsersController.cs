@@ -27,7 +27,7 @@ namespace Likr.Identity.Server.Controllers
             return Ok(new
             {
                 user.Id,
-                user.Email,
+                user.DisplayName,
                 user.UserName
             });
         }
