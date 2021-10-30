@@ -24,6 +24,7 @@ namespace Likr.Client.Pages
         public AuthenticationStateProvider AuthStateProvider { get; set; }
 
         private List<PostDto> _posts = new List<PostDto>();
+        private List<Claim> _claims = new List<Claim>();
         private string? _userId;
 
         protected override async Task OnInitializedAsync()
@@ -33,6 +34,7 @@ namespace Likr.Client.Pages
             _posts = wrapper.Response!;
 
             var user = (await AuthStateProvider.GetAuthenticationStateAsync()).User;
+            _claims = user.Claims.ToList();
             _userId = user.GetUserId();
         }
 
