@@ -1,10 +1,9 @@
 using Likr.Client.Dtos;
 
-namespace Client.Services
+namespace Likr.Client.Services;
+
+public interface IPostService
 {
-    public interface PostService
-    {
-        public Task<List<PostDto>> GetPosts();
-        public Task<List<PostDto>> GetPostsByUserId(Guid userId);
-    }
+    public Task<List<PostDto>> GetPosts();
+    public Task<List<PostDto>> GetPostsByUserId(Guid userId);
 }
