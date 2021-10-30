@@ -100,6 +100,20 @@
         "AuthenticationProviderKey": "IdentityApiKey",
         "AllowedScopes": [ "IdentityServerApi" ]
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "likr.identity",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{version}/i/{everything}",
+      "UpstreamHttpMethod": [
+        "GET"
+      ]
     }
   ],
   "GlobalConfiguration": {
