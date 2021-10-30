@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
+<!--  REMEMBER TO COMMENT OUT WHEN SWITCHING TO DOCKER BUILD -->
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="npm run buildcss" />
   </Target>
