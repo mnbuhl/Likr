@@ -55,6 +55,11 @@ namespace Likr.Identity.Server.Areas.Identity.Pages.Account
             [StringLength(32, ErrorMessage = "The Username cannot exceed 32 characters")]
             [RegularExpression("^[A-Za-z][a-zA-Z0-9-_]+$")]
             public string UserName { get; set; }
+            
+            [Required]
+            [Display(Name = "Display Name")]
+            [StringLength(32, ErrorMessage = "The Display Name cannot exceed 32 characters")]
+            public string DisplayName { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -80,7 +85,7 @@ namespace Likr.Identity.Server.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.UserName, Email = Input.Email };
+                var user = new ApplicationUser { UserName = Input.UserName, Email = Input.Email, DisplayName = Input.DisplayName };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
