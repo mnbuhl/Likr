@@ -8,5 +8,10 @@ namespace Likr.Client.Extensions
         {
             return user.FindFirst(x => x.Type.Equals("sub"))?.Value ?? "";
         }
+
+        public static string GetDisplayName(this ClaimsPrincipal user)
+        {
+            return user.FindFirst(x => x.Type == "DisplayName")?.Value!;
+        }
     }
 }

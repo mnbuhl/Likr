@@ -9,7 +9,7 @@ namespace Likr.Identity.Server.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
+    //[Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
     public class UsersController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManger;
