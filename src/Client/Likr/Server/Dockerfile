@@ -5,6 +5,12 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+FROM node:alpine AS node
+WORKDIR /src
+COPY . .
+RUN npm install
+RUN npm run build
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["src/Client/Likr/Server/Likr.Server.csproj", "src/Client/Likr/Server/"]

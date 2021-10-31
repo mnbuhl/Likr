@@ -3,7 +3,9 @@ using System.Linq;
 using IdentityServer4;
 using IdentityServer4.Models;
 using Likr.Identity.Server.Data;
+using Likr.Identity.Server.Extensions;
 using Likr.Identity.Server.Models;
+using Likr.Identity.Server.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -81,10 +83,13 @@ namespace Likr.Identity.Server
                         });
                     }
                 })
-                .AddDeveloperSigningCredential();
+                .AddDeveloperSigningCredential()
+                .AddProfileService<ProfileService>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            services.AddMassTransitWithRabbitMq();
 
             services.AddCors();
             services.AddLocalApiAuthentication();

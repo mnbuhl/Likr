@@ -15,6 +15,7 @@ namespace Likr.Posts.Extensions
                 configure.AddConsumer<CommentDeletedConsumer>();
                 configure.AddConsumer<LikeCreatedConsumer>();
                 configure.AddConsumer<LikeDeletedConsumer>();
+                configure.AddConsumer<PostUserCreatedConsumer>();
 
                 configure.UsingRabbitMq((context, cfg) =>
                 {

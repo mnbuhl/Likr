@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Likr.Commands;
@@ -10,6 +11,7 @@ using Likr.Posts.Interfaces;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Likr.Posts.Controllers.v1
 {
@@ -35,7 +37,8 @@ namespace Likr.Posts.Controllers.v1
         [HttpGet]
         public async Task<ActionResult<IList<PostDto>>> GetAll([FromQuery] PaginationQuery paginationQuery)
         {
-            IList<Post> posts = await _postRepository.GetAllAsync(paginationQuery: paginationQuery);
+            IList<Post> posts = await _postRepository.GetAllAsync(paginationQuery: paginationQuery, orderBy: x => x.OrderByDescending(p => p.CreatedAt),
+                includes: x => x.Include(p => p.User));
 
             return Ok(_mapper.Map<IList<PostDto>>(posts));
         }
@@ -46,7 +49,8 @@ namespace Likr.Posts.Controllers.v1
 
         {
             IList<Post> posts =
-                await _postRepository.GetAllAsync(x => x.UserId == userId, paginationQuery: paginationQuery);
+                await _postRepository.GetAllAsync(x => x.UserId == userId, paginationQuery: paginationQuery,
+                    includes: x => x.Include(p => p.User), orderBy: x => x.OrderByDescending(p => p.CreatedAt));
 
             if (posts == null)
                 return NotFound();
@@ -57,12 +61,14 @@ namespace Likr.Posts.Controllers.v1
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PostDto>> Get(Guid id)
         {
-            var post = await _postRepository.GetAsync(x => x.Id == id.ToString());
+            var post = await _postRepository.GetAsync(x => x.Id == id.ToString(),
+                includes: x => x.Include(p => p.User));
 
             if (post == null)
                 return NotFound();
 
-            post.Comments = await _commentRepository.GetAllAsync(x => x.PostId == id.ToString());
+            post.Comments =
+                await _commentRepository.GetAllAsync(x => x.PostId == id.ToString(), x => x.Include(p => p.User));
 
             return Ok(_mapper.Map<PostDto>(post));
         }

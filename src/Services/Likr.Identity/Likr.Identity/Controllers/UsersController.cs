@@ -1,4 +1,7 @@
-﻿using IdentityServer4;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using IdentityServer4;
 using Likr.Identity.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +12,7 @@ namespace Likr.Identity.Server.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
+    //[Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
     public class UsersController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManger;
@@ -19,15 +22,18 @@ namespace Likr.Identity.Server.Controllers
             _userManger = userManger;
         }
 
-        [HttpGet("{username}")]
-        public async Task<IActionResult> GetUserByUsername(string username)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(string id)
         {
-            var user = await _userManger.FindByNameAsync(username);
+            var user = await _userManger.FindByIdAsync(id);
+
+            if (user == null)
+                return NotFound();
 
             return Ok(new
             {
                 user.Id,
-                user.Email,
+                user.DisplayName,
                 user.UserName
             });
         }

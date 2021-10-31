@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Likr.Client.Dtos;
 
-namespace Likr.Client.Dtos
-{
-    public record CommentDto(
-        string Id,
-        string Body,
-        string UserId,
-        Guid PostId,
-        int LikesCount,
-        ICollection<CommentDto> Comments);
-}
-
-
+public record CommentDto(
+    string Id,
+    DateTime CreatedAt,
+    string Body,
+    string UserId,
+    Guid PostId,
+    int LikesCount,
+    ICollection<CommentDto> Comments);
