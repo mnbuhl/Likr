@@ -1,24 +1,15 @@
-﻿@page "/"
-
+@page "/"
 <PageTitle>Index</PageTitle>
 
-<h1 class="text-gray-500">Hello, world!</h1>
 
-<p>Sub: @_userId</p>
-
-<p>@string.Join("\n", _claims)</p>
-
-@if (_posts.Count > 0)
-{
-    @foreach (var post in _posts)
-    {
-        <p>@post.Body</p>
-    }
-}
-
-<EditForm Model="body" OnSubmit="CreatePost">
-    <InputTextArea @bind-Value="body"></InputTextArea>
-    <button type="submit">submit</button>
-</EditForm>
-
-Welcome to your new app.
+<AuthorizeView>
+    <Authorized>
+        @foreach (var post in _posts.OrEmptyIfNull())
+        {
+            <p>@post.Body</p>
+        }
+    </Authorized>
+    <NotAuthorized>
+        Not Hello
+    </NotAuthorized>
+</AuthorizeView>

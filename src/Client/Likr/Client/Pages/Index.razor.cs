@@ -1,60 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Likr.Client.Dtos;
-using Likr.Client.Extensions;
-using Likr.Client.Helpers;
+﻿using Likr.Client.Dtos;
 using Likr.Client.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace Likr.Client.Pages
+namespace Likr.Client.Pages;
+
+public partial class Index : ComponentBase
 {
-    public partial class Index : ComponentBase
+    [Inject]
+    public AuthService? AuthService { get; set; }
+    
+    [Inject]
+    public IPostService? PostService { get; set; }
+    
+    [Inject]
+    public IHttpService? HttpService { get; set; }
+
+    private List<PostDto> _posts = new List<PostDto>();
+    private List<UserDto> _users = new List<UserDto>();
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject]
-        public IHttpService HttpService { get; set; }
+        if (PostService == null)
+            return;
+        
+        _posts = await PostService.GetPosts();
+        List<string> userIds = _posts.Select(x => x.UserId).ToList();
 
-        [Inject]
-        public IAccessTokenProvider TokenProvider { get; set; }
-
-        [Inject]
-        public AuthenticationStateProvider AuthStateProvider { get; set; }
-
-        private List<PostDto> _posts = new List<PostDto>();
-        private List<Claim> _claims = new List<Claim>();
-        private string? _userId;
-
-        protected override async Task OnInitializedAsync()
+        foreach (var id in userIds.Distinct().ToList())
         {
-            HttpResponseWrapper<List<PostDto>?> wrapper = await HttpService.Get<List<PostDto>>("/api/v1/p/Posts");
-
-            _posts = wrapper.Response!;
-
-            var user = (await AuthStateProvider.GetAuthenticationStateAsync()).User;
-            _claims = user.Claims.ToList();
-            _userId = user.GetUserId();
-        }
-
-        private string body = "";
-
-        private async Task CreatePost()
-        {
-            var tokenResult = await TokenProvider.RequestAccessToken();
-            string accessToken = string.Empty;
-
-            if (tokenResult.TryGetToken(out var token))
-                accessToken = token.Value;
-
-            var post = new CreatePostDto
-            {
-                Body = body,
-                UserId = Guid.Parse(_userId)
-            };
-
-            var response = await HttpService.Create<CreatePostDto, PostDto>("/api/v1/p/Posts", post, accessToken);
+            _users.Add((await HttpService.Get<UserDto>($"/api/v1/u/Users/{id}")).Response);
         }
     }
 }
