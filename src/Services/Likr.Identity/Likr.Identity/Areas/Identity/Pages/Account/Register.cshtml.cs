@@ -13,6 +13,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Likr.Commands;
+using MassTransit;
 
 namespace Likr.Identity.Server.Areas.Identity.Pages.Account
 {
@@ -23,17 +25,19 @@ namespace Likr.Identity.Server.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IPublishEndpoint _publishEndpoint;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IPublishEndpoint publishEndpoint)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _publishEndpoint = publishEndpoint;
         }
 
         [BindProperty]
@@ -90,6 +94,10 @@ namespace Likr.Identity.Server.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _publishEndpoint.Publish(new PostUserCreated(user.Id, user.UserName, user.DisplayName));
+                    await _publishEndpoint.Publish(new LikeUserCreated(user.Id, user.UserName, user.DisplayName));
+                    await _publishEndpoint.Publish(new CommentUserCreated(user.Id, user.UserName, user.DisplayName));
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

@@ -1,0 +1,23 @@
+﻿@if (PostDto != null)
+{
+    <div class="comment-container border border-opacity-50 rounded-md mb-4">
+        <div class="p-5">
+            <div>
+                <p class="inline-block">@PostDto.User.DisplayName</p>
+                <p class="inline-block">@@@PostDto.User.Username</p>
+            </div>
+            <p>@PostDto.Body</p>
+            <div>
+                <p class="inline-block">@PostDto.CommentsCount</p>
+                <p class="inline-block">@PostDto.LikesCount</p>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public PostDto? PostDto { get; set; }
+
+}

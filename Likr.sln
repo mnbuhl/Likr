@@ -47,6 +47,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Likr.Client", "src\Client\L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Likr.Identity.Server", "src\Services\Likr.Identity\Likr.Identity\Likr.Identity.Server.csproj", "{04E06E8E-E66B-4D30-BB50-20D13A9572DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Likr.Commands", "src\Services\Likr.Identity\Likr.Commands\Likr.Commands.csproj", "{A2AE8F63-8CFA-44DC-853C-1D6D06031A2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{04E06E8E-E66B-4D30-BB50-20D13A9572DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04E06E8E-E66B-4D30-BB50-20D13A9572DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04E06E8E-E66B-4D30-BB50-20D13A9572DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2AE8F63-8CFA-44DC-853C-1D6D06031A2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2AE8F63-8CFA-44DC-853C-1D6D06031A2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2AE8F63-8CFA-44DC-853C-1D6D06031A2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2AE8F63-8CFA-44DC-853C-1D6D06031A2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +122,7 @@ Global
 		{A7FC911D-B572-461F-A13E-C0E320113FC8} = {0796C0BA-D308-49DF-A045-09E6F73C19C6}
 		{64B1900C-55B6-42D0-8731-9F00BFA2C210} = {0796C0BA-D308-49DF-A045-09E6F73C19C6}
 		{04E06E8E-E66B-4D30-BB50-20D13A9572DD} = {3E684230-2EEF-4307-983A-C2918E39B09B}
+		{A2AE8F63-8CFA-44DC-853C-1D6D06031A2A} = {3E684230-2EEF-4307-983A-C2918E39B09B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31E53794-E39B-4A1C-A622-6C5C2D7718FB}

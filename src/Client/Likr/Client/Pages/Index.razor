@@ -1,15 +1,4 @@
-@page "/"
+﻿@page "/"
 <PageTitle>Index</PageTitle>
 
-
-<AuthorizeView>
-    <Authorized>
-        @foreach (var post in _posts.OrEmptyIfNull())
-        {
-            <p>@post.Body</p>
-        }
-    </Authorized>
-    <NotAuthorized>
-        Not Hello
-    </NotAuthorized>
-</AuthorizeView>
+<Posts></Posts>

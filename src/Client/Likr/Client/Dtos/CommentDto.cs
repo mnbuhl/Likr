@@ -2,6 +2,7 @@
 
 public record CommentDto(
     string Id,
+    DateTime CreatedAt,
     string Body,
     string UserId,
     Guid PostId,
