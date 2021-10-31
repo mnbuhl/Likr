@@ -4,7 +4,10 @@
 
 <AuthorizeView>
     <Authorized>
-        Hello
+        @foreach (var post in _posts.OrEmptyIfNull())
+        {
+            <p>@post.Body</p>
+        }
     </Authorized>
     <NotAuthorized>
         Not Hello

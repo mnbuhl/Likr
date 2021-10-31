@@ -11,9 +11,9 @@ public class PostService : IPostService
         _httpService = httpService;
     }
 
-    public async Task<List<PostDto>> GetPosts(int pageSize = 10, int page = 1)
+    public async Task<List<PostDto>> GetPosts(int pageSize, int page)
     {
-        var wrapper = await _httpService.Get<List<PostDto>>($"/api/v1/p/Posts?pageSize={pageSize}?page={page}");
+        var wrapper = await _httpService.Get<List<PostDto>>($"/api/v1/p/Posts?pageSize={pageSize}&page={page}");
 
         return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
