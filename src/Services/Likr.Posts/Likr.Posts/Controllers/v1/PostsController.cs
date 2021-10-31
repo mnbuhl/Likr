@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Likr.Commands;
@@ -36,7 +37,7 @@ namespace Likr.Posts.Controllers.v1
         [HttpGet]
         public async Task<ActionResult<IList<PostDto>>> GetAll([FromQuery] PaginationQuery paginationQuery)
         {
-            IList<Post> posts = await _postRepository.GetAllAsync(paginationQuery: paginationQuery,
+            IList<Post> posts = await _postRepository.GetAllAsync(paginationQuery: paginationQuery, orderBy: x => x.OrderByDescending(p => p.CreatedAt),
                 includes: x => x.Include(p => p.User));
 
             return Ok(_mapper.Map<IList<PostDto>>(posts));
