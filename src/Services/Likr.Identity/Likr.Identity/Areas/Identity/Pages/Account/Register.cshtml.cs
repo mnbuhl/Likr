@@ -97,6 +97,7 @@ namespace Likr.Identity.Server.Areas.Identity.Pages.Account
 
                     await _publishEndpoint.Publish(new PostUserCreated(user.Id, user.UserName, user.DisplayName));
                     await _publishEndpoint.Publish(new LikeUserCreated(user.Id, user.UserName, user.DisplayName));
+                    await _publishEndpoint.Publish(new CommentUserCreated(user.Id, user.UserName, user.DisplayName));
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

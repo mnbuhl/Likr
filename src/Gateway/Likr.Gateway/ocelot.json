@@ -13,8 +13,7 @@
       "UpstreamScheme": "http",
       "UpstreamHttpMethod": [
         "GET"
-      ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/{version}/{everything}",
