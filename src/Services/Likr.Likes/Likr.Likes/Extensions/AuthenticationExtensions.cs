@@ -21,6 +21,7 @@ namespace Likr.Likes.Extensions
                     options.Authority = identityUrl;
                     options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters.ValidateAudience = false;
+                    options.TokenValidationParameters.ValidateIssuerSigningKey = false;
                 });
             
             return services;

@@ -50,7 +50,9 @@ namespace Likr.Comments.Data
 
             try
             {
-                comment.User = await session.Query<User>().Where(x => x.Id == comment.UserId, true).FirstAsync();
+                comment.User = await session.Query<User>().FirstOrDefaultAsync(x => x.Id == comment.UserId);
+
+                _logger.LogInformation(comment.User.DisplayName);
                 
                 await session.StoreAsync(comment, comment.Id ?? Guid.NewGuid().ToString());
                 await session.SaveChangesAsync();
