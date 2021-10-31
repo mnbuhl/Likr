@@ -19,10 +19,13 @@ namespace Likr.Identity.Server.Controllers
             _userManger = userManger;
         }
 
-        [HttpGet("{username}")]
-        public async Task<IActionResult> GetUserByUsername(string username)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(string id)
         {
-            var user = await _userManger.FindByNameAsync(username);
+            var user = await _userManger.FindByIdAsync(id);
+
+            if (user == null)
+                return NotFound();
 
             return Ok(new
             {

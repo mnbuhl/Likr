@@ -13,8 +13,9 @@ builder.Services.AddHttpClient("GatewayApi")
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
     .CreateClient("GatewayApi"));
 
-
+builder.Services.AddTransient<AuthService>();
 builder.Services.AddScoped<IHttpService, HttpService>();
+builder.Services.AddScoped<IPostService, PostService>();
 
 builder.Services.AddOidcAuthentication(options =>
 {
