@@ -3,6 +3,7 @@ using System.Linq;
 using IdentityServer4;
 using IdentityServer4.Models;
 using Likr.Identity.Server.Data;
+using Likr.Identity.Server.Extensions;
 using Likr.Identity.Server.Models;
 using Likr.Identity.Server.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -87,6 +88,8 @@ namespace Likr.Identity.Server
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            services.AddMassTransitWithRabbitMq();
 
             services.AddCors();
             services.AddLocalApiAuthentication();

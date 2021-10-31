@@ -1,9 +1,8 @@
-﻿using Likr.Posts.Consumers;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Likr.Posts.Extensions
+namespace Likr.Identity.Server.Extensions
 {
     public static class MassTransitExtensions
     {
@@ -11,18 +10,12 @@ namespace Likr.Posts.Extensions
         {
             services.AddMassTransit(configure =>
             {
-                configure.AddConsumer<CommentCreatedConsumer>();
-                configure.AddConsumer<CommentDeletedConsumer>();
-                configure.AddConsumer<LikeCreatedConsumer>();
-                configure.AddConsumer<LikeDeletedConsumer>();
-                configure.AddConsumer<PostUserCreatedConsumer>();
-
                 configure.UsingRabbitMq((context, cfg) =>
                 {
                     var configuration = context.GetRequiredService<IConfiguration>();
                     string rabbitMqHost = configuration.GetValue<string>("RabbitMq");
-                    cfg.Host(rabbitMqHost);
 
+                    cfg.Host(rabbitMqHost);
                     cfg.ConfigureEndpoints(context);
                 });
             });
