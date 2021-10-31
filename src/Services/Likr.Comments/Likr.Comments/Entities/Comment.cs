@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Likr.Comments.Entities
 {
     public class Comment
     {
         public string Id { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string Body { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }

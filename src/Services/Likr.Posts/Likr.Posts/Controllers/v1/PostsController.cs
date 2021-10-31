@@ -50,7 +50,7 @@ namespace Likr.Posts.Controllers.v1
         {
             IList<Post> posts =
                 await _postRepository.GetAllAsync(x => x.UserId == userId, paginationQuery: paginationQuery,
-                    includes: x => x.Include(p => p.User));
+                    includes: x => x.Include(p => p.User), orderBy: x => x.OrderByDescending(p => p.CreatedAt));
 
             if (posts == null)
                 return NotFound();
