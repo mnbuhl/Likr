@@ -96,6 +96,7 @@ namespace Likr.Identity.Server.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     await _publishEndpoint.Publish(new PostUserCreated(user.Id, user.UserName, user.DisplayName));
+                    await _publishEndpoint.Publish(new LikeUserCreated(user.Id, user.UserName, user.DisplayName));
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
