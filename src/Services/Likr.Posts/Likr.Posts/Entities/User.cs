@@ -1,4 +1,6 @@
-﻿namespace Likr.Posts.Entities
+﻿using System.Collections.Generic;
+
+namespace Likr.Posts.Entities
 {
     public class User : BaseEntity
     {
