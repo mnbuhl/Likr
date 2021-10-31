@@ -1,0 +1,6 @@
+﻿<div class="w-full xl:w-7/12">
+    @foreach (var post in _posts.OrEmptyIfNull())
+    {
+        <Post PostDto="post" />
+    }
+</div>

@@ -1,22 +1,4 @@
 ﻿@page "/"
 <PageTitle>Index</PageTitle>
 
-<AuthorizeView>
-    <Authorized>
-        @foreach (var post in _posts.OrEmptyIfNull())
-        {
-            <div>
-                <p class="inline-block">@post.User.DisplayName</p>
-                <p class="inline-block">@@@post.User.Username</p>
-            </div>
-            <p>@post.Body</p>
-            <div>
-                <p class="inline-block">@post.CommentsCount</p>
-                <p class="inline-block">@post.LikesCount</p>
-            </div>
-        }
-    </Authorized>
-    <NotAuthorized>
-        Not Hello
-    </NotAuthorized>
-</AuthorizeView>
+<Posts></Posts>
