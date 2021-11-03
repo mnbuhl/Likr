@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Likr.Comments.Entities;
 using Likr.Comments.Interfaces;
@@ -22,39 +23,85 @@ namespace Likr.Comments.Data
         public async Task<IList<Comment>> GetAll()
         {
             using var session = _context.Store.OpenAsyncSession();
-            return await session.Query<Comment>().ToListAsync();
+            return await session.Query<Comment>().Include("Comments").ToListAsync();
         }
 
         public async Task<IList<Comment>> GetAllByPostId(string postId)
         {
             using var session = _context.Store.OpenAsyncSession();
-            return await session.Query<Comment>().Where(x => x.PostId == postId, true).ToListAsync();
+            return await session.Query<Comment>().Include("Comments").Where(x => x.PostId == postId, true).ToListAsync();
         }
 
         public async Task<Comment> Get(string id)
         {
             using var session = _context.Store.OpenAsyncSession();
-            var comment = await session.LoadAsync<Comment>(id);
-
-            if (comment != null)
-            {
-                comment.Comments = await GetAllByPostId(comment.Id);
-            }
+            var comment = await session.Include("Comments").LoadAsync<Comment>(id);
 
             return comment;
         }
+
+        // public async Task<bool> InsertOrUpdate(Comment comment)
+        // {
+        //     using var session = _context.Store.OpenAsyncSession();
+        //
+        //     try
+        //     {
+        //         comment.Id = Guid.NewGuid().ToString();
+        //         comment.User = await session.Query<User>().FirstOrDefaultAsync(x => x.Id == comment.UserId);
+        //
+        //         var existingComment = await session.Query<Comment>().Include(x => x.Comments)
+        //             .FirstOrDefaultAsync(x => x.Id == comment.PostId);
+        //
+        //         if (existingComment != null)
+        //         {
+        //             if (existingComment.Comments is not null)
+        //             {
+        //                 existingComment.Comments.Add(comment);
+        //             }
+        //             else
+        //             {
+        //                 existingComment.Comments = new List<Comment> { comment };
+        //             }
+        //
+        //             await session.StoreAsync(existingComment, existingComment.Id);
+        //         }
+        //         else
+        //         {
+        //             await session.StoreAsync(comment, comment.Id);
+        //         }
+        //
+        //         await session.SaveChangesAsync();
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         _logger.LogError(e, "Failed to store comment in database");
+        //         return false;
+        //     }
+        //
+        //     return true;
+        // }
 
         public async Task<bool> InsertOrUpdate(Comment comment)
         {
             using var session = _context.Store.OpenAsyncSession();
 
+            var existingComment = await session.Include("Comments").LoadAsync<Comment>(comment.PostId);
+            var user = await session.LoadAsync<User>(comment.UserId);
+            
+            comment.Id = Guid.NewGuid().ToString();
+            comment.User = user;
+
             try
             {
-                comment.User = await session.Query<User>().FirstOrDefaultAsync(x => x.Id == comment.UserId);
-
-                _logger.LogInformation(comment.User.DisplayName);
-                
-                await session.StoreAsync(comment, comment.Id ?? Guid.NewGuid().ToString());
+                if (existingComment == null)
+                {
+                    await session.StoreAsync(comment, comment.Id);
+                }
+                else
+                {
+                    
+                }
+            
                 await session.SaveChangesAsync();
             }
             catch (Exception e)
@@ -62,7 +109,7 @@ namespace Likr.Comments.Data
                 _logger.LogError(e, "Failed to store comment in database");
                 return false;
             }
-
+            
             return true;
         }
 
