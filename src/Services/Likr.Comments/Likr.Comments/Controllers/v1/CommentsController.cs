@@ -82,11 +82,11 @@ namespace Likr.Comments.Controllers.v1
         public async Task<IActionResult> Delete(Guid id)
         {
             var comment = await _repository.Get(id.ToString());
-
+            
             if (comment == null)
                 return NotFound();
 
-            await _repository.Delete(Guid.Parse(comment.Id));
+            await _repository.Delete(id);
 
             await _publishEndpoint.Publish(new CommentDeleted(id.ToString(), comment.PostId));
             await _publishEndpoint.Publish(new PostDeleted(id.ToString()));
