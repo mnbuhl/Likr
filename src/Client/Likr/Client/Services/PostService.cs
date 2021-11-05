@@ -13,19 +13,23 @@ public class PostService : IPostService
 
     public async Task<List<PostDto>> GetPosts(int pageSize, int page)
     {
-        var wrapper = await _httpService.Get<List<PostDto>>($"/api/v1/p/Posts?pageSize={pageSize}&page={page}");
+        var wrapper = await _httpService.Get<List<PostDto>>($"v1/p/Posts?pageSize={pageSize}&page={page}");
 
         return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task<List<PostDto>> GetPostsByUserId(Guid userId)
+    public async Task<List<PostDto>> GetPostsByUserId(Guid userId, int pageSize, int page)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Get<List<PostDto>>($"v1/p/Posts/user/{userId}?pageSize={pageSize}&page={page}");
+
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task<PostDto> GetById(Guid id)
+    public async Task<PostDto> GetById(Guid id)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Get<PostDto>($"v1/p/Posts/{id}");
+
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
     public Task<PostDto> CreatePost(CreatePostDto postDto)

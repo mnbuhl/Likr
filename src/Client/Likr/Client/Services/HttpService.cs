@@ -12,7 +12,7 @@ public class HttpService : IHttpService
 
     public HttpService(HttpClient client, IConfiguration configuration)
     {
-        client.BaseAddress = new Uri(configuration.GetValue<string>("GatewayUri"));
+        client.BaseAddress = new Uri(configuration.GetValue<string>("GatewayUri") + "/api/");
         _client = client;
     }
 
@@ -78,7 +78,7 @@ public class HttpService : IHttpService
     private static async Task<T?> Deserialize<T>(HttpResponseMessage httpResponse)
     {
         var serializerOptions = new JsonSerializerOptions
-            { PropertyNameCaseInsensitive = true, ReferenceHandler = ReferenceHandler.Preserve };
+        { PropertyNameCaseInsensitive = true, ReferenceHandler = ReferenceHandler.Preserve };
         string response = await httpResponse.Content.ReadAsStringAsync();
 
         return JsonSerializer.Deserialize<T>(response, serializerOptions);

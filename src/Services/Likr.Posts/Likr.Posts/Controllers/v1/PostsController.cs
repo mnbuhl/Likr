@@ -44,8 +44,8 @@ namespace Likr.Posts.Controllers.v1
         }
 
         [HttpGet("user/{userId}")]
-        public async Task<ActionResult<IList<PostDto>>> GetAllByUserId([FromQuery] string userId,
-            PaginationQuery paginationQuery)
+        public async Task<ActionResult<IList<PostDto>>> GetAllByUserId([FromRoute] string userId,
+            [FromQuery] PaginationQuery paginationQuery)
 
         {
             IList<Post> posts =
