@@ -6,7 +6,11 @@ module.exports = {
   },
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {}
+    extend: {
+      colors: {
+        'dark-purple': 'rgb(2, 0, 36)'
+      }
+    }
   },
   variants: {
     extend: {}
