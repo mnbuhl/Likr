@@ -1,0 +1,13 @@
+﻿<div class="mb-4">
+    <h3 class="font-semibold text-xl">Create a post</h3>
+    <EditForm Model="@_post" OnValidSubmit="@HandleValidSubmit">
+        <InputTextArea class="" placeholder="Text jere" @bind-Value="@_post.Body"></InputTextArea>
+        <button type="submit">Post</button>
+    </EditForm>
+    
+    
+    @foreach (var claim in _user.Claims)
+    {
+        <p>@claim</p>
+    }
+</div>

@@ -1,3 +1,5 @@
-﻿namespace Likr.Client.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record CreateCommentDto(string Body, Guid UserId, Guid PostId);
+namespace Likr.Client.Dtos;
+
+public record CreateCommentDto([Required] string Body, [Required] Guid UserId, [Required] Guid PostId);

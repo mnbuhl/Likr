@@ -23,7 +23,7 @@ namespace Likr.Identity.Server.Services
 
             var claims = new List<Claim>
             {
-                new Claim("DisplayName", user.DisplayName),
+                new Claim("DisplayName", user.DisplayName)
             };
 
             context.IssuedClaims.AddRange(claims);

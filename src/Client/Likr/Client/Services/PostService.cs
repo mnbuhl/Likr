@@ -32,9 +32,11 @@ public class PostService : IPostService
         return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task<PostDto> CreatePost(CreatePostDto postDto)
+    public async Task<PostDto> CreatePost(CreatePostDto postDto, string token)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Create<CreatePostDto, PostDto>("v1/p/Posts", postDto);
+        
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
     public Task DeletePost(Guid id)
