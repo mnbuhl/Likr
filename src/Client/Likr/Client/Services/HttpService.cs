@@ -16,10 +16,8 @@ public class HttpService : IHttpService
         _client = client;
     }
 
-    public async Task<HttpResponseWrapper<T?>> Get<T>(string url, string token = "")
+    public async Task<HttpResponseWrapper<T?>> Get<T>(string url)
     {
-        SetAuthorizationHeader(token);
-
         var response = await _client.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
@@ -30,10 +28,8 @@ public class HttpService : IHttpService
         return new HttpResponseWrapper<T?>(true, responseDeserialized, response);
     }
 
-    public async Task<HttpResponseWrapper<TResponse?>> Create<T, TResponse>(string url, T data, string token = "")
+    public async Task<HttpResponseWrapper<TResponse?>> Create<T, TResponse>(string url, T data)
     {
-        SetAuthorizationHeader(token);
-
         string dataJson = JsonSerializer.Serialize(data);
         var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
         var response = await _client.PostAsync(url, stringContent);
@@ -47,10 +43,8 @@ public class HttpService : IHttpService
         return new HttpResponseWrapper<TResponse?>(true, responseDeserialized, response);
     }
 
-    public async Task<HttpResponseWrapper<object>> Update<T>(string url, T data, string token = "")
+    public async Task<HttpResponseWrapper<object>> Update<T>(string url, T data)
     {
-        SetAuthorizationHeader(token);
-
         string dataJson = JsonSerializer.Serialize(data);
         var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
         var response = await _client.PutAsync(url, stringContent);
@@ -63,10 +57,8 @@ public class HttpService : IHttpService
         return new HttpResponseWrapper<object>(true, response.IsSuccessStatusCode, response);
     }
 
-    public async Task<HttpResponseWrapper<object?>> Delete(string url, string token = "")
+    public async Task<HttpResponseWrapper<object?>> Delete(string url)
     {
-        SetAuthorizationHeader(token);
-
         var response = await _client.DeleteAsync(url);
 
         if (!response.IsSuccessStatusCode)
@@ -82,11 +74,5 @@ public class HttpService : IHttpService
         string response = await httpResponse.Content.ReadAsStringAsync();
 
         return JsonSerializer.Deserialize<T>(response, serializerOptions);
-    }
-
-    private void SetAuthorizationHeader(string token)
-    {
-        if (!string.IsNullOrWhiteSpace(token))
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 }

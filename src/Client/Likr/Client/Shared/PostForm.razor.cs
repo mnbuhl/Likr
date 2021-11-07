@@ -37,6 +37,6 @@ public partial class PostForm : ComponentBase
             return;
 
         _post.UserId = Guid.Parse(user.GetUserId());
-       // await PostService.CreatePost(_post);
+        await PostService.CreatePost(_post, "");
     }
 }
