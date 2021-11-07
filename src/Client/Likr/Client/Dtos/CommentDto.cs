@@ -7,4 +7,5 @@ public record CommentDto(
     string UserId,
     Guid PostId,
     int LikesCount,
+    int CommentsCount,
     ICollection<CommentDto> Comments);

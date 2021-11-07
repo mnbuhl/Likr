@@ -15,16 +15,7 @@ public partial class PostForm : ComponentBase
     public AuthService? AuthService { get; set; }
 
     private CreatePostDto _post = new CreatePostDto();
-
-    private ClaimsPrincipal? _user;
-
-    protected override async Task OnInitializedAsync()
-    {
-        if (AuthService == null)
-            return;
-
-        _user = await AuthService.GetCurrentUser();
-    }
+    
 
     private async Task HandleValidSubmit()
     {
@@ -37,6 +28,6 @@ public partial class PostForm : ComponentBase
             return;
 
         _post.UserId = Guid.Parse(user.GetUserId());
-        await PostService.CreatePost(_post, "");
+        await PostService.CreatePost(_post);
     }
 }

@@ -1,0 +1,47 @@
+@page "/posts/{id:guid}"
+
+
+<div class="grid grid-cols-4">
+    <div class="col-span-3">
+        @if (_post != null)
+            {
+                <div class="comment-container border border-opacity-25 rounded-md mb-4 w-4/5 mx-auto">
+                    <div class="p-5">
+                        <a href="" class="space-x-1">
+                            <p class="inline-block hover:underline mb-5 font-semibold">@_post.User.DisplayName</p>
+                            <p class="inline-block text-gray-500 text-sm hover:underline">@@@_post.User.Username</p>
+                        </a>
+                        <p class="mb-5">@_post.Body</p>
+                        <div class="space-x-10">
+                            <button>
+                                <img class="w-5 inline-block" src="images/comment.svg" alt="comment"/>
+                                <span class="inline-block">@_post.CommentsCount</span>
+                            </button>
+        
+                            <button>
+                                <img class="w-5 inline-block" src="images/star.svg" alt="comment"/>
+                                <span class="inline-block">@_post.LikesCount</span>
+                            </button>
+        
+                            <button>
+                                <img class="w-5 inline-block" src="images/share.svg" alt="share"/>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                @if (_post.Comments != null && _post.Comments.Any())
+                {
+                    @foreach (var comment in _post.Comments)
+                    {
+                        <p>@comment</p>
+                    }
+                }
+            }
+            else
+            {
+                <p>Loading...</p>
+            }
+    </div>
+    <Featured></Featured>
+</div>
