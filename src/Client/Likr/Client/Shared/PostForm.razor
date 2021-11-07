@@ -1,13 +1,10 @@
 ﻿<div class="mb-4">
-    <h3 class="font-semibold text-xl">Create a post</h3>
+    <h3 class="font-semibold text-xl mb-4">Create a post</h3>
     <EditForm Model="@_post" OnValidSubmit="@HandleValidSubmit">
-        <InputTextArea class="" placeholder="Text jere" @bind-Value="@_post.Body"></InputTextArea>
-        <button type="submit">Post</button>
+        <InputTextArea class="form-textarea w-5/6 bg-gray-900 mr-5" placeholder="What is on your mind?" rows="2"
+            @bind-Value="@_post.Body">
+        </InputTextArea>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full align-top mt-4"
+            type="submit">Post</button>
     </EditForm>
-    
-    
-    @foreach (var claim in _user.Claims)
-    {
-        <p>@claim</p>
-    }
 </div>
