@@ -6,6 +6,7 @@ public record CommentDto(
     string Body,
     string UserId,
     Guid PostId,
+    UserDto User,
     int LikesCount,
     int CommentsCount,
     ICollection<CommentDto> Comments);
