@@ -1,7 +1,7 @@
 ﻿<div class="">
     @foreach (var post in _posts.OrEmptyIfNull())
     {
-        <Post PostDto="post" />
+        <SinglePost PostDto="post" />
     }
     <div class="mb-6 mx-auto text-center w-full">
         <button @onclick="LoadMorePosts"

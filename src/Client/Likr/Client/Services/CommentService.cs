@@ -28,7 +28,7 @@ public class CommentService : ICommentService
 
     public async Task<CommentDto> GetCommentById(Guid id)
     {
-        var wrapper = await _httpService.Get<CommentDto>($"{Endpoint}/post/{id}");
+        var wrapper = await _httpService.Get<CommentDto>($"{Endpoint}/{id}");
 
         return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }

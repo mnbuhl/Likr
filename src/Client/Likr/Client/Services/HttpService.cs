@@ -1,9 +1,9 @@
-﻿using System.Text;
+﻿using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Likr.Client.Extensions;
 using Likr.Client.Helpers;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 namespace Likr.Client.Services;
 
@@ -23,12 +23,12 @@ public class HttpService : IHttpService
 
     public async Task<HttpResponseWrapper<T?>> Get<T>(string url)
     {
-        HttpResponseMessage response = await _client.GetAsync(url);
+        var response = await _client.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
             return new HttpResponseWrapper<T?>(false, default, response);
 
-        var responseDeserialized = await Deserialize<T>(response);
+        var responseDeserialized = await Deserialize<T?>(response);
 
         return new HttpResponseWrapper<T?>(true, responseDeserialized, response);
     }
@@ -75,9 +75,11 @@ public class HttpService : IHttpService
     private static async Task<T?> Deserialize<T>(HttpResponseMessage httpResponse)
     {
         var serializerOptions = new JsonSerializerOptions
-        { PropertyNameCaseInsensitive = true, ReferenceHandler = ReferenceHandler.Preserve };
-        string response = await httpResponse.Content.ReadAsStringAsync();
-
-        return JsonSerializer.Deserialize<T>(response, serializerOptions);
+        {
+            PropertyNameCaseInsensitive = true, 
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+        return await httpResponse.Content.ReadFromJsonAsync<T?>(serializerOptions);
     }
 }

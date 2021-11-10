@@ -5,61 +5,44 @@
     <div class="lg:col-span-3">
         @if (_post != null)
         {
-            <div class="post-container border border-opacity-25 rounded-md mb-4 w-4/5 ml-10">
-                <div class="p-5">
-                    <a href="" class="space-x-1">
-                        <p class="inline-block hover:underline mb-5 font-semibold">@_post.User.DisplayName</p>
-                        <p class="inline-block text-gray-500 text-sm hover:underline">@@@_post.User.Username</p>
-                    </a>
-                    <p class="mb-5">@_post.Body</p>
-                    <div class="space-x-10">
-                        <button>
-                            <img class="w-5 inline-block" src="images/comment.svg" alt="comment" />
-                            <span class="inline-block">@_post.CommentsCount</span>
-                        </button>
-
-                        <button>
-                            <img class="w-5 inline-block" src="images/star.svg" alt="comment" />
-                            <span class="inline-block">@_post.LikesCount</span>
-                        </button>
-
-                        <button>
-                            <img class="w-5 inline-block" src="images/share.svg" alt="share" />
-                        </button>
-                    </div>
-                </div>
+            <div class="post-container mb-4 w-4/5 ml-10">
+                <SinglePost PostDto="_post"/>
             </div>
+
 
             @if (_post.Comments != null && _post.Comments.Any())
             {
                 @foreach (var comment in _post.Comments)
                 {
-                    <div class="comment-container border border-opacity-25 rounded-md mb-4 lg:w-4/6 w-4/5 ml-10">
-                        <div class="p-5">
-                            <a href="" class="space-x-1 mb-0">
-                                <p class="inline-block hover:underline mb-5 font-semibold">@comment.User.DisplayName</p>
-                                <p class="inline-block text-gray-500 text-sm hover:underline">@@@comment.User.Username</p>
-                            </a>
-                            <p class="text-sm text-gray-500 -mt-3">Replying to <span
-                        class="text-blue-400 hover:underline cursor-pointer">@@@_post.User.Username</span></p>
-                            <p class="mb-5">@comment.Body</p>
-                            <div class="space-x-10">
-                                <button>
-                                    <img class="w-5 inline-block" src="images/comment.svg" alt="comment" />
-                                    <span class="inline-block">@comment.CommentsCount</span>
-                                </button>
-
-                                <button>
-                                    <img class="w-5 inline-block" src="images/star.svg" alt="comment" />
-                                    <span class="inline-block">@comment.LikesCount</span>
-                                </button>
-
-                                <button>
-                                    <img class="w-5 inline-block" src="images/share.svg" alt="share" />
-                                </button>
-                            </div>
-                        </div>
+                    <div class="ml-6">
+                        <SingleComment CommentDto="@comment" InReplyTo="@_post.User.Username"/>
                     </div>
+
+
+                    @if (comment.CommentsCount > 0 && _comments!.GetValueOrDefault(comment.Id) != null)
+                    {
+                        @foreach (var nestedComment in _comments[comment.Id!])
+                        {
+                            <div class="nested-comment-container ml-6">
+                                <div class=" border border-opacity-25 rounded-md mb-4 lg:w-3/5 w-4/5 ml-20">
+                                    <div class="p-5">
+                                        <a href="" class="space-x-1 mb-0">
+                                            <p class="inline-block hover:underline mb-5 font-semibold">@nestedComment?.User?.DisplayName</p>
+                                            <p class="inline-block text-gray-500 text-sm hover:underline">@@@nestedComment?.User?.Username</p>
+                                        </a>
+                                        <p class="text-sm text-gray-500 -mt-3">
+                                            Replying to
+                                            <span
+                                                class="text-blue-400 hover:underline cursor-pointer">
+                                                @@@comment.User?.Username
+                                            </span>
+                                        </p>
+                                        <p class="mb-0">@nestedComment?.Body</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
                 }
             }
         }

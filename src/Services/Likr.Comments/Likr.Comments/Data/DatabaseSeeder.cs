@@ -97,6 +97,47 @@ namespace Likr.Comments.Data
                 "69B7AC70-ABB2-418F-9F30-2EE67CC07C9C",
                 "89930EF5-A856-4E39-B519-538295D09FF3"
             };
+            
+            var userIds = new List<Guid>
+            {
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                Guid.NewGuid()
+            };
+            
+            var users = new List<User>
+            {
+                new User
+                {
+                    Id = userIds[0].ToString(),
+                    Username = "UserOne",
+                    DisplayName = "User 1"
+                },
+                new User
+                {
+                    Id = userIds[1].ToString(),
+                    Username = "UserTwo",
+                    DisplayName = "User 2"
+                },
+                new User
+                {
+                    Id = userIds[2].ToString(),
+                    Username = "UserThree",
+                    DisplayName = "User 3"
+                },
+                new User
+                {
+                    Id = userIds[3].ToString(),
+                    Username = "UserFour",
+                    DisplayName = "User 4"
+                },
+            };
+
+            foreach (var user in users)
+            {
+                session.Store(user);
+            }
 
             int counter = 0;
             foreach (string id in commentIds)
@@ -107,8 +148,8 @@ namespace Likr.Comments.Data
                     Body = $"This is a test comment - {counter++}",
                     LikesCount = _random.Next(0, 100),
                     PostId = postIds[_randomForComments.Next(postIds.Count)].ToLower(),
-                    UserId = Guid.NewGuid().ToString(),
-                    User = new User()
+                    UserId = users[_random.Next(users.Count)].Id,
+                    User = users[_random.Next(users.Count)]
                 }, id.ToLower());
             }
 
