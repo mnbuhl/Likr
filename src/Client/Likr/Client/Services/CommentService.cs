@@ -5,26 +5,32 @@ namespace Likr.Client.Services;
 public class CommentService : ICommentService
 {
     private readonly IHttpService _httpService;
-    private const string Endpoint = "v1/p/Comments";
+    private const string Endpoint = "v1/c/Comments";
 
     public CommentService(IHttpService httpService)
     {
         _httpService = httpService;
     }
     
-    public Task<List<CommentDto>> GetComments()
+    public async Task<List<CommentDto>> GetComments()
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Get<List<CommentDto>>($"{Endpoint}");
+
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task<List<CommentDto>> GetCommentsByPostId(Guid userId)
+    public async Task<List<CommentDto>> GetCommentsByPostId(Guid postId)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Get<List<CommentDto>>($"{Endpoint}/post/{postId}");
+
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task<CommentDto> GetCommentById(Guid id)
+    public async Task<CommentDto> GetCommentById(Guid id)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Get<CommentDto>($"{Endpoint}/post/{id}");
+
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
     public Task<CommentDto> CreateComment(CreateCommentDto commentDto)

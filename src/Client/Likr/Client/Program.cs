@@ -20,6 +20,7 @@ builder.Services.AddHttpClient("GatewayApi.NoAuth", client =>
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddScoped<IHttpService, HttpService>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 builder.Services.AddOidcAuthentication(options =>
 {
