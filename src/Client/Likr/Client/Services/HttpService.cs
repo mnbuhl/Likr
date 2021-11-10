@@ -1,8 +1,9 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Likr.Client.Extensions;
 using Likr.Client.Helpers;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 namespace Likr.Client.Services;
 
@@ -10,15 +11,19 @@ public class HttpService : IHttpService
 {
     private readonly HttpClient _client;
 
-    public HttpService(HttpClient client, IConfiguration configuration)
+    public HttpService(IHttpClientFactory clientFactory, AuthService authService)
     {
-        client.BaseAddress = new Uri(configuration.GetValue<string>("GatewayUri") + "/api/");
-        _client = client;
+        var user = authService.GetCurrentUser().Result;
+
+        if (user == null || string.IsNullOrEmpty(user.GetUserId()))
+            _client = clientFactory.CreateClient("GatewayApi.NoAuth");
+        else
+            _client = clientFactory.CreateClient("GatewayApi.Auth");
     }
 
     public async Task<HttpResponseWrapper<T?>> Get<T>(string url)
     {
-        var response = await _client.GetAsync(url);
+        HttpResponseMessage response = await _client.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
             return new HttpResponseWrapper<T?>(false, default, response);

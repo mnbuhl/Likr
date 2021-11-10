@@ -11,6 +11,7 @@ public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
     {
         ConfigureHandler(
             authorizedUrls: new[] { "http://localhost:5200", "http://localhost:8004" },
-            scopes: new[] { "IdentityServerApi" });
+            scopes: new[] { "IdentityServerApi" }
+            );
     }
 }

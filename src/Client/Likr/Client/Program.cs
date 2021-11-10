@@ -10,10 +10,12 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped<CustomAuthorizationMessageHandler>();
 
-builder.Services.AddHttpClient("GatewayApi")
+builder.Services.AddHttpClient("GatewayApi.Auth", client => 
+        client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("GatewayUri") + "/api/"))
     .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-    .CreateClient("GatewayApi"));
+
+builder.Services.AddHttpClient("GatewayApi.NoAuth", client =>
+    client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("GatewayUri") + "/api/"));
 
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddScoped<IHttpService, HttpService>();
