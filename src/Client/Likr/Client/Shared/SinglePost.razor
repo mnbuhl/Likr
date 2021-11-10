@@ -1,6 +1,6 @@
 ﻿@if (PostDto != null)
 {
-    <div class="comment-container border border-opacity-25 rounded-md mb-4">
+    <div class="post-container border border-opacity-25 rounded-md mb-4">
         <div class="p-5">
             <a href="posts/@PostDto.Id">
                 <a href="" class="space-x-1">
@@ -11,17 +11,17 @@
             </a>
             <div class="space-x-10">
                 <button>
-                    <img class="w-5 inline-block" src="images/comment.svg" alt="comment"/>
+                    <img class="w-5 inline-block" src="images/comment.svg" alt="comment" />
                     <span class="inline-block">@PostDto.CommentsCount</span>
                 </button>
 
                 <button>
-                    <img class="w-5 inline-block" src="images/star.svg" alt="comment"/>
+                    <img class="w-5 inline-block" src="images/star.svg" alt="comment" />
                     <span class="inline-block">@PostDto.LikesCount</span>
                 </button>
 
                 <button>
-                    <img class="w-5 inline-block" src="images/share.svg" alt="share"/>
+                    <img class="w-5 inline-block" src="images/share.svg" alt="share" />
                 </button>
             </div>
         </div>

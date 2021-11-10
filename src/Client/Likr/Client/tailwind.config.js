@@ -9,6 +9,10 @@ module.exports = {
     extend: {
       colors: {
         'dark-purple': 'rgb(2, 0, 36)'
+      },
+      spacing: {
+        125: '31.25rem',
+        200: '50rem'
       }
     }
   },

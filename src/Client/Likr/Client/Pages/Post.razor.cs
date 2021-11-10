@@ -32,8 +32,8 @@ public partial class Post : ComponentBase
         {
             if (comment.CommentsCount > 0)
             {
-                var commentWithNested = await CommentService.GetCommentById(Guid.Parse(comment.Id));
-                _comments[comment.Id] = commentWithNested.Comments.ToList();
+                var commentWithNested = await CommentService.GetCommentById(Guid.Parse(comment!.Id));
+                _comments[comment.Id] = commentWithNested!.Comments!.ToList();
             }
                 
         }
