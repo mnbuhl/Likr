@@ -40,8 +40,10 @@ public class PostService : IPostService
         return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task DeletePost(Guid id)
+    public async Task<bool> DeletePost(Guid id)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Delete($"{Endpoint}/fa18449b-d1e2-461e-9a18-cefe83fa226a");
+
+        return wrapper.Success;
     }
 }
