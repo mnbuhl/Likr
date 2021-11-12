@@ -62,7 +62,6 @@ namespace Likr.Comments.Data
             {
                 if (existingComment == null && comment.Comments == null)
                 {
-                    Console.WriteLine("HIT HERE 1st szkjhdaskjdkjhasdkjh");
                     await session.StoreAsync(comment);
                 }
                 else if (existingComment != null && !existingComment.Comments.Any())
