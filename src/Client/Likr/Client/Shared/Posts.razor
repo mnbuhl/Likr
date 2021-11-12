@@ -1,10 +1,10 @@
-﻿<div class="">
+﻿<div>
     <AuthorizeView>
         <PostForm OnPostCreated="OnPostCreated"></PostForm>
     </AuthorizeView>
     @foreach (var post in _posts.OrEmptyIfNull())
     {
-        <SinglePost PostDto="post" OnDelete="OnPostDeleted"/>
+        <SinglePost PostDto="post" UserId="@_userId" OnDelete="OnPostDeleted"/>
     }
     <div class="mb-6 mx-auto text-center w-full">
         <button @onclick="LoadPosts"

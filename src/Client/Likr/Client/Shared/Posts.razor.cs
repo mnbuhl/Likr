@@ -1,4 +1,5 @@
 ﻿using Likr.Client.Dtos;
+using Likr.Client.Extensions;
 using Likr.Client.Services;
 using Microsoft.AspNetCore.Components;
 
@@ -14,9 +15,16 @@ public partial class Posts : ComponentBase
 
     private List<PostDto> _posts = new();
     private int _page = 1;
+    private string _userId = "Default Value";
 
     protected override async Task OnInitializedAsync()
     {
+        if (AuthService != null)
+        {
+            var user = await AuthService.GetCurrentUser();
+            if (user != null)
+                _userId = user.GetUserId();
+        }
         await LoadPosts();
     }
 
