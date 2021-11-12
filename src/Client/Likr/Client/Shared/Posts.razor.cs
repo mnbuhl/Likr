@@ -8,23 +8,21 @@ namespace Likr.Client.Shared;
 public partial class Posts : ComponentBase
 {
     [Inject]
-    public AuthService? AuthService { get; set; }
-
-    [Inject]
     public IPostService? PostService { get; set; }
+    
+    [CascadingParameter]
+    public string? UserId { get; set; }
+
+    [Parameter]
+    public string Username { get; set; } = string.Empty;
 
     private List<PostDto> _posts = new();
     private int _page = 1;
-    private string _userId = "Default Value";
+    private int _pageSize = 8;
+    private bool _displayLoadMore = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        if (AuthService != null)
-        {
-            var user = await AuthService.GetCurrentUser();
-            if (user != null)
-                _userId = user.GetUserId();
-        }
         await LoadPosts();
     }
 
@@ -32,8 +30,22 @@ public partial class Posts : ComponentBase
     {
         if (PostService == null)
             return;
+
+        var posts = new List<PostDto>();
+
+        if (string.IsNullOrEmpty(Username))
+        {
+            posts.AddRange(await PostService.GetPosts(_pageSize, _page));
+        }
+        else
+        {
+            posts.AddRange(await PostService.GetPostsByUsername(Username, _pageSize, _page));
+        }
         
-        _posts.AddRange(await PostService.GetPosts(8, _page));
+        _displayLoadMore = posts.Count == _pageSize;
+        
+        _posts.AddRange(posts);
+        
         _page++;
     }
 

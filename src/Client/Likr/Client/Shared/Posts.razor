@@ -1,16 +1,23 @@
 ﻿<div>
-    <AuthorizeView>
-        <PostForm OnPostCreated="OnPostCreated"></PostForm>
-    </AuthorizeView>
+    @if (string.IsNullOrEmpty(Username))
+    {
+        <AuthorizeView>
+            <PostForm OnPostCreated="OnPostCreated"></PostForm>
+        </AuthorizeView>
+    }
+    
     @foreach (var post in _posts.OrEmptyIfNull())
     {
-        <SinglePost PostDto="post" UserId="@_userId" OnDelete="OnPostDeleted"/>
+        <SinglePost PostDto="post" UserId="@UserId" OnDelete="OnPostDeleted"/>
     }
-    <div class="mb-6 mx-auto text-center w-full">
-        <button @onclick="LoadPosts"
-                class="px-3 py-2 rounded bg-blue-600 hover:bg-blue-700 transition ease-in-out duration-200">
-            Load
-            more
-        </button>
-    </div>
+    @if (_displayLoadMore)
+    {
+        <div class="mb-6 mx-auto text-center w-full">
+            <button @onclick="LoadPosts"
+                    class="px-3 py-2 rounded bg-blue-600 hover:bg-blue-700 transition ease-in-out duration-200">
+                Load more
+            </button>
+        </div>
+    }
+   
 </div>

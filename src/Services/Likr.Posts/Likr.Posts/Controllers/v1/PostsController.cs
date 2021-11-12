@@ -59,13 +59,13 @@ namespace Likr.Posts.Controllers.v1
             return Ok(_mapper.Map<IList<PostDto>>(posts));
         }
         
-        [HttpGet("username/{userId}")]
-        public async Task<ActionResult<IList<PostDto>>> GetAllByUsername([FromRoute] string userId,
+        [HttpGet("username/{username}")]
+        public async Task<ActionResult<IList<PostDto>>> GetAllByUsername([FromRoute] string username,
             [FromQuery] PaginationQuery paginationQuery)
 
         {
             IList<Post> posts =
-                await _postRepository.GetAllAsync(x => x.User.Username == userId, paginationQuery: paginationQuery,
+                await _postRepository.GetAllAsync(x => x.User.Username == username, paginationQuery: paginationQuery,
                     includes: x => x.Include(p => p.User), orderBy: x => x.OrderByDescending(p => p.CreatedAt));
 
             if (posts == null)

@@ -26,6 +26,13 @@ public class PostService : IPostService
         return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
+    public async Task<List<PostDto>> GetPostsByUsername(string username, int pageSize = 10, int page = 1)
+    {
+        var wrapper = await _httpService.Get<List<PostDto>>($"{Endpoint}/username/{username}?pageSize={pageSize}&page={page}");
+
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
+    }
+
     public async Task<PostDto> GetById(Guid id)
     {
         var wrapper = await _httpService.Get<PostDto>($"{Endpoint}/{id}");
