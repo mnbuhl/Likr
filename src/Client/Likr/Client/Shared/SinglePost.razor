@@ -10,17 +10,17 @@
         }
         <div class="p-5">
             <a href="posts/@PostDto.Id">
-                <a href="" class="space-x-1">
+                <a href="/@PostDto.User.Username" class="space-x-1">
                     <p class="inline-block hover:underline mb-5 font-semibold">@PostDto.User.DisplayName</p>
                     <p class="inline-block text-gray-500 text-sm hover:underline">@@@PostDto.User.Username</p>
                 </a>
                 <p class="mb-5">@PostDto.Body</p>
             </a>
             <div class="space-x-10">
-                <button>
+                <a href="/posts/@PostDto.Id">
                     <img class="w-5 inline-block" src="images/comment.svg" alt="comment" />
                     <span class="inline-block">@PostDto.CommentsCount</span>
-                </button>
+                </a>
 
                 <button>
                     <img class="w-5 inline-block" src="images/star.svg" alt="comment" />
