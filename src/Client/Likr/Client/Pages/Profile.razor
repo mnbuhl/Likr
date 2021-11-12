@@ -5,6 +5,14 @@
 <div class="lg:grid lg:grid-cols-4">
     <div class="lg:col-span-3">
         <div class="w-5/6 mx-auto">
+            <DisplayProfile Username="@Username" />
+            <div class="flex justify-between px-32 border my-2 border-gray-600 rounded-xl py-2">
+                <p class="border-b-2 border-blue-600 font-bold mb-0 cursor-pointer">Posts</p>
+                <p class="text-gray-500 mb-0 cursor-pointer border-b-2 border-transparent hover:border-blue-600">
+                    Comments</p>
+                <p class="text-gray-500 mb-0 cursor-pointer border-b-2 border-transparent hover:border-blue-600">
+                    Likes</p>
+            </div>
             <Posts Username="@Username"></Posts>
         </div>
 
@@ -15,8 +23,6 @@
 </div>
 
 @code {
-
     [Parameter]
     public string? Username { get; set; }
-
 }
