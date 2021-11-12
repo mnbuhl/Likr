@@ -64,7 +64,7 @@ namespace Likr.Comments.Data
                 {
                     await session.StoreAsync(comment);
                 }
-                else if (existingComment != null && !existingComment.Comments.Any())
+                else if (existingComment != null && existingComment.Comments == null)
                 {
                     existingComment.Comments ??= new List<Comment> { comment };
                     await session.StoreAsync(existingComment);
