@@ -8,5 +8,5 @@ public interface ICommentService
     public Task<List<CommentDto>> GetCommentsByPostId(Guid postId);
     public Task<CommentDto> GetCommentById(Guid id);
     public Task<CommentDto> CreateComment(CreateCommentDto commentDto);
-    public Task DeleteComment(Guid id);
+    public Task<bool> DeleteComment(Guid id);
 }

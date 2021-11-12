@@ -40,8 +40,10 @@ public class CommentService : ICommentService
         return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task DeleteComment(Guid id)
+    public async Task<bool> DeleteComment(Guid id)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Delete($"{Endpoint}/{id}");
+
+        return wrapper.Success;
     }
 }
