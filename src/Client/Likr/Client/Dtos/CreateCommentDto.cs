@@ -2,4 +2,14 @@
 
 namespace Likr.Client.Dtos;
 
-public record CreateCommentDto([Required] string Body, [Required] Guid UserId, [Required] Guid PostId);
+public class CreateCommentDto
+{
+    [Required] 
+    public string? Body { get; set; }
+
+    [Required]
+    public Guid UserId { get; set; }
+
+    [Required]
+    public Guid PostId { get; set; }
+}

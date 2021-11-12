@@ -33,9 +33,11 @@ public class CommentService : ICommentService
         return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task<CommentDto> CreateComment(CreateCommentDto commentDto)
+    public async Task<CommentDto> CreateComment(CreateCommentDto commentDto)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Create<CreateCommentDto, CommentDto>(Endpoint, commentDto);
+        
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
     public Task DeleteComment(Guid id)
