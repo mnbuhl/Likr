@@ -17,18 +17,22 @@ public partial class Posts : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        if (PostService == null)
-            return;
-
-        _posts = await PostService.GetPosts(8, _page);
+        await LoadPosts();
     }
 
-    public async Task LoadMorePosts()
+    public async Task LoadPosts()
     {
         if (PostService == null)
             return;
-
-        _page++;
+        
         _posts.AddRange(await PostService.GetPosts(8, _page));
+        _page++;
+    }
+
+    public async Task OnPostCreated(PostDto postDto)
+    {
+        var post = await PostService?.GetById(Guid.Parse(postDto.Id))!;
+
+        _posts.Insert(0, post);
     }
 }

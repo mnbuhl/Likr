@@ -36,7 +36,7 @@ public class PostService : IPostService
     public async Task<PostDto> CreatePost(CreatePostDto postDto)
     {
         var wrapper = await _httpService.Create<CreatePostDto, PostDto>(Endpoint, postDto);
-        
+
         return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
