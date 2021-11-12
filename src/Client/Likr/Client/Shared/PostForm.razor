@@ -19,7 +19,7 @@
 
     [Inject]
     public AuthService? AuthService { get; set; }
-    
+
     [Parameter]
     public EventCallback<PostDto> OnPostCreated { get; set; }
 
@@ -41,7 +41,7 @@
         var post = await PostService.CreatePost(_post);
 
         await OnPostCreated.InvokeAsync(post);
-        
+
         _post = new CreatePostDto();
     }
 

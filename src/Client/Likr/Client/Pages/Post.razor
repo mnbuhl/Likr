@@ -2,57 +2,57 @@
 
 
 <div class="lg:grid lg:grid-cols-4">
-    <div class="lg:col-span-3">
-        @if (_post != null)
-        {
-            <div class="post-container mb-4 w-5/6 mx-auto">
-                <SinglePost PostDto="_post" OnDelete="OnPostDeleted" />
-                <CommentForm PostId="@Guid.Parse(_post.Id)" OnCommentCreated="OnCommentCreated" />
-            </div>
+  <div class="lg:col-span-3">
+    @if (_post != null)
+    {
+      <div class="post-container mb-4 w-5/6 mx-auto">
+        <SinglePost PostDto="_post" OnDelete="OnPostDeleted"/>
+        <CommentForm PostId="@Guid.Parse(_post.Id)" OnCommentCreated="OnCommentCreated"/>
+      </div>
 
-            @if (_post.Comments != null && _post.Comments.Any())
+      @if (_post.Comments != null && _post.Comments.Any())
+      {
+        @foreach (var comment in _post.Comments)
+        {
+          <div class="w-4/6 mx-auto">
+            <SingleComment CommentDto="@comment" UserId="@_userId" OnDelete="OnCommentDeleted" InReplyTo="@_post.User.Username"/>
+          </div>
+
+
+          @if (comment.CommentsCount > 0 && _comments!.GetValueOrDefault(comment.Id) != null)
+          {
+            @foreach (var nestedComment in _comments[comment.Id!])
             {
-                @foreach (var comment in _post.Comments)
-                {
-                    <div class="w-4/6 mx-auto">
-                        <SingleComment CommentDto="@comment" InReplyTo="@_post.User.Username" />
-                    </div>
-
-
-                    @if (comment.CommentsCount > 0 && _comments!.GetValueOrDefault(comment.Id) != null)
-                    {
-                        @foreach (var nestedComment in _comments[comment.Id!])
-                        {
-                            <div class="nested-comment-container mx-auto w-3/6 mb-4">
-                                <div class=" border border-opacity-25 rounded-md">
-                                    <div class="p-5">
-                                        <a href="" class="space-x-1 mb-0">
-                                            <p class="inline-block hover:underline mb-5 font-semibold">@nestedComment?.User?.DisplayName</p>
-                                            <p class="inline-block text-gray-500 text-sm hover:underline">
-                                                @@@nestedComment?.User?.Username
-                                            </p>
-                                        </a>
-                                        <p class="text-sm text-gray-500 -mt-3">
-                                            Replying to
-                                            <span class="text-blue-400 hover:underline cursor-pointer">
-                                                @@@comment.User?.Username
-                                            </span>
-                                        </p>
-                                        <p class="mb-0">@nestedComment?.Body</p>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    }
-                }
+              <div class="nested-comment-container mx-auto w-3/6 mb-4">
+                <div class=" border border-opacity-25 rounded-md">
+                  <div class="p-5">
+                    <a href="" class="space-x-1 mb-0">
+                      <p class="inline-block hover:underline mb-5 font-semibold">@nestedComment?.User?.DisplayName</p>
+                      <p class="inline-block text-gray-500 text-sm hover:underline">
+                        @@@nestedComment?.User?.Username
+                      </p>
+                    </a>
+                    <p class="text-sm text-gray-500 -mt-3">
+                      Replying to
+                      <span class="text-blue-400 hover:underline cursor-pointer">
+                        @@@comment.User?.Username
+                      </span>
+                    </p>
+                    <p class="mb-0">@nestedComment?.Body</p>
+                  </div>
+                </div>
+              </div>
             }
+          }
         }
-        else
-        {
-            <p>Loading...</p>
-        }
-    </div>
-    <div>
-        <Featured></Featured>
-    </div>
+      }
+    }
+    else
+    {
+      <p>Loading...</p>
+    }
+  </div>
+  <div>
+    <Featured></Featured>
+  </div>
 </div>

@@ -1,4 +1,5 @@
 using Likr.Client.Dtos;
+using Likr.Client.Extensions;
 using Likr.Client.Services;
 using Microsoft.AspNetCore.Components;
 
@@ -15,18 +16,26 @@ public partial class Post : ComponentBase
     [Inject]
     public NavigationManager? NavigationManager { get; set; }
     
+    [Inject]
+    public AuthService? AuthService { get; set; }
+    
     [Parameter]
     public Guid Id { get; set; }
 
     private PostDto? _post;
     private readonly Dictionary<string ,List<CommentDto>> _comments = new();
+    private string _userId = "Default Value";
 
     protected override async Task OnParametersSetAsync()
     {
-        if (PostService == null || CommentService == null)
+        if (PostService == null || CommentService == null || AuthService == null)
             return;
 
         _post = await PostService.GetById(Id);
+        var user = await AuthService.GetCurrentUser();
+
+        if (user != null)
+            _userId = user.GetUserId();
         
         if (_post == null)
             return;
@@ -59,5 +68,18 @@ public partial class Post : ComponentBase
         
         await PostService.DeletePost(Guid.Parse(postDto.Id));
         NavigationManager.NavigateTo("/");
+    }
+    
+    public async Task OnCommentDeleted(CommentDto commentDto)
+    {
+        if (CommentService == null || _post == null)
+            return;
+
+        bool deleted = await CommentService.DeleteComment(Guid.Parse(commentDto.Id!));
+
+        if (deleted)
+        {
+            _post.Comments.Remove(_post.Comments.First(x => x.Id == commentDto.Id));
+        }
     }
 }

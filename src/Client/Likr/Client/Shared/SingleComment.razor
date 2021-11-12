@@ -1,6 +1,13 @@
 ﻿@if (CommentDto != null)
 {
-    <div class="comment-container border border-opacity-25 rounded-md mb-4">
+    <div class="comment-container border border-opacity-25 rounded-md mb-4 relative">
+        @if (UserId != null && string.Equals(UserId, CommentDto.UserId))
+                {
+                    <button @onclick="@(async () => await OnDelete.InvokeAsync(CommentDto))" 
+                            class="w-5 absolute right-0 mt-4 mr-4 opacity-75">
+                        <img src="images/delete.svg" />
+                    </button>
+                }
         <div class="p-5">
             <a href="" class="space-x-1 mb-0">
                 <p class="inline-block hover:underline mb-5 font-semibold">@CommentDto?.User?.DisplayName</p>
@@ -15,17 +22,17 @@
             <p class="mb-5">@CommentDto?.Body</p>
             <div class="space-x-10">
                 <button>
-                    <img class="w-5 inline-block" src="images/comment.svg" alt="comment" />
+                    <img class="w-5 inline-block" src="images/comment.svg" alt="comment"/>
                     <span class="inline-block">@CommentDto?.CommentsCount</span>
                 </button>
 
                 <button>
-                    <img class="w-5 inline-block" src="images/star.svg" alt="comment" />
+                    <img class="w-5 inline-block" src="images/star.svg" alt="comment"/>
                     <span class="inline-block">@CommentDto?.LikesCount</span>
                 </button>
 
                 <button>
-                    <img class="w-5 inline-block" src="images/share.svg" alt="share" />
+                    <img class="w-5 inline-block" src="images/share.svg" alt="share"/>
                 </button>
             </div>
         </div>
@@ -33,11 +40,18 @@
 }
 
 @code {
-
+    [Inject]
+    public AuthService? AuthService { get; set; }
+    
     [Parameter]
     public CommentDto? CommentDto { get; set; }
 
     [Parameter]
     public string? InReplyTo { get; set; } = "Default User";
+    
+    [Parameter]
+    public EventCallback<CommentDto> OnDelete { get; set; }
 
+    [Parameter]
+    public string? UserId { get; set; }
 }
