@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Likr.Commands;
@@ -81,10 +82,14 @@ namespace Likr.Comments.Controllers.v1
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
+            string userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var comment = await _repository.Get(id.ToString());
             
             if (comment == null)
                 return NotFound();
+            
+            if (comment.UserId != userId)
+                return BadRequest();
 
             await _repository.Delete(id);
 
