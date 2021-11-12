@@ -2,7 +2,7 @@
 {
     <div class="nested-comment-container mx-auto w-4/6 mb-4 mt-4 relative">
         <div class=" border border-opacity-25 rounded-md relative">
-            @if (UserId != null && string.Equals(UserId, Comment.User.Id.ToString()))
+            @if (UserId != null && string.Equals(UserId, Comment.User?.Id.ToString()))
             {
                 <button @onclick="@(async () => await OnNestedCommentDelete.InvokeAsync(Comment))"
                     class="w-5 absolute right-0 mt-4 mr-4 opacity-75">
