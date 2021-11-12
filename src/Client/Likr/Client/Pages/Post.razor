@@ -7,7 +7,7 @@
         {
             <div class="post-container mb-4 w-5/6 mx-auto">
                 <SinglePost PostDto="_post" />
-                <CommentForm PostId="@Guid.Parse(_post.Id)" />
+                <CommentForm PostId="@Guid.Parse(_post.Id)" OnCommentCreated="OnCommentCreated" />
             </div>
 
             @if (_post.Comments != null && _post.Comments.Any())

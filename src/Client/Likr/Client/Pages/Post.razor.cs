@@ -35,7 +35,16 @@ public partial class Post : ComponentBase
                 var commentWithNested = await CommentService.GetCommentById(Guid.Parse(comment!.Id));
                 _comments[comment.Id] = commentWithNested!.Comments!.ToList();
             }
-                
         }
+    }
+    
+    public async Task OnCommentCreated(CommentDto commentDto)
+    {
+        if (_post == null || commentDto.Id == null)
+            return;
+
+        var comment = await CommentService?.GetCommentById(Guid.Parse(commentDto.Id))!;
+        
+        _post.Comments.Add(comment);
     }
 }

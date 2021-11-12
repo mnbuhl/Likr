@@ -14,16 +14,19 @@
 </div>
 
 @code {
-    [Parameter]
-    public Guid PostId { get; set; }
-    
     [Inject]
     public ICommentService? CommentService { get; set; }
     
     [Inject]
     public AuthService? AuthService { get; set; }
     
-    private readonly CreateCommentDto _comment = new CreateCommentDto();
+    [Parameter]
+    public EventCallback<CommentDto> OnCommentCreated { get; set; }
+    
+    [Parameter]
+    public Guid PostId { get; set; }
+    
+    private CreateCommentDto _comment = new CreateCommentDto();
     private string _rows = "1";
 
     public async Task OnValidSubmit()
@@ -39,6 +42,10 @@
         _comment.PostId = PostId;
         _comment.UserId = Guid.Parse(user.GetUserId());
         
-        await CommentService.CreateComment(_comment);
+        var comment = await CommentService.CreateComment(_comment);
+
+        _comment = new CreateCommentDto();
+        
+        await OnCommentCreated.InvokeAsync(comment);
     }
 }
