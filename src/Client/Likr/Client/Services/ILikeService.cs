@@ -6,6 +6,6 @@ public interface ILikeService
 {
     Task<IList<LikeDto>?> GetLikesByPostId(string postId);
     Task<IList<LikeDto>?> GetLikesByUserId(string userId);
-    Task<bool> Like(CreateLikeDto createLike);
+    Task<bool> Like(CreateLikeDto likeDto);
     Task<bool> Unlike(string postId);
 }

@@ -50,16 +50,25 @@ namespace Likr.Likes.Controllers.v1
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("like")]
         public async Task<ActionResult> Like(CreateLikeDto likeDto)
         {
+            string userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId) || likeDto.ObserverId != Guid.Parse(userId))
+                return Unauthorized();
+            
             var like = await _likeRepository.GetAsync(x =>
-                x.ObserverId == likeDto.ObserverId.ToString() && x.TargetId == likeDto.TargetId.ToString());
+                x.ObserverId == userId && x.TargetId == likeDto.TargetId.ToString());
 
             if (like != null)
                 return BadRequest("You already liked this post");
 
-            like = _mapper.Map<Like>(likeDto);
+            like = new Like
+            {
+                ObserverId = userId,
+                TargetId = likeDto.TargetId.ToString()
+            };
 
             bool created = await _likeRepository.CreateAsync(like);
 
@@ -72,8 +81,8 @@ namespace Likr.Likes.Controllers.v1
         }
 
         [Authorize]
-        [HttpDelete]
-        public async Task<IActionResult> Unlike([FromQuery] string postId)
+        [HttpDelete("unlike/{postId}")]
+        public async Task<IActionResult> Unlike(string postId)
         {
             string userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 

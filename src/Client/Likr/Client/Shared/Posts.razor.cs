@@ -10,6 +10,9 @@ public partial class Posts : ComponentBase
     [Inject]
     public IPostService? PostService { get; set; }
     
+    [Inject]
+    public ILikeService? LikeService { get; set; }
+    
     [CascadingParameter]
     public string? UserId { get; set; }
 
@@ -17,6 +20,7 @@ public partial class Posts : ComponentBase
     public string Username { get; set; } = string.Empty;
 
     private List<PostDto> _posts = new();
+    private List<LikeDto> _likes = new();
     private int _page = 1;
     private int _pageSize = 8;
     private bool _displayLoadMore = false;
@@ -24,6 +28,7 @@ public partial class Posts : ComponentBase
     protected override async Task OnParametersSetAsync()
     {
         await LoadPosts();
+        await ApplyLikes();
     }
 
     public async Task LoadPosts()
@@ -47,6 +52,22 @@ public partial class Posts : ComponentBase
         _posts.AddRange(posts);
         
         _page++;
+    }
+
+    public async Task ApplyLikes()
+    {
+        if (LikeService == null || UserId == null)
+            return;
+        
+        var likes = await LikeService.GetLikesByUserId(UserId);
+        
+        if (likes == null)
+            return;
+
+        foreach (var post in _posts)
+        {
+            _likes.AddRange(likes.Where(x => x.TargetId == post.Id));
+        }
     }
 
     public async Task OnPostCreated(PostDto postDto)

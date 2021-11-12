@@ -26,16 +26,16 @@ public class LikeService : ILikeService
         return wrapper.Response;
     }
 
-    public async Task<bool> Like(CreateLikeDto createLike)
+    public async Task<bool> Like(CreateLikeDto likeDto)
     {
-        var wrapper = await _httpService.Create<CreateLikeDto, object>(Endpoint, createLike);
+        var wrapper = await _httpService.Create<CreateLikeDto, object>($"{Endpoint}/like", likeDto);
 
         return wrapper.Success;
     }
 
     public async Task<bool> Unlike(string postId)
     {
-        var wrapper = await _httpService.Create<string, object>(Endpoint, postId);
+        var wrapper = await _httpService.Delete($"{Endpoint}/unlike/{postId}");
 
         return wrapper.Success;
     }

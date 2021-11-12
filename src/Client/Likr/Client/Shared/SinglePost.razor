@@ -3,9 +3,9 @@
     <div class="post-container border border-opacity-25 rounded-md mb-4 relative">
         @if (UserId != null && string.Equals(UserId, PostDto.User.Id.ToString()))
         {
-            <button @onclick="@(async () => await OnDelete.InvokeAsync(PostDto))" 
+            <button @onclick="@(async () => await OnDelete.InvokeAsync(PostDto))"
                     class="w-5 absolute right-0 mt-4 mr-4 opacity-75">
-                <img src="images/delete.svg" />
+                <img src="images/delete.svg"/>
             </button>
         }
         <div class="p-5">
@@ -18,17 +18,26 @@
             </a>
             <div class="space-x-10">
                 <a href="/posts/@PostDto.Id">
-                    <img class="w-5 inline-block" src="images/comment.svg" alt="comment" />
+                    <img class="w-5 inline-block" src="images/comment.svg" alt="comment"/>
                     <span class="inline-block">@PostDto.CommentsCount</span>
                 </a>
 
-                <button>
-                    <img class="w-5 inline-block" src="images/star.svg" alt="comment" />
-                    <span class="inline-block">@PostDto.LikesCount</span>
+            @if (_liked)
+            {
+                <button @onclick="LikePost">
+                    <img class="w-5 inline-block" src="images/star.svg" alt="star"/>
+                    <span class="ml-1 inline-block">@PostDto.LikesCount</span>
                 </button>
-
-                <button>
-                    <img class="w-5 inline-block" src="images/share.svg" alt="share" />
+            }
+            else
+            {
+                <button @onclick="UnlikePost">
+                    <img class="w-5 inline-block" src="images/gold-star.svg" alt="star"/>
+                    <span class="ml-1 inline-block">@PostDto.LikesCount</span>
+                </button>
+            }
+            <button>
+                    <img class="w-5 inline-block" src="images/share.svg" alt="share"/>
                 </button>
             </div>
         </div>
@@ -36,6 +45,10 @@
 }
 
 @code {
+
+    [Inject]
+    public ILikeService? LikeService { get; set; }
+
     [Parameter]
     public EventCallback<PostDto> OnDelete { get; set; }
 
@@ -44,4 +57,25 @@
 
     [Parameter]
     public string? UserId { get; set; }
+
+    private bool _liked = false;
+
+    private async Task LikePost()
+    {
+        if (LikeService == null || PostDto == null || UserId == null)
+            return;
+
+        bool liked = await LikeService.Like(new CreateLikeDto { TargetId = PostDto.Id, ObserverId = UserId });
+        _liked = liked;
+    }
+
+    private async Task UnlikePost()
+    {
+        if (LikeService == null || PostDto == null)
+            return;
+
+        bool liked = await LikeService.Unlike(PostDto.Id);
+        _liked = !liked;
+    }
+
 }
