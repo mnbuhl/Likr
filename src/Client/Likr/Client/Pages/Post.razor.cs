@@ -15,26 +15,21 @@ public partial class Post : ComponentBase
     
     [Inject]
     public NavigationManager? NavigationManager { get; set; }
-    
-    [Inject]
-    public AuthService? AuthService { get; set; }
+
+    [CascadingParameter(Name = "UserId")]
+    public string? UserId { get; set; } = "Default Value";
     
     [Parameter]
     public Guid Id { get; set; }
 
     private PostDto? _post;
-    private string _userId = "Default Value";
 
     protected override async Task OnParametersSetAsync()
     {
-        if (PostService == null || CommentService == null || AuthService == null)
+        if (PostService == null || CommentService == null)
             return;
 
         _post = await PostService.GetById(Id);
-        var user = await AuthService.GetCurrentUser();
-
-        if (user != null)
-            _userId = user.GetUserId();
     }
     
     public async Task OnCommentCreated(CommentDto commentDto)

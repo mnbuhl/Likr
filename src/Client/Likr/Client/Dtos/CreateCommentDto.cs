@@ -4,7 +4,7 @@ namespace Likr.Client.Dtos;
 
 public class CreateCommentDto
 {
-    [Required] 
+    [Required, MinLength(1), MaxLength(280)] 
     public string? Body { get; set; }
 
     [Required]

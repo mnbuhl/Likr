@@ -1,6 +1,7 @@
 ﻿<div class="mb-4">
     <h3 class="font-semibold text-xl mb-4">Create a post</h3>
     <EditForm Model="@_post" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator/>
         <InputTextArea class="form-textarea w-5/6 bg-gray-900 mr-5 rounded-xl" placeholder="What is on your mind?" rows="@_rows"
                        @bind-Value="@_post.Body"
                        @onclick="@(() => _rows = "4")" @onfocusout="@(() => _rows = "2")">
@@ -9,6 +10,7 @@
                 type="submit">
             Post
         </button>
+        <ValidationSummary/>
     </EditForm>
 </div>
 
@@ -17,8 +19,8 @@
     [Inject]
     public IPostService? PostService { get; set; }
 
-    [Inject]
-    public AuthService? AuthService { get; set; }
+    [CascadingParameter(Name = "UserId")]
+    public string? UserId { get; set; }
 
     [Parameter]
     public EventCallback<PostDto> OnPostCreated { get; set; }
@@ -29,15 +31,10 @@
 
     private async Task HandleValidSubmit()
     {
-        if (AuthService == null || PostService == null)
+        if (UserId == null || PostService == null)
             return;
 
-        var user = await AuthService.GetCurrentUser();
-
-        if (user == null)
-            return;
-
-        _post.UserId = Guid.Parse(user.GetUserId());
+        _post.UserId = Guid.Parse(UserId);
         var post = await PostService.CreatePost(_post);
 
         await OnPostCreated.InvokeAsync(post);

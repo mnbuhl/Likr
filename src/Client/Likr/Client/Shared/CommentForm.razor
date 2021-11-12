@@ -1,5 +1,6 @@
 ﻿<div>
     <EditForm Model="@_comment" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator/>
         <InputTextArea
             class="border lg:w-5/6 w-full p-4 text-white bg-gray-900 mr-5 rounded-xl border-gray-600"
             @bind-Value="@_comment.Body" placeholder="Add your comment here..." rows="@_rows"
@@ -10,6 +11,7 @@
             type="submit">
             Post
         </button>
+        <ValidationSummary/>
     </EditForm>
 </div>
 
@@ -17,8 +19,8 @@
     [Inject]
     public ICommentService? CommentService { get; set; }
     
-    [Inject]
-    public AuthService? AuthService { get; set; }
+    [CascadingParameter(Name = "UserId")]
+    public string? UserId { get; set; }
     
     [Parameter]
     public EventCallback<CommentDto> OnCommentCreated { get; set; }
@@ -31,16 +33,11 @@
 
     public async Task OnValidSubmit()
     {
-        if (CommentService == null || AuthService == null)
+        if (CommentService == null || string.IsNullOrEmpty(UserId))
             return;
 
-        var user = await AuthService.GetCurrentUser();
-        
-        if (user == null)
-            return;
-        
         _comment.PostId = PostId;
-        _comment.UserId = Guid.Parse(user.GetUserId());
+        _comment.UserId = Guid.Parse(UserId);
         
         var comment = await CommentService.CreateComment(_comment);
 

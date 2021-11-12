@@ -6,7 +6,7 @@
         @if (_post != null)
         {
             <div class="post-container mb-4 w-5/6 mx-auto">
-                <SinglePost PostDto="@_post" UserId="@_userId" OnDelete="OnPostDeleted"/>
+                <SinglePost PostDto="@_post" UserId="@UserId" OnDelete="OnPostDeleted"/>
                 <CommentForm PostId="@Guid.Parse(_post.Id)" OnCommentCreated="OnCommentCreated"/>
             </div>
 
@@ -17,7 +17,7 @@
                     <div class="w-4/6 mx-auto">
                         <SingleComment 
                             CommentDto="@comment" 
-                            UserId="@_userId" 
+                            UserId="@UserId" 
                             OnDelete="@OnCommentDeleted" 
                             InReplyTo="@_post.User.Username"/>
                     </div>
