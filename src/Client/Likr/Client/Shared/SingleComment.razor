@@ -1,13 +1,13 @@
 ﻿@if (CommentDto != null)
 {
-    <div class="comment-container border border-opacity-25 rounded-md mb-4 relative">
-        @if (UserId != null && string.Equals(UserId, CommentDto.UserId))
-                {
-                    <button @onclick="@(async () => await OnDelete.InvokeAsync(CommentDto))" 
-                            class="w-5 absolute right-0 mt-4 mr-4 opacity-75">
-                        <img src="images/delete.svg" />
-                    </button>
-                }
+    <div class="comment-container border border-opacity-25 rounded-md mt-4 relative">
+        @if (UserId != null && string.Equals(UserId, CommentDto.User?.Id.ToString()))
+        {
+            <button @onclick="@(async () => await OnDelete.InvokeAsync(CommentDto))" 
+                    class="w-5 absolute right-0 mt-4 mr-4 opacity-75">
+                <img src="images/delete.svg" />
+            </button>
+        }
         <div class="p-5">
             <a href="" class="space-x-1 mb-0">
                 <p class="inline-block hover:underline mb-5 font-semibold">@CommentDto?.User?.DisplayName</p>
@@ -21,9 +21,9 @@
             </p>
             <p class="mb-5">@CommentDto?.Body</p>
             <div class="space-x-10">
-                <button>
+                <button @onclick="ToggleForm">
                     <img class="w-5 inline-block" src="images/comment.svg" alt="comment"/>
-                    <span class="inline-block">@CommentDto?.CommentsCount</span>
+                    <span class="inline-block">@CommentDto?.Comments?.Count</span>
                 </button>
 
                 <button>
@@ -37,11 +37,23 @@
             </div>
         </div>
     </div>
+    @if (_displayForm)
+    {
+        <AuthorizeView>
+            <NestedCommentForm PostId="@CommentDto?.Id" OnNestedCommentCreated="@OnNestedCommentCreated" />
+        </AuthorizeView>   
+    }
+    
+    @if (CommentDto!.Comments != null && CommentDto.Comments.Any())
+    @foreach(var comment in CommentDto.Comments)
+    {
+        <NestedComment Comment="@comment" InReplyTo="@CommentDto.User?.Username" />
+    }
 }
 
 @code {
     [Inject]
-    public AuthService? AuthService { get; set; }
+    public ICommentService? CommentService { get; set; }
     
     [Parameter]
     public CommentDto? CommentDto { get; set; }
@@ -54,4 +66,32 @@
 
     [Parameter]
     public string? UserId { get; set; }
+
+    private bool _displayForm = false;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (CommentDto == null || CommentService == null)
+            return;
+        
+        var comment = await CommentService.GetCommentById(Guid.Parse(CommentDto.Id!));
+
+        CommentDto = comment;
+    }
+
+    private void OnNestedCommentCreated(CommentDto commentDto)
+    {
+        if (CommentDto == null || CommentService == null)
+        {
+            return;
+        }
+        
+        _displayForm = false;
+        CommentDto.Comments.Add(commentDto);
+    }
+    
+    private void ToggleForm()
+    {
+        _displayForm = !_displayForm;
+    }
 }

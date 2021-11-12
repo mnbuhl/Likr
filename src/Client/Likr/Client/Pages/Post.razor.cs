@@ -23,7 +23,6 @@ public partial class Post : ComponentBase
     public Guid Id { get; set; }
 
     private PostDto? _post;
-    private readonly Dictionary<string ,List<CommentDto>> _comments = new();
     private string _userId = "Default Value";
 
     protected override async Task OnParametersSetAsync()
@@ -36,18 +35,6 @@ public partial class Post : ComponentBase
 
         if (user != null)
             _userId = user.GetUserId();
-        
-        if (_post == null)
-            return;
-
-        foreach (var comment in _post.Comments)
-        {
-            if (comment.CommentsCount > 0)
-            {
-                var commentWithNested = await CommentService.GetCommentById(Guid.Parse(comment!.Id));
-                _comments[comment.Id] = commentWithNested!.Comments!.ToList();
-            }
-        }
     }
     
     public async Task OnCommentCreated(CommentDto commentDto)
