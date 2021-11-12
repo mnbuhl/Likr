@@ -62,14 +62,15 @@ namespace Likr.Comments.Data
             {
                 if (existingComment == null && comment.Comments == null)
                 {
+                    Console.WriteLine("HIT HERE 1st szkjhdaskjdkjhasdkjh");
                     await session.StoreAsync(comment);
                 }
-                else if (existingComment != null && comment.Comments == null)
+                else if (existingComment != null && !existingComment.Comments.Any())
                 {
                     existingComment.Comments ??= new List<Comment> { comment };
                     await session.StoreAsync(existingComment);
                 }
-                else if (existingComment != null && comment.Comments != null)
+                else if (existingComment != null && existingComment.Comments.Any())
                 {
                     existingComment.Comments.Add(comment);
                     await session.StoreAsync(existingComment);
