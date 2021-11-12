@@ -76,10 +76,10 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if (CommentDto == null || CommentService == null)
+        if (CommentDto?.Id == null || CommentService == null)
             return;
 
-        var comment = await CommentService.GetCommentById(Guid.Parse(CommentDto.Id!));
+        var comment = await CommentService.GetCommentById(Guid.Parse(CommentDto.Id));
 
         CommentDto = comment;
     }

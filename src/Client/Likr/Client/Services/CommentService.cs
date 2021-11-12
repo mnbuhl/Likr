@@ -30,7 +30,7 @@ public class CommentService : ICommentService
     {
         var wrapper = await _httpService.Get<CommentDto>($"{Endpoint}/{id}");
 
-        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
+        return wrapper.Response ?? new CommentDto();
     }
 
     public async Task<CommentDto> CreateComment(CreateCommentDto commentDto)
