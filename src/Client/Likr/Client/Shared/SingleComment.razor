@@ -3,9 +3,9 @@
     <div class="comment-container border border-opacity-25 rounded-md mt-4 relative">
         @if (UserId != null && string.Equals(UserId, CommentDto.User?.Id.ToString()))
         {
-            <button @onclick="@(async () => await OnDelete.InvokeAsync(CommentDto))" 
+            <button @onclick="@(async () => await OnDelete.InvokeAsync(CommentDto))"
                     class="w-5 absolute right-0 mt-4 mr-4 opacity-75">
-                <img src="images/delete.svg" />
+                <img src="images/delete.svg"/>
             </button>
         }
         <div class="p-5">
@@ -40,27 +40,32 @@
     @if (_displayForm)
     {
         <AuthorizeView>
-            <NestedCommentForm PostId="@CommentDto?.Id" OnNestedCommentCreated="@OnNestedCommentCreated" />
-        </AuthorizeView>   
+            <NestedCommentForm PostId="@CommentDto?.Id" OnNestedCommentCreated="@OnNestedCommentCreated"/>
+        </AuthorizeView>
     }
-    
+
     @if (CommentDto!.Comments != null && CommentDto.Comments.Any())
-    @foreach(var comment in CommentDto.Comments)
-    {
-        <NestedComment Comment="@comment" InReplyTo="@CommentDto.User?.Username" />
-    }
+        @foreach (var comment in CommentDto.Comments)
+        {
+            <NestedComment 
+                Comment="@comment" 
+                InReplyTo="@CommentDto.User?.Username" 
+                UserId="@UserId" 
+                OnNestedCommentDelete="OnNestedCommentDelete"/>
+        }
 }
 
 @code {
+
     [Inject]
     public ICommentService? CommentService { get; set; }
-    
+
     [Parameter]
     public CommentDto? CommentDto { get; set; }
 
     [Parameter]
     public string? InReplyTo { get; set; } = "Default User";
-    
+
     [Parameter]
     public EventCallback<CommentDto> OnDelete { get; set; }
 
@@ -73,7 +78,7 @@
     {
         if (CommentDto == null || CommentService == null)
             return;
-        
+
         var comment = await CommentService.GetCommentById(Guid.Parse(CommentDto.Id!));
 
         CommentDto = comment;
@@ -85,13 +90,23 @@
         {
             return;
         }
-        
+
         _displayForm = false;
-        CommentDto.Comments.Add(commentDto);
+        CommentDto.Comments?.Add(commentDto);
     }
-    
+
+    private async Task OnNestedCommentDelete(CommentDto commentDto)
+    {
+        if (CommentDto == null || CommentService == null)
+            return;
+
+        bool deleted = await CommentService.DeleteComment(Guid.Parse(commentDto.Id!));
+        CommentDto.Comments?.Remove(commentDto);
+    }
+
     private void ToggleForm()
     {
         _displayForm = !_displayForm;
     }
+
 }
