@@ -4,7 +4,7 @@
     </AuthorizeView>
     @foreach (var post in _posts.OrEmptyIfNull())
     {
-        <SinglePost PostDto="post"/>
+        <SinglePost PostDto="post" OnDelete="OnPostDeleted"/>
     }
     <div class="mb-6 mx-auto text-center w-full">
         <button @onclick="LoadPosts"

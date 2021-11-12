@@ -1,6 +1,13 @@
 ﻿@if (PostDto != null)
 {
-    <div class="post-container border border-opacity-25 rounded-md mb-4">
+    <div class="post-container border border-opacity-25 rounded-md mb-4 relative">
+        @if (_userId != null && string.Equals(_userId, PostDto.User.Id.ToString()))
+        {
+            <button @onclick="@(async () => await OnDelete.InvokeAsync(PostDto))" 
+                    class="w-5 absolute right-0 mt-4 mr-4 opacity-75">
+                <img src="images/delete.svg" />
+            </button>
+        }
         <div class="p-5">
             <a href="posts/@PostDto.Id">
                 <a href="" class="space-x-1">
@@ -29,8 +36,27 @@
 }
 
 @code {
+    [Inject]
+    public AuthService? AuthService { get; set; }
+    
+    [Parameter]
+    public EventCallback<PostDto> OnDelete { get; set; }
 
     [Parameter]
     public PostDto? PostDto { get; set; }
 
+    private string? _userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthService == null)
+            return;
+
+        var user = await AuthService.GetCurrentUser();
+
+        if (user == null)
+            return;
+
+        _userId = user.GetUserId();
+    }
 }

@@ -6,14 +6,17 @@ namespace Likr.Client.Pages;
 
 public partial class Post : ComponentBase
 {
-    [Parameter]
-    public Guid Id { get; set; }
-        
     [Inject]
     public IPostService? PostService { get; set; }
     
     [Inject]
     public ICommentService? CommentService { get; set; }
+    
+    [Inject]
+    public NavigationManager? NavigationManager { get; set; }
+    
+    [Parameter]
+    public Guid Id { get; set; }
 
     private PostDto? _post;
     private readonly Dictionary<string ,List<CommentDto>> _comments = new();
@@ -44,7 +47,17 @@ public partial class Post : ComponentBase
             return;
 
         var comment = await CommentService?.GetCommentById(Guid.Parse(commentDto.Id))!;
+        comment.CommentsCount = 0;
         
         _post.Comments.Add(comment);
+    }
+    
+    public async Task OnPostDeleted(PostDto postDto)
+    {
+        if (PostService == null || NavigationManager == null)
+            return;
+        
+        await PostService.DeletePost(Guid.Parse(postDto.Id));
+        NavigationManager.NavigateTo("/");
     }
 }

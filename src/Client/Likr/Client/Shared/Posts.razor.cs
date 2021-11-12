@@ -35,4 +35,13 @@ public partial class Posts : ComponentBase
 
         _posts.Insert(0, post);
     }
+    
+    public async Task OnPostDeleted(PostDto postDto)
+    {
+        if (PostService == null)
+            return;
+        
+        await PostService.DeletePost(Guid.Parse(postDto.Id));
+        _posts.Remove(_posts.First(x => x.Id == postDto.Id));
+    }
 }

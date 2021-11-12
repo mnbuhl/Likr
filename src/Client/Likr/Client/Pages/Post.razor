@@ -6,7 +6,7 @@
         @if (_post != null)
         {
             <div class="post-container mb-4 w-5/6 mx-auto">
-                <SinglePost PostDto="_post" />
+                <SinglePost PostDto="_post" OnDelete="OnPostDeleted" />
                 <CommentForm PostId="@Guid.Parse(_post.Id)" OnCommentCreated="OnCommentCreated" />
             </div>
 
