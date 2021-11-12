@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Likr.Commands;
@@ -72,10 +73,15 @@ namespace Likr.Likes.Controllers.v1
 
         [Authorize]
         [HttpDelete]
-        public async Task<IActionResult> Unlike([FromQuery] DeleteLikeDto likeDto)
+        public async Task<IActionResult> Unlike([FromQuery] string postId)
         {
+            string userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+            
             var like = await _likeRepository.GetAsync(x =>
-                x.ObserverId == likeDto.ObserverId.ToString() && x.TargetId == likeDto.TargetId.ToString());
+                x.ObserverId == userId && x.TargetId == postId);
 
             if (like == null)
                 return BadRequest("You haven't liked this post");
@@ -85,7 +91,7 @@ namespace Likr.Likes.Controllers.v1
             if (!deleted)
                 return BadRequest();
 
-            await _publishEndpoint.Publish(new LikeDeleted(likeDto.TargetId.ToString()));
+            await _publishEndpoint.Publish(new LikeDeleted(postId));
 
             return NoContent();
         }
