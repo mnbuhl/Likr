@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Likr.Commands;
@@ -49,33 +50,50 @@ namespace Likr.Likes.Controllers.v1
         }
 
         [Authorize]
-        [HttpPost]
-        public async Task<ActionResult> Like(CreateLikeDto likeDto)
+        [HttpPost("like")]
+        public async Task<ActionResult<LikeDto>> Like(CreateLikeDto likeDto)
         {
+            string userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId) || likeDto.ObserverId != Guid.Parse(userId))
+                return Unauthorized();
+            
             var like = await _likeRepository.GetAsync(x =>
-                x.ObserverId == likeDto.ObserverId.ToString() && x.TargetId == likeDto.TargetId.ToString());
+                x.ObserverId == userId && x.TargetId == likeDto.TargetId.ToString());
 
             if (like != null)
                 return BadRequest("You already liked this post");
 
-            like = _mapper.Map<Like>(likeDto);
+            like = new Like
+            {
+                ObserverId = userId,
+                TargetId = likeDto.TargetId.ToString()
+            };
 
             bool created = await _likeRepository.CreateAsync(like);
 
             if (!created)
                 return BadRequest();
 
-            await _publishEndpoint.Publish(new LikeCreated(like.TargetId));
+            var createdLikeDto = _mapper.Map<LikeDto>(like);
 
-            return NoContent();
+            await _publishEndpoint.Publish(new LikePostCreated(like.TargetId));
+            await _publishEndpoint.Publish(new LikeCommentCreated(like.TargetId));
+
+            return Ok(createdLikeDto);
         }
 
         [Authorize]
-        [HttpDelete]
-        public async Task<IActionResult> Unlike([FromQuery] DeleteLikeDto likeDto)
+        [HttpDelete("unlike/{postId}")]
+        public async Task<IActionResult> Unlike(string postId)
         {
+            string userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+            
             var like = await _likeRepository.GetAsync(x =>
-                x.ObserverId == likeDto.ObserverId.ToString() && x.TargetId == likeDto.TargetId.ToString());
+                x.ObserverId == userId && x.TargetId == postId);
 
             if (like == null)
                 return BadRequest("You haven't liked this post");
@@ -85,7 +103,8 @@ namespace Likr.Likes.Controllers.v1
             if (!deleted)
                 return BadRequest();
 
-            await _publishEndpoint.Publish(new LikeDeleted(likeDto.TargetId.ToString()));
+            await _publishEndpoint.Publish(new LikePostDeleted(postId));
+            await _publishEndpoint.Publish(new LikeCommentDeleted(postId));
 
             return NoContent();
         }

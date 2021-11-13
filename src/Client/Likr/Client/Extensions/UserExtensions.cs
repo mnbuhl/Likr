@@ -13,4 +13,14 @@ public static class UserExtensions
     {
         return user.FindFirst(x => x.Type == "DisplayName")?.Value!;
     }
+    
+    public static string GetUsername(this ClaimsPrincipal user)
+    {
+        return user.FindFirst(x => x.Type == "Username")?.Value!;
+    }
+    
+    public static string GetToken(this ClaimsPrincipal user)
+    {
+        return user.FindFirst(x => x.Type == "access_token")?.Value!;
+    }
 }

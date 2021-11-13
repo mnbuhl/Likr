@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Likr.Commands;
@@ -44,12 +45,27 @@ namespace Likr.Posts.Controllers.v1
         }
 
         [HttpGet("user/{userId}")]
-        public async Task<ActionResult<IList<PostDto>>> GetAllByUserId([FromQuery] string userId,
-            PaginationQuery paginationQuery)
+        public async Task<ActionResult<IList<PostDto>>> GetAllByUserId([FromRoute] string userId,
+            [FromQuery] PaginationQuery paginationQuery)
 
         {
             IList<Post> posts =
                 await _postRepository.GetAllAsync(x => x.UserId == userId, paginationQuery: paginationQuery,
+                    includes: x => x.Include(p => p.User), orderBy: x => x.OrderByDescending(p => p.CreatedAt));
+
+            if (posts == null)
+                return NotFound();
+
+            return Ok(_mapper.Map<IList<PostDto>>(posts));
+        }
+        
+        [HttpGet("username/{username}")]
+        public async Task<ActionResult<IList<PostDto>>> GetAllByUsername([FromRoute] string username,
+            [FromQuery] PaginationQuery paginationQuery)
+
+        {
+            IList<Post> posts =
+                await _postRepository.GetAllAsync(x => x.User.Username == username, paginationQuery: paginationQuery,
                     includes: x => x.Include(p => p.User), orderBy: x => x.OrderByDescending(p => p.CreatedAt));
 
             if (posts == null)
@@ -93,6 +109,15 @@ namespace Likr.Posts.Controllers.v1
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
+            string userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var post = await _postRepository.GetAsync(x => x.Id == id.ToString(), x => x.Include(p => p.User));
+            
+            if (post == null)
+                return NotFound();
+
+            if (post.User.Id != userId)
+                return BadRequest();
+            
             bool deleted = await _postRepository.DeleteAsync(id.ToString());
 
             if (!deleted)

@@ -85,7 +85,7 @@ services:
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=IdentityDb;User Id=sa;Password=secretpw123;"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
 #      - "ServiceUrl=http://likr.identity" # Change to deployed URL once deployed
-#      - "Urls:BaseUri=http://localhost:8100" Change to deployed URL once deployed
+#      - "Urls:BaseUri=http://localhost:8100"  # Change to deployed URL once deployed
     depends_on:
       - sqldata
     ports:
@@ -96,6 +96,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "IdentityUrl=http://likr.identity" 
+    depends_on:
+      - likr.identity
     ports:
       - "5200:80"
 
@@ -105,5 +107,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
 #      - "Authority=http://localhost:8004" Change to deployed URL once deployed
       - "ServiceUrl=http://likr.client:8100"
+    depends_on:
+       - likr.identity
     ports:
       - "8100:80"

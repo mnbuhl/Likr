@@ -1,3 +1,11 @@
-﻿namespace Likr.Client.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record CreatePostDto(string Body, Guid UserId);
+namespace Likr.Client.Dtos;
+
+public class CreatePostDto
+{
+    [Required, MinLength(1), MaxLength(280)]
+    public string? Body { get; set; }
+    [Required]
+    public Guid UserId { get; set; }
+}

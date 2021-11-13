@@ -25,8 +25,6 @@ namespace Likr.Gateway
             string identityUrl = _configuration.GetValue<string>("IdentityUrl");
             string authProviderKey = "IdentityApiKey";
 
-            Console.WriteLine(identityUrl);
-
             services.AddAuthentication()
                 .AddJwtBearer(authProviderKey, x =>
                 {

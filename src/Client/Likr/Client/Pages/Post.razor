@@ -1,0 +1,39 @@
+@page "/posts/{id:guid}"
+
+<PageTitle>Post by @_post?.User?.Username - Likr</PageTitle>
+
+<div class="lg:grid lg:grid-cols-4">
+    <div class="lg:col-span-3">
+        @if (_post != null)
+        {
+            <div class="post-container mb-4 w-5/6 mx-auto">
+                <SinglePost PostDto="@_post" UserId="@UserId" OnDelete="OnPostDeleted" Liked="_liked"/>
+                <AuthorizeView>
+                    <CommentForm PostId="@Guid.Parse(_post.Id)" OnCommentCreated="OnCommentCreated"/>
+                </AuthorizeView>
+            </div>
+
+            @if (_post.Comments != null && _post.Comments.Any())
+            {
+                @foreach (var comment in _post.Comments)
+                {
+                    <div class="w-4/6 mx-auto">
+                        <SingleComment 
+                            CommentDto="@comment" 
+                            UserId="@UserId" 
+                            OnDelete="@OnCommentDeleted" 
+                            InReplyTo="@_post.User?.Username"
+                            Liked="@_likedComments.Any(x => x.Id == comment.Id)"/>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <p>Loading...</p>
+        }
+    </div>
+    <div class="invisible  lg:visible">
+        <Featured></Featured>
+    </div>
+</div>
