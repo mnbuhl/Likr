@@ -6,7 +6,7 @@ using MassTransit;
 
 namespace Likr.Posts.Consumers
 {
-    public class LikeDeletedConsumer : IConsumer<LikeDeleted>
+    public class LikeDeletedConsumer : IConsumer<LikePostDeleted>
     {
         private readonly IGenericRepository<Post> _postRepository;
         private readonly IGenericRepository<Comment> _commentRepository;
@@ -17,7 +17,7 @@ namespace Likr.Posts.Consumers
             _commentRepository = commentRepository;
         }
 
-        public async Task Consume(ConsumeContext<LikeDeleted> context)
+        public async Task Consume(ConsumeContext<LikePostDeleted> context)
         {
             var post = await _postRepository.GetAsync(x => x.Id == context.Message.TargetId);
 

@@ -20,7 +20,7 @@
                             CommentDto="@comment" 
                             UserId="@UserId" 
                             OnDelete="@OnCommentDeleted" 
-                            InReplyTo="@_post.User.Username"/>
+                            InReplyTo="@_post.User?.Username"/>
                     </div>
                 }
             }

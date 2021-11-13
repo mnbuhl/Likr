@@ -25,7 +25,7 @@ public partial class Posts : ComponentBase
     private int _pageSize = 8;
     private bool _displayLoadMore = false;
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         await LoadPosts();
     }
@@ -56,7 +56,7 @@ public partial class Posts : ComponentBase
 
     public async Task ApplyLikes()
     {
-        if (LikeService == null || UserId == null)
+        if (LikeService == null || string.IsNullOrEmpty(UserId))
             return;
 
         var likes = await LikeService.GetLikesByUserId(UserId);

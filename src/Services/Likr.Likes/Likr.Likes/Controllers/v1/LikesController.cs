@@ -77,7 +77,8 @@ namespace Likr.Likes.Controllers.v1
 
             var createdLikeDto = _mapper.Map<LikeDto>(like);
 
-            await _publishEndpoint.Publish(new LikeCreated(like.TargetId));
+            await _publishEndpoint.Publish(new LikePostCreated(like.TargetId));
+            await _publishEndpoint.Publish(new LikeCommentCreated(like.TargetId));
 
             return Ok(createdLikeDto);
         }
@@ -102,7 +103,8 @@ namespace Likr.Likes.Controllers.v1
             if (!deleted)
                 return BadRequest();
 
-            await _publishEndpoint.Publish(new LikeDeleted(postId));
+            await _publishEndpoint.Publish(new LikePostDeleted(postId));
+            await _publishEndpoint.Publish(new LikeCommentDeleted(postId));
 
             return NoContent();
         }
