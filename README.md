@@ -47,6 +47,9 @@ Build & run:
 
 Rebuild: ```docker compose up -d --build --force-recreate```
 
+Run deployment:  
+```docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d```
+
 Stop: ```docker compose down```
 
 #### Images
