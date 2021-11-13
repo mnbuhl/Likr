@@ -1,4 +1,4 @@
-version: '3.4'
+﻿version: '3.4'
 
 services:
   sqldata:
@@ -12,7 +12,7 @@ services:
       - "1433:1433"
     volumes:
       - mssqldata:/var/opt/mssql
-        
+  
   ravendb:
     container_name: ravendb
     environment:
@@ -39,7 +39,7 @@ services:
   likr.posts:
     container_name: likr.posts
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=PostsDb;User Id=sa;Password=secretpw123;"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
       - "IdentityUrl=http://likr.identity"
@@ -48,26 +48,26 @@ services:
       - sqldata
       - rabbitmq
     ports:
-      - "8001:80"
+      - "80"
   
   likr.comments:
     container_name: likr.comments
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - "Database:Urls:0=http://ravendb:8080"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
-      - "IdentityUrl=http://likr.identity" 
+      - "IdentityUrl=http://likr.identity"
     restart: unless-stopped
     depends_on:
       - ravendb
       - rabbitmq
     ports:
-      - "8002:80"
+      - "80"
 
   likr.likes:
     container_name: likr.likes
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=LikesDb;User Id=sa;Password=secretpw123;"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
       - "IdentityUrl=http://likr.identity"
@@ -76,16 +76,16 @@ services:
       - sqldata
       - rabbitmq
     ports:
-      - "8003:80"
+      - "80"
 
   likr.identity.server:
     container_name: likr.identity
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - "ConnectionStrings:DefaultConnection=Server=sqldata;Database=IdentityDb;User Id=sa;Password=secretpw123;"
       - "RabbitMq=amqp://guest:guest@rabbitmq:5672"
-#      - "ServiceUrl=http://likr.identity" # Change to deployed URL once deployed
-#      - "Urls:BaseUri=http://localhost:8100"  # Change to deployed URL once deployed
+    #      - "ServiceUrl=http://likr.identity" # Change to deployed URL once deployed
+    #      - "Urls:BaseUri=http://localhost:8100"  # Change to deployed URL once deployed
     depends_on:
       - sqldata
     ports:
@@ -94,20 +94,20 @@ services:
   likr.gateway:
     container_name: likr.gateway
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - "IdentityUrl=http://likr.identity" 
+      - ASPNETCORE_ENVIRONMENT=Production
+      - "IdentityUrl=http://likr.identity"
     depends_on:
-      - likr.identity.server
+      - likr.identity
     ports:
       - "5200:80"
 
   likr.client:
     container_name: likr.client
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-#      - "Authority=http://localhost:8004" Change to deployed URL once deployed
+      - ASPNETCORE_ENVIRONMENT=Production
+      #      - "Authority=http://localhost:8004" Change to deployed URL once deployed
       - "ServiceUrl=http://likr.client:8100"
     depends_on:
-       - likr.identity.server
+      - likr.identity
     ports:
       - "8100:80"
