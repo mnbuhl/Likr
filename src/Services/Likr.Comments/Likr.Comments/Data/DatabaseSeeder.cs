@@ -8,8 +8,6 @@ namespace Likr.Comments.Data
     public class DatabaseSeeder
     {
         private readonly IDocumentStore _store;
-        private readonly Random _random = new Random();
-        private readonly Random _randomForComments = new Random(5);
 
         public DatabaseSeeder(IDocumentStore documentStore)
         {
@@ -20,137 +18,91 @@ namespace Likr.Comments.Data
         {
             using var session = _store.OpenSession();
 
-            var postIds = new List<string>
-            {
-                "22476115-C5AB-4428-8225-7F0440C589BB",
-                "2A15730D-3CB0-4541-8E48-EB4750EBC628",
-                "8164D69D-475A-40B9-97DB-7FCBD2B02DC6",
-                "260739FC-EAB0-49CD-9330-ACE484B703E1",
-                "D1ED8A23-5EA6-425B-9DEE-5E56A0BE4592",
-                "0EC7153C-8235-44C5-8D7C-B7424B154FC3",
-                "3D171AFE-C227-459E-B8BE-1541D84571AA",
-                "3E22D823-8A07-4979-ADB3-AD0B42E05C70",
-                "3F6A33E9-B7A6-4B99-8CA5-6EE38E491F56",
-                "D90CF823-964A-44CA-97F9-CF07887BDE84",
-                "FE8AC82A-9D0D-470A-9175-ED103AD5BB8F",
-                "6364C994-D52E-48F4-96C6-B6C0046DD87D",
-                "596B413B-49E7-4141-B030-C24C7E4477A6",
-                "9FF436E5-AE67-4DDD-B196-4EC474273603",
-                "F187A7D2-EFDE-4F7C-A753-83B0B2FA2166",
-                "95F9530D-F457-42B2-B5C7-EC9317A44181",
-                "3F379F3B-FF10-498E-8B11-1E29EC9B582A",
-                "6262D110-E599-4BBC-944A-7AF9BA3A8E52",
-                "7F6F6F3B-B90E-46CF-969A-7FD64146A68E",
-                "FA18449B-D1E2-461E-9A18-CEFE83FA226A"
-            };
-
-            var commentIds = new List<string>
-            {
-                "4CDA3F89-0EDD-4D0B-97DF-A3CBEA10DA44",
-                "A91993F4-1490-41E6-B7B1-6B11BC5F3E3E",
-                "78D308B1-1BCD-43E7-ACEA-32CE2C60DE30",
-                "1414D988-28D1-4D79-BF95-7444080C5E0D",
-                "45BEAB89-4751-42BB-A2DB-876E2FC77ECE",
-                "9C08F61C-59B7-4930-AF9C-1B231A0E7E81",
-                "EFCE7AE8-F954-432A-970E-9C58ABECCF04",
-                "89D02AE9-F649-452C-8BF0-E2ACA9670510",
-                "E7707704-E3BA-4AE1-8F5F-6555D6D325EA",
-                "EA64B8E1-672F-4893-A65B-A540EC0AF9D0",
-                "95023595-D09A-468E-A0B3-526A50FF3DB1",
-                "468DB7D4-ED25-462B-A1E1-0D28D4F790EA",
-                "62F970E0-5C2B-4F41-A450-9350E4119A90",
-                "FA734A40-9E86-4515-BBB7-EC218B6D13BF",
-                "958B0FCE-E8DD-405D-9B40-846AB3759DD7",
-                "F5B0C476-23A2-4B95-ADB1-2DEE46E8EA71",
-                "922DD51F-A79E-4FC4-BB17-60C8F4C3021C",
-                "555CE19C-AB73-471F-B517-40438FBCF83B",
-                "841928F0-02D5-42AF-9873-BEC5D9DAAF57",
-                "583C1E93-E0C0-46F4-9BCD-968370C04C33",
-                "943086EF-CB1F-4AB5-AF09-45F4FE9015EC",
-                "D6483190-913E-43EF-B0A9-997F9C2FC4B0",
-                "2FC260EA-F130-4784-995D-8AB1F7817FBC",
-                "56B62FA6-6409-43AA-AAD3-04458B11A73F",
-                "B5D939EE-B516-4B31-B19D-BBA9F915E0D2",
-                "EECF34C6-83A2-48F3-B9DE-C94399B51A29",
-                "EDA80FDB-C7F9-462C-97B3-53545B065CE7",
-                "1AAE04C6-EE5E-48AD-B8DB-14F80EAFE570",
-                "57010DE0-AC3A-419D-A0BE-C52D40393879",
-                "8272E343-9D20-4D5A-9F23-BE9B6627AA45",
-                "87E682C0-72DF-423F-856F-AD9AEB411E0E",
-                "854274E6-89C3-410D-8CF0-A666DD60504B",
-                "0DBD0CB6-F77D-4C2E-8F96-0A91B9CDE2DC",
-                "7A3C144D-B54B-466B-B301-3C02A137A291",
-                "B8F72796-111B-4E21-A653-336A00808515",
-                "774A5EBE-E646-4306-AAAD-8E0950EE6C07",
-                "847684F9-50A4-4279-867C-ED5C323FBB2F",
-                "28320BF6-232C-4F88-8383-0407892E18F5",
-                "33AA411B-7AE7-4D02-A904-DB8AB7A6516A",
-                "7E4856D6-C635-4349-9FB3-BF8D78B7744A",
-                "4D24105D-E9B2-474D-A30A-2DCF1E0D4886",
-                "66CC6989-38E5-46A0-A728-2357CBF2DC88",
-                "00CD2FFA-670C-449F-BD01-BE1C8C2E929D",
-                "6915960E-A1F0-4F8F-98A9-D0D0BEBE5F06",
-                "D1A01BC7-6AD9-458B-84FD-59EF79A5A4A2",
-                "4B35B348-67E2-40AD-85FC-05503574A60E",
-                "22E46C12-AD72-4926-9A20-F5BF211EF8EC",
-                "8369094E-6694-4AED-8ACE-06E1FBBD7863",
-                "69B7AC70-ABB2-418F-9F30-2EE67CC07C9C",
-                "89930EF5-A856-4E39-B519-538295D09FF3"
-            };
-            
-            var userIds = new List<Guid>
-            {
-                Guid.NewGuid(),
-                Guid.NewGuid(),
-                Guid.NewGuid(),
-                Guid.NewGuid()
-            };
-            
             var users = new List<User>
             {
                 new User
                 {
-                    Id = userIds[0].ToString(),
+                    Id = "628a5306-09d7-4d28-856b-09994ed4381f",
                     Username = "UserOne",
                     DisplayName = "User 1"
                 },
                 new User
                 {
-                    Id = userIds[1].ToString(),
+                    Id = "2201bbb9-8f16-48d5-92a9-2a96bd80fbe9",
                     Username = "UserTwo",
                     DisplayName = "User 2"
                 },
                 new User
                 {
-                    Id = userIds[2].ToString(),
+                    Id = "3cb10b30-efb4-4621-b508-797958cd957c",
                     Username = "UserThree",
                     DisplayName = "User 3"
                 },
                 new User
                 {
-                    Id = userIds[3].ToString(),
+                    Id = "9fba0c51-aa4f-417b-ac8b-30d72ff7e629",
                     Username = "UserFour",
                     DisplayName = "User 4"
-                },
+                }
             };
 
             foreach (var user in users)
             {
                 session.Store(user);
             }
-
-            int counter = 0;
-            foreach (string id in commentIds)
+            
+            var comments = new List<Comment>
             {
-                session.Store(new Comment
+                new Comment
                 {
-                    Id = id.ToLower(),
-                    Body = $"This is a test comment - {counter++}",
-                    LikesCount = _random.Next(0, 100),
-                    PostId = postIds[_randomForComments.Next(postIds.Count)].ToLower(),
-                    UserId = users[_random.Next(users.Count)].Id,
-                    User = users[_random.Next(users.Count)]
-                }, id.ToLower());
+                    Id = "f21aa5f8-c4f2-4330-a9ad-cb32f6f67e3c",
+                    Body = "They finished building the road they knew no one would ever use.",
+                    LikesCount = 0,
+                    UserId = "628a5306-09d7-4d28-856b-09994ed4381f",
+                    User = users[0],
+                    PostId = "a0d38424-5ea1-4d7e-963a-c0f3126ba59d"
+                },
+                new Comment
+                {
+                    Id = "ab56582b-46f3-4ca4-be0c-8c66ef3c43b6",
+                    Body = "The secret code they created made no sense, even to them.",
+                    LikesCount = 0,
+                    UserId = "2201bbb9-8f16-48d5-92a9-2a96bd80fbe9",
+                    User = users[1],
+                    PostId = "a0d38424-5ea1-4d7e-963a-c0f3126ba59d"
+                },
+                new Comment
+                {
+                    Id = "8b540efb-2953-4798-ab4f-6dac38b05229",
+                    Body = "Little Red Riding Hood decided to wear orange today.",
+                    LikesCount = 0,
+                    UserId = "3cb10b30-efb4-4621-b508-797958cd957c",
+                    User = users[2],
+                    PostId = "a6188cef-d474-4af0-9395-0637e34c1cbc"
+                },
+                new Comment
+                {
+                    Id = "4a82dd64-6f0d-414e-8ce2-3cf31971856f",
+                    Body = "He hated that he loved what she hated about hate.",
+                    LikesCount = 0,
+                    UserId = "3cb10b30-efb4-4621-b508-797958cd957c",
+                    User = users[2],
+                    PostId = "ccd77681-127b-4112-889d-f5e3fed9d604"
+                },
+                new Comment
+                {
+                    Id = "d598e012-c94f-4f91-b312-249f5adfb08d",
+                    Body = "You bite up because of your lower jaw.",
+                    LikesCount = 0,
+                    UserId = "9fba0c51-aa4f-417b-ac8b-30d72ff7e629",
+                    User = users[3],
+                    PostId = "d470fbce-6329-4d71-a261-821972c3b82c"
+                }
+            };
+            
+            foreach (var comment in comments)
+            {
+                session.Store(comment, comment.Id);
             }
 
             session.SaveChanges();

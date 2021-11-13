@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectItems", "ProjectItem
 		sql\decrease_comments_count.sql = sql\decrease_comments_count.sql
 		sql\increase_comments_count.sql = sql\increase_comments_count.sql
 		README.md = README.md
+		synchronized-seed-data.txt = synchronized-seed-data.txt
+		sql\clean_sql_data.sql = sql\clean_sql_data.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Likr.Posts", "Likr.Posts", "{2223BBEF-652A-4DB7-B972-4003B9EC58E6}"
