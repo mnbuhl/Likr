@@ -55,7 +55,7 @@ namespace Likr.Comments.Data
             var existingComment = await session.Include("Comments").LoadAsync<Comment>(comment.PostId);
             var user = await session.LoadAsync<User>(comment.UserId);
 
-            comment.Id = Guid.NewGuid().ToString();
+            comment.Id ??= Guid.NewGuid().ToString();
             comment.User = user;
 
             try

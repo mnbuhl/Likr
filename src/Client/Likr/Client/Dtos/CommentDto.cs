@@ -8,7 +8,7 @@ public class CommentDto
     public string? UserId { get; set; }
     public Guid? PostId { get; set; }
     public UserDto? User { get; set; }
-    public int? LikesCount { get; set; }
+    public int LikesCount { get; set; }
     public ICollection<CommentDto>? Comments { get; set; } = new List<CommentDto>();
-    public int? CommentsCount { get; set; }
+    public int CommentsCount { get; set; }
 }
