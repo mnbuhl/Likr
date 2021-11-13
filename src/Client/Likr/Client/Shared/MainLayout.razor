@@ -1,26 +1,28 @@
 ﻿@inherits LayoutComponentBase
 
-<CascadingValue Value="_userId" Name="UserId">
-    <CascadingValue Value="_username" Name="Username">
-            <div class="page">
-                <div class="sidebar">
-        
-                    <NavMenu/>
-                </div>
-        
-                <main>
-                    <div class="top-row px-4 auth">
-                        <LoginDisplay/>
-                        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-                    </div>
-        
-                    <article class="content px-4">
-                        @Body
-                    </article>
-                </main>
+
+<div class="page">
+    <CascadingValue Value="_userId" Name="UserId">
+        <CascadingValue Value="_username" Name="Username">
+            <div class="sidebar">
+
+                <NavMenu/>
             </div>
+
+            <main>
+                <div class="top-row px-4 auth">
+                    <LoginDisplay/>
+                    <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                </div>
+
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
+        </CascadingValue>
     </CascadingValue>
-</CascadingValue>
+</div>
+
 
 @code {
 
@@ -30,7 +32,7 @@
     private string _userId = string.Empty;
     private string _username = string.Empty;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (AuthService == null)
             return;
