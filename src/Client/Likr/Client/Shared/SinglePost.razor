@@ -77,7 +77,7 @@
 
         bool liked = await LikeService.Like(new CreateLikeDto { TargetId = PostDto.Id, ObserverId = UserId });
         Liked = liked;
-        PostDto.LikesCount += 1;
+        PostDto.LikesCount++;
     }
 
     private async Task UnlikePost()
@@ -88,6 +88,9 @@
         bool liked = await LikeService.Unlike(PostDto.Id);
         Liked = !liked;
         PostDto.LikesCount--;
+        
+        if (PostDto.LikesCount < 0)
+            PostDto.LikesCount = 0;
     }
 
 }

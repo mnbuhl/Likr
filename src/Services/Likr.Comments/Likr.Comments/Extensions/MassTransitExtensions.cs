@@ -11,8 +11,8 @@ namespace Likr.Comments.Extensions
         {
             services.AddMassTransit(configure =>
             {
-                configure.AddConsumer<LikeCreatedConsumer>();
-                configure.AddConsumer<LikeDeletedConsumer>();
+                configure.AddConsumer<LikeCommentCreatedConsumer>();
+                configure.AddConsumer<LikeCommentDeletedConsumer>();
                 configure.AddConsumer<CommentUserCreatedConsumer>();
 
                 configure.UsingRabbitMq((context, cfg) =>

@@ -5,11 +5,11 @@ using MassTransit;
 
 namespace Likr.Comments.Consumers
 {
-    public class LikeDeletedConsumer : IConsumer<LikeCommentDeleted>
+    public class LikeCommentDeletedConsumer : IConsumer<LikeCommentDeleted>
     {
         private readonly ICommentRepository _commentRepository;
 
-        public LikeDeletedConsumer(ICommentRepository commentRepository)
+        public LikeCommentDeletedConsumer(ICommentRepository commentRepository)
         {
             _commentRepository = commentRepository;
         }
@@ -21,6 +21,10 @@ namespace Likr.Comments.Consumers
             if (comment != null)
             {
                 comment.LikesCount--;
+                
+                if (comment.LikesCount < 0)
+                    comment.LikesCount = 0;
+                
                 await _commentRepository.InsertOrUpdate(comment);
             }
         }

@@ -6,24 +6,24 @@ using MassTransit;
 
 namespace Likr.Posts.Consumers
 {
-    public class LikeDeletedConsumer : IConsumer<LikePostDeleted>
+    public class LikePostCreatedConsumer : IConsumer<LikePostCreated>
     {
-        private readonly IGenericRepository<Post> _postRepository;
         private readonly IGenericRepository<Comment> _commentRepository;
+        private readonly IGenericRepository<Post> _postRepository;
 
-        public LikeDeletedConsumer(IGenericRepository<Post> postRepository, IGenericRepository<Comment> commentRepository)
+        public LikePostCreatedConsumer(IGenericRepository<Comment> commentRepository, IGenericRepository<Post> postRepository)
         {
-            _postRepository = postRepository;
             _commentRepository = commentRepository;
+            _postRepository = postRepository;
         }
 
-        public async Task Consume(ConsumeContext<LikePostDeleted> context)
+        public async Task Consume(ConsumeContext<LikePostCreated> context)
         {
             var post = await _postRepository.GetAsync(x => x.Id == context.Message.TargetId);
 
             if (post != null)
             {
-                post.LikesCount--;
+                post.LikesCount++;
                 await _postRepository.UpdateAsync(post);
                 return;
             }
@@ -32,7 +32,7 @@ namespace Likr.Posts.Consumers
 
             if (comment != null)
             {
-                comment.LikesCount--;
+                comment.LikesCount++;
                 await _commentRepository.UpdateAsync(comment);
             }
         }
