@@ -57,7 +57,7 @@ namespace Likr.Comments.Data
                 {
                     Id = "f21aa5f8-c4f2-4330-a9ad-cb32f6f67e3c",
                     Body = "They finished building the road they knew no one would ever use.",
-                    LikesCount = 0,
+                    LikesCount = 1,
                     UserId = "628a5306-09d7-4d28-856b-09994ed4381f",
                     User = users[0],
                     PostId = "a0d38424-5ea1-4d7e-963a-c0f3126ba59d"

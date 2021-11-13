@@ -1,12 +1,12 @@
 USE [PostsDb];
-DELETE FROM Users;
 DELETE FROM Comments;
 DELETE FROM Posts;
+DELETE FROM Users;
 
 USE [LikesDb];
-DELETE FROM Users;
-DELETE FROM Posts;
 DELETE FROM Likes;
+DELETE FROM Posts;
+DELETE FROM Users;
 
 USE [IdentityDb];
 DELETE FROM AspNetUserClaims;
