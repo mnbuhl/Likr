@@ -20,7 +20,8 @@
                             CommentDto="@comment" 
                             UserId="@UserId" 
                             OnDelete="@OnCommentDeleted" 
-                            InReplyTo="@_post.User?.Username"/>
+                            InReplyTo="@_post.User?.Username"
+                            Liked="@_likedComments.Any(x => x.Id == comment.Id)"/>
                     </div>
                 }
             }

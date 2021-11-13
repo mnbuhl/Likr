@@ -27,6 +27,7 @@ public partial class Post : ComponentBase
 
     private PostDto? _post;
     private bool _liked = false;
+    private readonly List<CommentDto> _likedComments = new();
 
     protected override async Task OnParametersSetAsync()
     {
@@ -45,6 +46,23 @@ public partial class Post : ComponentBase
         
         if (postLikes != null && postLikes.Any(x => x.ObserverId == UserId))
             _liked = true;
+
+        if (_post.Comments.Any())
+            await ApplyCommentLikes();
+    }
+
+    private async Task ApplyCommentLikes()
+    {
+        if (_post?.Comments == null || LikeService == null || UserId == null)
+            return;
+        
+        IList<LikeDto>? liked = await LikeService.GetLikesByUserId(UserId);
+
+        foreach (var comment in _post.Comments)
+        {
+            if (liked != null && liked.Any(x => x.TargetId == comment.Id))
+                _likedComments.Add(comment);
+        }
     }
     
     public async Task OnCommentCreated(CommentDto commentDto)

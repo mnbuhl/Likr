@@ -26,10 +26,30 @@
                     <span class="inline-block">@CommentDto?.Comments?.Count</span>
                 </button>
 
-                <button>
-                    <img class="w-5 inline-block" src="images/star.svg" alt="comment"/>
-                    <span class="inline-block">@CommentDto?.LikesCount</span>
-                </button>
+                <AuthorizeView>
+                    <Authorized>
+                        @if (!Liked)
+                        {
+                            <button @onclick="LikeComment">
+                                <img class="w-5 inline-block" src="images/star.svg" alt="star"/>
+                                <span class="ml-1 inline-block">@CommentDto?.LikesCount</span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button @onclick="UnlikeComment">
+                                <img class="w-5 inline-block" src="images/gold-star.svg" alt="star"/>
+                                <span class="ml-1 inline-block">@CommentDto?.LikesCount</span>
+                            </button>
+                        }
+                    </Authorized>
+                    <NotAuthorized>
+                        <a href="authentication/login">
+                            <img class="w-5 inline-block" src="images/star.svg" alt="star"/>
+                            <span class="ml-1 inline-block">@CommentDto?.LikesCount</span>
+                        </a>
+                    </NotAuthorized>
+                </AuthorizeView>
 
                 <button>
                     <img class="w-5 inline-block" src="images/share.svg" alt="share"/>
@@ -47,10 +67,10 @@
     @if (CommentDto!.Comments != null && CommentDto.Comments.Any())
         @foreach (var comment in CommentDto.Comments)
         {
-            <NestedComment 
-                Comment="@comment" 
-                InReplyTo="@CommentDto.User?.Username" 
-                UserId="@UserId" 
+            <NestedComment
+                Comment="@comment"
+                InReplyTo="@CommentDto.User?.Username"
+                UserId="@UserId"
                 OnNestedCommentDelete="OnNestedCommentDelete"/>
         }
 }
@@ -59,6 +79,9 @@
 
     [Inject]
     public ICommentService? CommentService { get; set; }
+
+    [Inject]
+    public ILikeService? LikeService { get; set; }
 
     [Parameter]
     public CommentDto? CommentDto { get; set; }
@@ -72,6 +95,9 @@
     [Parameter]
     public string? UserId { get; set; }
 
+    [Parameter]
+    public bool Liked { get; set; } = false;
+
     private bool _displayForm = false;
 
     protected override async Task OnParametersSetAsync()
@@ -80,7 +106,7 @@
             return;
 
         var comment = await CommentService.GetCommentById(Guid.Parse(CommentDto.Id));
-        
+
         if (comment.Body == default)
             return;
 
@@ -110,6 +136,29 @@
     private void ToggleForm()
     {
         _displayForm = !_displayForm;
+    }
+    
+    private async Task LikeComment()
+    {
+        if (LikeService == null || CommentDto == null || string.IsNullOrEmpty(UserId))
+            return;
+
+        bool liked = await LikeService.Like(new CreateLikeDto { TargetId = CommentDto.Id, ObserverId = UserId });
+        Liked = liked;
+        CommentDto.LikesCount++;
+    }
+
+    private async Task UnlikeComment()
+    {
+        if (LikeService == null || CommentDto == null)
+            return;
+
+        bool liked = await LikeService.Unlike(CommentDto.Id!);
+        Liked = !liked;
+        CommentDto.LikesCount--;
+        
+        if (CommentDto.LikesCount < 0)
+            CommentDto.LikesCount = 0;
     }
 
 }
