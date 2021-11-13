@@ -13,7 +13,7 @@ public partial class Posts : ComponentBase
     [Inject]
     public ILikeService? LikeService { get; set; }
     
-    [CascadingParameter]
+    [CascadingParameter(Name = "UserId")]
     public string? UserId { get; set; }
 
     [Parameter]
@@ -28,7 +28,6 @@ public partial class Posts : ComponentBase
     protected override async Task OnParametersSetAsync()
     {
         await LoadPosts();
-        await ApplyLikes();
     }
 
     public async Task LoadPosts()
@@ -50,15 +49,16 @@ public partial class Posts : ComponentBase
         _displayLoadMore = posts.Count == _pageSize;
         
         _posts.AddRange(posts);
-        
         _page++;
+        
+        await ApplyLikes();
     }
 
     public async Task ApplyLikes()
     {
         if (LikeService == null || UserId == null)
             return;
-        
+
         var likes = await LikeService.GetLikesByUserId(UserId);
         
         if (likes == null)
@@ -66,7 +66,7 @@ public partial class Posts : ComponentBase
 
         foreach (var post in _posts)
         {
-            _likes.AddRange(likes.Where(x => x.TargetId == post.Id));
+            _likes.AddRange(likes.Where(x => x.TargetId == post.Id).ToList());
         }
     }
 

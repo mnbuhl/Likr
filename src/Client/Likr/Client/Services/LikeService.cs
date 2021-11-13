@@ -28,7 +28,7 @@ public class LikeService : ILikeService
 
     public async Task<bool> Like(CreateLikeDto likeDto)
     {
-        var wrapper = await _httpService.Create<CreateLikeDto, object>($"{Endpoint}/like", likeDto);
+        var wrapper = await _httpService.Create<CreateLikeDto, LikeDto>($"{Endpoint}/like", likeDto);
 
         return wrapper.Success;
     }

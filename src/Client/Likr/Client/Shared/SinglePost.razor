@@ -22,7 +22,7 @@
                     <span class="inline-block">@PostDto.CommentsCount</span>
                 </a>
 
-            @if (_liked)
+            @if (!Liked)
             {
                 <button @onclick="LikePost">
                     <img class="w-5 inline-block" src="images/star.svg" alt="star"/>
@@ -58,7 +58,8 @@
     [Parameter]
     public string? UserId { get; set; }
 
-    private bool _liked = false;
+    [Parameter]
+    public bool Liked { get; set; } = false;
 
     private async Task LikePost()
     {
@@ -66,7 +67,8 @@
             return;
 
         bool liked = await LikeService.Like(new CreateLikeDto { TargetId = PostDto.Id, ObserverId = UserId });
-        _liked = liked;
+        Liked = liked;
+        PostDto.LikesCount += 1;
     }
 
     private async Task UnlikePost()
@@ -75,7 +77,8 @@
             return;
 
         bool liked = await LikeService.Unlike(PostDto.Id);
-        _liked = !liked;
+        Liked = !liked;
+        PostDto.LikesCount--;
     }
 
 }

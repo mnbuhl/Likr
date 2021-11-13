@@ -8,7 +8,7 @@
     
     @foreach (var post in _posts.OrEmptyIfNull())
     {
-        <SinglePost PostDto="post" UserId="@UserId" OnDelete="OnPostDeleted"/>
+        <SinglePost PostDto="post" UserId="@UserId" OnDelete="OnPostDeleted" Liked="@(_likes.Any(x => x.TargetId == post.Id))"/>
     }
     @if (_displayLoadMore)
     {

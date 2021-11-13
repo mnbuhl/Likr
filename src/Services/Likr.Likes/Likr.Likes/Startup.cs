@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Likr.Likes.Data;
 using Likr.Likes.Extensions;
 using Likr.Likes.Interfaces;
@@ -43,6 +44,7 @@ namespace Likr.Likes
             services.AddMassTransitWithRabbitMq();
 
             services.AddControllers();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Likr.Likes", Version = "v1" });

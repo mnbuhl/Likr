@@ -51,7 +51,7 @@ namespace Likr.Likes.Controllers.v1
 
         [Authorize]
         [HttpPost("like")]
-        public async Task<ActionResult> Like(CreateLikeDto likeDto)
+        public async Task<ActionResult<LikeDto>> Like(CreateLikeDto likeDto)
         {
             string userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -75,9 +75,11 @@ namespace Likr.Likes.Controllers.v1
             if (!created)
                 return BadRequest();
 
+            var createdLikeDto = _mapper.Map<LikeDto>(like);
+
             await _publishEndpoint.Publish(new LikeCreated(like.TargetId));
 
-            return NoContent();
+            return Ok(createdLikeDto);
         }
 
         [Authorize]
