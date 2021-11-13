@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Likr.Identity.Server.Models;
@@ -24,6 +25,7 @@ namespace Likr.Identity.Server.Services
             var claims = new List<Claim>
             {
                 new Claim("DisplayName", user.DisplayName),
+                new Claim("Username", user.UserName)
             };
 
             context.IssuedClaims.AddRange(claims);

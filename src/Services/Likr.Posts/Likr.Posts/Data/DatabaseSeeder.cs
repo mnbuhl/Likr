@@ -183,7 +183,8 @@ namespace Likr.Posts.Data
                         Body = $"This is a test comment - {counter++}",
                         LikesCount = _random.Next(0, 1000),
                         UserId = userIds[_random.Next(4)].ToString(),
-                        PostId = postIds[_randomForComments.Next(postIds.Count)].ToLower()
+                        PostId = postIds[_randomForComments.Next(postIds.Count)].ToLower(),
+                        CommentsCount = 0
                     });
                 }
                 

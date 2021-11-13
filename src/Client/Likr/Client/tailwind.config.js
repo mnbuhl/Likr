@@ -1,15 +1,27 @@
 const colors = require('tailwindcss/colors');
 module.exports = {
   purge: {
-    enabled: false,
+    enabled: true,
     content: ['./**/*.html', './**/*.razor']
   },
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {}
+    extend: {
+      colors: {
+        'dark-purple': 'rgb(2, 0, 36)'
+      },
+      spacing: {
+        125: '31.25rem',
+        200: '50rem'
+      }
+    }
   },
   variants: {
     extend: {}
   },
-  plugins: []
+  plugins: [
+    require('@tailwindcss/forms')({
+      strategy: 'class'
+    })
+  ]
 };

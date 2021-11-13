@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Likr.Comments.Entities;
 using Likr.Comments.Interfaces;
@@ -22,39 +23,58 @@ namespace Likr.Comments.Data
         public async Task<IList<Comment>> GetAll()
         {
             using var session = _context.Store.OpenAsyncSession();
-            return await session.Query<Comment>().ToListAsync();
+            return await session.Query<Comment>().Include("Comments").ToListAsync();
         }
 
         public async Task<IList<Comment>> GetAllByPostId(string postId)
         {
             using var session = _context.Store.OpenAsyncSession();
-            return await session.Query<Comment>().Where(x => x.PostId == postId, true).ToListAsync();
+            return await session.Query<Comment>().Include("Comments").Where(x => x.PostId == postId, true)
+                .ToListAsync();
         }
 
         public async Task<Comment> Get(string id)
         {
             using var session = _context.Store.OpenAsyncSession();
-            var comment = await session.LoadAsync<Comment>(id);
+            var comment = await session.Include("Comments").LoadAsync<Comment>(id);
 
             if (comment != null)
-            {
-                comment.Comments = await GetAllByPostId(comment.Id);
-            }
+                return comment;
 
-            return comment;
+            var nestedComment = await session.Query<Comment>().Include("Comments")
+                .Where(x => x.Comments.Any(y => y.Id == id))
+                .FirstOrDefaultAsync();
+
+            return nestedComment;
         }
 
         public async Task<bool> InsertOrUpdate(Comment comment)
         {
             using var session = _context.Store.OpenAsyncSession();
 
+            var existingComment = await session.Include("Comments").LoadAsync<Comment>(comment.PostId);
+            var user = await session.LoadAsync<User>(comment.UserId);
+
+            comment.Id ??= Guid.NewGuid().ToString();
+            comment.User = user;
+
             try
             {
-                comment.User = await session.Query<User>().FirstOrDefaultAsync(x => x.Id == comment.UserId);
+                if (existingComment == null && comment.Comments == null)
+                {
+                    await session.StoreAsync(comment);
+                }
+                else if (existingComment != null && existingComment.Comments == null)
+                {
+                    existingComment.Comments ??= new List<Comment> { comment };
+                    await session.StoreAsync(existingComment);
+                }
+                else if (existingComment != null && existingComment.Comments.Any())
+                {
+                    existingComment.Comments.Add(comment);
+                    await session.StoreAsync(existingComment);
+                }
 
-                _logger.LogInformation(comment.User.DisplayName);
-                
-                await session.StoreAsync(comment, comment.Id ?? Guid.NewGuid().ToString());
                 await session.SaveChangesAsync();
             }
             catch (Exception e)
@@ -69,12 +89,25 @@ namespace Likr.Comments.Data
         public async Task<bool> Delete(Guid id)
         {
             using var session = _context.Store.OpenAsyncSession();
-            var comment = await session.LoadAsync<Comment>(id.ToString());
+            var comment = await session.Include("Comments").LoadAsync<Comment>(id.ToString());
 
-            if (comment == null)
+            if (comment != null)
+            {
+                session.Delete(comment);
+                await session.SaveChangesAsync();
+                return true;
+            }
+
+            var nestedComment = await session.Query<Comment>().Include("Comments")
+                .Where(x => x.Comments.Any(y => y.Id == id.ToString()))
+                .FirstOrDefaultAsync();
+
+            if (nestedComment == null)
                 return false;
 
-            session.Delete(comment);
+            nestedComment.Comments.Remove(nestedComment.Comments.FirstOrDefault(x => x.Id == id.ToString()));
+            await session.StoreAsync(nestedComment);
+
             await session.SaveChangesAsync();
             return true;
         }

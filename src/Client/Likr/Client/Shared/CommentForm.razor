@@ -1,0 +1,48 @@
+﻿<div>
+    <EditForm Model="@_comment" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator/>
+        <InputTextArea
+            class="border lg:w-5/6 w-full p-4 text-white bg-gray-900 mr-5 rounded-xl border-gray-600"
+            @bind-Value="@_comment.Body" placeholder="Add your comment here..." rows="@_rows"
+            @onclick="@(() => _rows = "3")" @onfocusout="@(() => _rows = "1")">
+        </InputTextArea>
+        <button
+            class="bg-blue-500 hover:bg-blue-700 2xl:w-24 lg:w-14 sm:w-24 text-white font-bold py-2 md:px-3 px-4 rounded-full align-top mt-2"
+            type="submit">
+            Post
+        </button>
+        <ValidationSummary/>
+    </EditForm>
+</div>
+
+@code {
+    [Inject]
+    public ICommentService? CommentService { get; set; }
+    
+    [CascadingParameter(Name = "UserId")]
+    public string? UserId { get; set; }
+    
+    [Parameter]
+    public EventCallback<CommentDto> OnCommentCreated { get; set; }
+    
+    [Parameter]
+    public Guid PostId { get; set; }
+    
+    private CreateCommentDto _comment = new CreateCommentDto();
+    private string _rows = "1";
+
+    public async Task OnValidSubmit()
+    {
+        if (CommentService == null || string.IsNullOrEmpty(UserId))
+            return;
+
+        _comment.PostId = PostId;
+        _comment.UserId = Guid.Parse(UserId);
+        
+        var comment = await CommentService.CreateComment(_comment);
+
+        _comment = new CreateCommentDto();
+        
+        await OnCommentCreated.InvokeAsync(comment);
+    }
+}

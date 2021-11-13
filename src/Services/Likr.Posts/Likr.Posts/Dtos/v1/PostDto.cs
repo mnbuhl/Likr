@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Likr.Posts.Entities;
 
 namespace Likr.Posts.Dtos.v1
 {
-    public record PostDto(string Id, string Body, User User, int LikesCount, int CommentsCount,
+    public record PostDto(string Id, string Body, User User, int LikesCount, int CommentsCount, DateTime CreatedAt,
         ICollection<Comment> Comments);
 }

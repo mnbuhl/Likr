@@ -1,0 +1,45 @@
+﻿@if (Comment != null)
+{
+    <div class="nested-comment-container mx-auto w-4/6 mb-4 mt-4 relative">
+        <div class=" border border-opacity-25 rounded-md relative">
+            @if (UserId != null && string.Equals(UserId, Comment.User?.Id.ToString()))
+            {
+                <button @onclick="@(async () => await OnNestedCommentDelete.InvokeAsync(Comment))"
+                    class="w-5 absolute right-0 mt-4 mr-4 opacity-75">
+                    <img src="images/delete.svg" alt="X button"/>
+                </button>
+            }
+            <div class="p-5">
+                <a href="/@Comment.User?.Username" class="space-x-1 mb-0">
+                    <p class="inline-block hover:underline mb-5 font-semibold">@Comment?.User?.DisplayName</p>
+                    <p class="inline-block text-gray-500 text-sm hover:underline">
+                        @@@Comment?.User?.Username
+                    </p>
+                </a>
+                <p class="text-sm text-gray-500 -mt-3">
+                    Replying to
+                    <span class="text-blue-400 hover:underline cursor-pointer">
+                        @@@InReplyTo
+                    </span>
+                </p>
+                <p class="mb-0">@Comment?.Body</p>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public CommentDto? Comment { get; set; }
+
+    [Parameter]
+    public string? InReplyTo { get; set; }
+
+    [Parameter]
+    public string? UserId { get; set; }
+
+    [Parameter] 
+    public EventCallback<CommentDto> OnNestedCommentDelete { get; set; }
+
+}

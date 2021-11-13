@@ -1,0 +1,48 @@
+﻿@if (_profile != null)
+{
+    <div class="p-6 border border-gray-600 rounded-xl">
+        <div class="xl:grid grid-cols-4">
+            <div class="w-32 xl:mb-0 mb-4">
+                <img class="rounded-full border-2 border-gray-600" src="https://source.unsplash.com/random/800x800"
+                alt="profile photo" />
+            </div>
+            <div class="col-span-3">
+                <div>
+                    <p class="mb-0">@_profile.DisplayName</p>
+                    <p class="text-gray-500">@@@_profile.Username</p>
+                </div>
+                <div>
+                    <p class="inline-block text-gray-500 hover:underline cursor-pointer"><span
+                        class="text-white font-bold">312</span> Following</p> ·
+                    <p class="inline-block text-gray-500 hover:underline cursor-pointer"><span
+                        class="text-white font-bold">452</span> Followers</p>
+                </div>
+                <div>
+                    <img class="w-5 inline-block" src="images/location.svg" alt="location" />
+                    <p class="inline-block">Denmark</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+
+@code {
+    [Inject]
+    public IProfileService? ProfileService { get; set; }
+
+    [Parameter]
+    public string? Username { get; set; }
+
+    private UserDto? _profile;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ProfileService == null || Username == null)
+            return;
+
+        _profile = await ProfileService.GetProfileByUsername(Username);
+    }
+}

@@ -5,6 +5,7 @@ namespace Likr.Client.Services;
 public class PostService : IPostService
 {
     private readonly IHttpService _httpService;
+    private const string Endpoint = "v1/p/Posts";
 
     public PostService(IHttpService httpService)
     {
@@ -13,28 +14,43 @@ public class PostService : IPostService
 
     public async Task<List<PostDto>> GetPosts(int pageSize, int page)
     {
-        var wrapper = await _httpService.Get<List<PostDto>>($"/api/v1/p/Posts?pageSize={pageSize}&page={page}");
+        var wrapper = await _httpService.Get<List<PostDto>>($"{Endpoint}?pageSize={pageSize}&page={page}");
 
         return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task<List<PostDto>> GetPostsByUserId(Guid userId)
+    public async Task<List<PostDto>> GetPostsByUserId(Guid userId, int pageSize, int page)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Get<List<PostDto>>($"{Endpoint}/user/{userId}?pageSize={pageSize}&page={page}");
+
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task<PostDto> GetById(Guid id)
+    public async Task<List<PostDto>> GetPostsByUsername(string username, int pageSize = 10, int page = 1)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Get<List<PostDto>>($"{Endpoint}/username/{username}?pageSize={pageSize}&page={page}");
+
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task<PostDto> CreatePost(CreatePostDto postDto)
+    public async Task<PostDto> GetById(Guid id)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Get<PostDto>($"{Endpoint}/{id}");
+
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
     }
 
-    public Task DeletePost(Guid id)
+    public async Task<PostDto> CreatePost(CreatePostDto postDto)
     {
-        throw new NotImplementedException();
+        var wrapper = await _httpService.Create<CreatePostDto, PostDto>(Endpoint, postDto);
+
+        return wrapper.Response ?? throw new HttpRequestException(wrapper.HttpResponseMessage.ReasonPhrase);
+    }
+
+    public async Task<bool> DeletePost(Guid id)
+    {
+        var wrapper = await _httpService.Delete($"{Endpoint}/{id}");
+
+        return wrapper.Success;
     }
 }
