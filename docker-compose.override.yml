@@ -106,7 +106,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
 #      - "Authority=http://localhost:8004" Change to deployed URL once deployed
-      - "ServiceUrl=http://likr.client:8100"
+      - "ServiceUrl=http://localhost:8100"
     depends_on:
        - likr.identity.server
     ports:
