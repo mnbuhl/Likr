@@ -1,5 +1,4 @@
 ﻿using Likr.Client.Dtos;
-using Likr.Client.Extensions;
 using Likr.Client.Services;
 using Microsoft.AspNetCore.Components;
 
@@ -19,10 +18,10 @@ public partial class Posts : ComponentBase
     [Parameter]
     public string Username { get; set; } = string.Empty;
 
-    private List<PostDto> _posts = new();
-    private List<LikeDto> _likes = new();
+    private readonly List<PostDto> _posts = new();
+    private readonly List<LikeDto> _likes = new();
     private int _page = 1;
-    private int _pageSize = 8;
+    private readonly int _pageSize = 8;
     private bool _displayLoadMore = false;
 
     protected override async Task OnInitializedAsync()

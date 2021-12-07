@@ -1,7 +1,7 @@
 # Likr - Social Media
 Likr is a social media developed with microservice technologies for my self chosen 4th Semester Computer Science exam.
 
-Project can be viewed and used in real time here: [TODO]
+Project can be viewed and used in real time here: Project was supposed to be deployed to Kubernetes, but I ran out of time to do so.
 
 ### Technologies used:
 Client service
