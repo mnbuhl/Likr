@@ -19,6 +19,7 @@ namespace Likr.Identity.Server.Controllers
         [HttpGet("_configuration/{clientId}")]
         public IActionResult GetClientRequestParameters([FromRoute] string clientId)
         {
+            _logger.LogInformation($"Client with ClientId: {clientId} has requested Client Request Parameters");
             var parameters = ClientRequestParametersProvider.GetClientParameters(HttpContext, clientId);
             return Ok(parameters);
         }
