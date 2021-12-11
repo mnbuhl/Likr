@@ -65,6 +65,7 @@
     }
 
     @if (CommentDto!.Comments != null && CommentDto.Comments.Any())
+    {
         @foreach (var comment in CommentDto.Comments)
         {
             <NestedComment
@@ -73,6 +74,7 @@
                 UserId="@UserId"
                 OnNestedCommentDelete="OnNestedCommentDelete"/>
         }
+    }
 }
 
 @code {
@@ -129,7 +131,7 @@
         if (CommentDto == null || CommentService == null)
             return;
 
-        bool deleted = await CommentService.DeleteComment(Guid.Parse(commentDto.Id!));
+        await CommentService.DeleteComment(Guid.Parse(commentDto.Id!));
         CommentDto.Comments?.Remove(commentDto);
     }
 
@@ -137,7 +139,7 @@
     {
         _displayForm = !_displayForm;
     }
-    
+
     private async Task LikeComment()
     {
         if (LikeService == null || CommentDto == null || string.IsNullOrEmpty(UserId))
@@ -156,7 +158,7 @@
         bool liked = await LikeService.Unlike(CommentDto.Id!);
         Liked = !liked;
         CommentDto.LikesCount--;
-        
+
         if (CommentDto.LikesCount < 0)
             CommentDto.LikesCount = 0;
     }

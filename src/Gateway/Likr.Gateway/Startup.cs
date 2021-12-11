@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,8 +21,8 @@ namespace Likr.Gateway
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            string identityUrl = _configuration.GetValue<string>("IdentityUrl");
-            string authProviderKey = "IdentityApiKey";
+            var identityUrl = _configuration.GetValue<string>("IdentityUrl");
+            var authProviderKey = "IdentityApiKey";
 
             services.AddAuthentication()
                 .AddJwtBearer(authProviderKey, x =>
@@ -40,11 +39,8 @@ namespace Likr.Gateway
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+
             app.UseCors(builder =>
             {
                 builder.WithOrigins(_configuration.GetSection("AllowedOrigins").Get<string[]>())

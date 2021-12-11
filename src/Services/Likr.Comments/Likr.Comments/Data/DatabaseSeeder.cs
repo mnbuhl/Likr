@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Likr.Comments.Entities;
 using Raven.Client.Documents;
 
@@ -46,11 +45,8 @@ namespace Likr.Comments.Data
                 }
             };
 
-            foreach (var user in users)
-            {
-                session.Store(user);
-            }
-            
+            foreach (var user in users) session.Store(user);
+
             var comments = new List<Comment>
             {
                 new Comment
@@ -99,11 +95,8 @@ namespace Likr.Comments.Data
                     PostId = "d470fbce-6329-4d71-a261-821972c3b82c"
                 }
             };
-            
-            foreach (var comment in comments)
-            {
-                session.Store(comment, comment.Id);
-            }
+
+            foreach (var comment in comments) session.Store(comment, comment.Id);
 
             session.SaveChanges();
         }

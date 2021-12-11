@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,7 +9,7 @@ namespace Likr.Posts.Extensions
         public static IServiceCollection AddIdentityServerAuth(this IServiceCollection services,
             IConfiguration configuration)
         {
-            string identityUrl = configuration.GetValue<string>("IdentityUrl");
+            var identityUrl = configuration.GetValue<string>("IdentityUrl");
 
             services.AddAuthentication(opt =>
                 {
@@ -24,7 +23,7 @@ namespace Likr.Posts.Extensions
                     options.TokenValidationParameters.ValidateAudience = false;
                     options.TokenValidationParameters.ValidateIssuerSigningKey = false;
                 });
-            
+
             return services;
         }
     }

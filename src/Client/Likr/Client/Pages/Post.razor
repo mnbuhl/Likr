@@ -13,15 +13,15 @@
                 </AuthorizeView>
             </div>
 
-            @if (_post.Comments != null && _post.Comments.Any())
+            @if (_post.Comments.Any())
             {
                 @foreach (var comment in _post.Comments)
                 {
                     <div class="w-4/6 mx-auto">
-                        <SingleComment 
-                            CommentDto="@comment" 
-                            UserId="@UserId" 
-                            OnDelete="@OnCommentDeleted" 
+                        <SingleComment
+                            CommentDto="@comment"
+                            UserId="@UserId"
+                            OnDelete="@OnCommentDeleted"
                             InReplyTo="@_post.User?.Username"
                             Liked="@_likedComments.Any(x => x.Id == comment.Id)"/>
                     </div>
