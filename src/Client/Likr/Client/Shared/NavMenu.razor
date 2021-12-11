@@ -1,6 +1,8 @@
 ﻿<div class="top-row ps-3">
     <div class="">
-        <a href="" class="h-14"><img class="w-28 mx-auto" src="images/logo.svg" alt="logo" /></a>
+        <a href="" class="h-14">
+            <img class="w-28 mx-auto" src="images/logo.svg" alt="logo"/>
+        </a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -24,7 +26,7 @@
             else
             {
                 <NavLink class="nav-link px-2" href="@Username">
-                    <img class="w-6" src="images/user.svg" alt="user" aria-hidden="true" /> <span class="ml-2">Profile</span>
+                    <img class="w-6" src="images/user.svg" alt="user" aria-hidden="true"/> <span class="ml-2">Profile</span>
                 </NavLink>
             }
         </div>
@@ -32,26 +34,27 @@
 </div>
 
 @code {
+
     [CascadingParameter(Name = "Username")]
     public string? Username { get; set; }
-    
+
     [Inject]
     public NavigationManager? NavigationManager { get; set; }
 
-    private bool collapseNavMenu = true;
+    private bool _collapseNavMenu = true;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        _collapseNavMenu = !_collapseNavMenu;
     }
 
     private void NavigateToProfileOrAuthenticate()
     {
         if (NavigationManager == null)
             return;
-        
+
         if (Username == null)
         {
             NavigationManager.NavigateTo("authentication/login");
@@ -59,4 +62,5 @@
         }
         NavigationManager.NavigateTo(Username);
     }
+
 }

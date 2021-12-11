@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Likr.Identity.Server.Models;
@@ -34,8 +33,8 @@ namespace Likr.Identity.Server.Services
         public async Task IsActiveAsync(IsActiveContext context)
         {
             var user = await UserManager.GetUserAsync(context.Subject);
-        
-            context.IsActive = (user != null);
+
+            context.IsActive = user != null;
         }
     }
 }

@@ -16,6 +16,6 @@ public class AuthService
     {
         var authState = await _authStateProvider.GetAuthenticationStateAsync();
 
-        return authState?.User;
+        return authState.User;
     }
 }

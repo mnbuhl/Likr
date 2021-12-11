@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Likr.Posts.Consumers
 {
-    public class CommentCreatedConsumer : IConsumer<Likr.Commands.CommentCreated>
+    public class CommentCreatedConsumer : IConsumer<Commands.CommentCreated>
     {
         private readonly IGenericRepository<Comment> _commentRepository;
         private readonly IGenericRepository<Post> _postRepository;
@@ -20,16 +20,16 @@ namespace Likr.Posts.Consumers
             _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<Likr.Commands.CommentCreated> context)
+        public async Task Consume(ConsumeContext<Commands.CommentCreated> context)
         {
             var message = context.Message;
 
-            bool commentToPost = (await _postRepository.GetAsync(x => x.Id == message.PostId)) != null;
+            bool commentToPost = await _postRepository.GetAsync(x => x.Id == message.PostId) != null;
             _logger.LogInformation($"commentToPost: {commentToPost}");
 
             if (commentToPost)
             {
-                bool exists = (await _commentRepository.GetAsync(x => x.Id == message.Id)) != null;
+                bool exists = await _commentRepository.GetAsync(x => x.Id == message.Id) != null;
                 _logger.LogInformation($"exists: {exists}");
 
                 if (exists)
